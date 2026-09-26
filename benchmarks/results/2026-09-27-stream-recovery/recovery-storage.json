@@ -1,0 +1,9 @@
+{
+  "scope": "After validation; excludes Docker image caches, Maven cache and workspace.",
+  "temporary_root_kib": 1008444,
+  "pg_data_directory_kib": 1439048,
+  "owned_olap_containers_removed": [
+    "20fd863832bf8c9fd3ff4e8202526b685361b9948e6c7a50288b36342f2a8c03",
+    "70926cd3eefc8639e7433a2c3c3f1359d08523e1cf3aacf7098ba411ef4797c0"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "Small-fixture correctness; timeout status is injected, commit reply loss is real.",
+  "source_runtime_commit": "8b9521444671ff18f613b481786e8d87ab005ae7",
+  "final_checks": {
+    "unverified-before": 48,
+    "unverified-upstream": 48,
+    "unverified-after": 98,
+    "recovery-starrocks": 32,
+    "recovery-doris": 32,
+    "recovery-sr-rows": 22,
+    "recovery-doris-rows": 22,
+    "recovery-sr-fidelity": 16,
+    "recovery-doris-fidelity": 16
+  },
+  "junit": 58,
+  "simulated_http_engine_runs": 194,
+  "real_database_engine_runs_with_response_proxy": 64,
+  "real_database_engine_regressions": 76,
+  "production_error_rate_measured": false,
+  "performance_goal_met": false,
+  "hundred_million_row_recovery_validated": false
+}

@@ -48,6 +48,11 @@ StarRocks/Doris reproductions of successful loads with missing rows, exact
 response-counter checks, and rejection without automatic retry. Already committed
 partial batches remain; this is detection, not atomic backfill or full-field proof.
 
+[Committed Stream Load response loss (中文)](REPORT-stream-recovery.zh-CN.md)
+extends counter validation to Publish Timeout and rejects existing-label recovery
+when the original counters are unavailable. Correctly committed batches with a
+lost reply may also fail explicitly and require reconciliation before restarting.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

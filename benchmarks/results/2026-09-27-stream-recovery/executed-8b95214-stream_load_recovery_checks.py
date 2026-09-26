@@ -160,9 +160,6 @@ def main():
                     save()
                     print(json.dumps(report['results'][-1]), flush=True)
     finally:
-        if 'pending_run' in report:
-            report['pending_run'].update(requests=requests, state_polls=polls)
-            save()
         server.shutdown()
         server.server_close()
         thread.join()

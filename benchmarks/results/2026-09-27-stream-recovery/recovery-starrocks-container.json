@@ -1,0 +1,170 @@
+{
+  "Id": "70926cd3eefc8639e7433a2c3c3f1359d08523e1cf3aacf7098ba411ef4797c0",
+  "Image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 625904,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-26T23:33:50.754592696Z",
+    "FinishedAt": "0001-01-01T00:00:00Z",
+    "Health": {
+      "Status": "healthy",
+      "FailingStreak": 0,
+      "Log": [
+        {
+          "Start": "2026-09-27T07:34:46.209604617+08:00",
+          "End": "2026-09-27T07:34:46.386969525+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T07:35:16.387462805+08:00",
+          "End": "2026-09-27T07:35:16.565511337+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T07:35:46.566079637+08:00",
+          "End": "2026-09-27T07:35:46.751991225+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T07:36:16.755463655+08:00",
+          "End": "2026-09-27T07:36:16.915989405+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T07:36:46.920408629+08:00",
+          "End": "2026-09-27T07:36:47.091397607+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        }
+      ]
+    }
+  },
+  "SizeRw": 604868608,
+  "SizeRootFs": 3814109184,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "5",
+        "max-size": "20m"
+      }
+    },
+    "NetworkMode": "bridge",
+    "PortBindings": {
+      "8030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28030"
+        }
+      ],
+      "8040/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28040"
+        }
+      ],
+      "9030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "29030"
+        }
+      ]
+    },
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 4196401152,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 4294967296,
+    "NanoCpus": 4000000000,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 8589934592,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  }
+}

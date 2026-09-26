@@ -6,14 +6,17 @@ DorisWriter支持将大批量数据写入Doris中。
 ## 2 实现原理
 DorisWriter 通过Doris原生支持Stream load方式导入数据， DorisWriter会将`reader`读取的数据进行缓存在内存中，拼接成Json文本，然后批量导入至Doris。
 
-本 fork 对 `Status=Success` 的每批响应强制检查行数：`NumberTotalRows`、`NumberLoadedRows`
+本 fork 对 `Status=Success` 或 `Publish Timeout` 的每批响应强制检查行数：`NumberTotalRows`、`NumberLoadedRows`
 都必须等于发送行数，`NumberFilteredRows`、`NumberUnselectedRows` 必须为 0；缺失或格式错误的
 计数也会使作业失败。此类错误不会自动重试，避免已提交的不完整批次经 `Label Already Exists`
 被重新判成成功。配置 `where` 丢弃行或允许过滤坏数据的作业因此可能从成功变为明确失败。
 
 这是提交后的检测，不能回滚已写入的行。应同时设置 `loadProps.strict_mode=true`、
 `loadProps.max_filter_ratio=0`，避免服务端容忍坏数据；这些参数也不能替代字段校验。
-`Publish Timeout` 和通过标签确认的网络重试仍沿用原有恢复行为，不能据此证明逐行完整性。
+`Publish Timeout` 计数完整时不重放批次，但数据仍可能尚不可查询。
+`Label Already Exists` 即使查询到 `VISIBLE` / `COMMITTED`，也无法取得原始导入计数，
+现在会以 `Unverified Stream Load` 明确失败并停止自动重试。完整导入后丢失回执也可能触发该错误；
+必须先按日志中的 label 对账，不能换 label 或盲目重跑整个追加任务。详见[真实回执丢失测试](../../benchmarks/REPORT-stream-recovery.zh-CN.md)。
 目标表的主键合并、字段转换、跨作业重跑及整作业原子发布均不由这项计数检查保证。
 
 ## 3 功能说明

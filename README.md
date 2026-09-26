@@ -13,6 +13,7 @@
 > [PG 原生整数读取](benchmarks/REPORT-pg-integer-read.zh-CN.md)：减少字符串中转，保留 NULL、整数值及字节统计；百万行整数/混合字段导出相对原版中位 +19.30% / +17.65%，普通表单路/四路 +9.39% / +1.51%。8 组每轮 +25% 均未通过，变慢配对及全部原始结果保留。
 
 > [失败后的排队写入修复](benchmarks/REPORT-stream-queue.zh-CN.md)：SR/Doris/SelectDB 终止失败后停止后续排队批次，并关闭任务线程；真实 SR/Doris 对照确认原版失败后仍写入两行尾部数据，新版停止这些写入。已提交/在途数据仍不能自动回滚，亿级零差错尚未验证。
+> [提交回执与不完整导入](benchmarks/REPORT-stream-recovery.zh-CN.md)：SR/Doris 的 Publish Timeout 同样校验行数；标签已提交但原始计数未知时明确失败，防止把可能少行的批次判成功。完整导入丢失回执也可能需要人工对账，不能盲目重跑。
 
 > 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
 > 100 万行真实 MySQL 同步，单条 querySql 开启自动四路并行：七轮吞吐提升均超过 50%，最低 **62.86%**，按耗时中位数计算提升 **72.66%**，逐字段校验零差异。

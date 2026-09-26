@@ -1,0 +1,170 @@
+{
+  "Id": "20fd863832bf8c9fd3ff4e8202526b685361b9948e6c7a50288b36342f2a8c03",
+  "Image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 640992,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-26T23:37:15.111876223Z",
+    "FinishedAt": "0001-01-01T00:00:00Z",
+    "Health": {
+      "Status": "healthy",
+      "FailingStreak": 0,
+      "Log": [
+        {
+          "Start": "2026-09-27T07:40:46.712054073+08:00",
+          "End": "2026-09-27T07:40:46.750365291+08:00",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-09-27T07:40:51.752841744+08:00",
+          "End": "2026-09-27T07:40:51.793742928+08:00",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-09-27T07:40:56.796993216+08:00",
+          "End": "2026-09-27T07:40:56.837978816+08:00",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-09-27T07:41:01.839350017+08:00",
+          "End": "2026-09-27T07:41:01.887849885+08:00",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-09-27T07:41:06.889757045+08:00",
+          "End": "2026-09-27T07:41:06.932357108+08:00",
+          "ExitCode": 0,
+          "Output": ""
+        }
+      ]
+    }
+  },
+  "SizeRw": 90902528,
+  "SizeRootFs": 2771136512,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "5",
+        "max-size": "20m"
+      }
+    },
+    "NetworkMode": "bridge",
+    "PortBindings": {
+      "8030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28031"
+        }
+      ],
+      "8040/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28041"
+        }
+      ],
+      "9030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "29031"
+        }
+      ]
+    },
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 4196401152,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 4294967296,
+    "NanoCpus": 4000000000,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 8589934592,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  }
+}

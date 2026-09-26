@@ -136,8 +136,6 @@ def main():
                 expect_unsafe = (args.expect_unverified if recovery_case else
                                  args.expect_incomplete if row_case else args.expect_unsafe)
                 expected_success = success or (expect_unsafe and historically_unsafe)
-                report['pending_run'] = {'case': name, 'expected_success': expected_success}
-                (output / 'results.json').write_text(json.dumps(report, indent=2))
                 seconds = run(args.runtime.resolve(), config, output, name, expected_success)
                 assert requests and len({r['sha256'] for r in requests}) == 1, requests
                 assert requests[0]['sha256'] == hashlib.sha256(('1\t中文😀\n' * 3).encode()).hexdigest()
@@ -158,13 +156,9 @@ def main():
                                 'expected_success': expected_success, 'requests': list(requests),
                                 'state_polls': list(polls),
                                 'unsafe_success_reproduced': historically_unsafe and expect_unsafe})
-                del report['pending_run']
                 (output / 'results.json').write_text(json.dumps(report, indent=2))
                 print(json.dumps(results[-1]), flush=True)
     finally:
-        if 'pending_run' in report:
-            report['pending_run'].update(requests=requests, state_polls=polls)
-            (output / 'results.json').write_text(json.dumps(report, indent=2))
         server.shutdown()
         server.server_close()
         thread.join()
