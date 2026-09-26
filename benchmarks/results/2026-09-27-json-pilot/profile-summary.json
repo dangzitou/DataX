@@ -1,0 +1,658 @@
+{
+  "sampled_threads": {
+    "job-0": 120,
+    "pool-1-thread-1": 5,
+    "0-0-0-reader": 1017,
+    "0-0-0-writer": 652,
+    "JFR Periodic Tasks": 5,
+    "Reference Handler": 2,
+    "Finalizer": 1,
+    "Thread-2": 4395
+  },
+  "top_frames": [
+    [
+      "java/net/SocketInputStream.socketRead0",
+      5024
+    ],
+    [
+      "com/alibaba/fastjson2/JSONWriterUTF8.writeString",
+      206
+    ],
+    [
+      "java/net/SocketOutputStream.socketWrite0",
+      54
+    ],
+    [
+      "sun/nio/cs/UTF_8$Decoder.decode",
+      51
+    ],
+    [
+      "sun/util/calendar/BaseCalendar.getFixedDate",
+      49
+    ],
+    [
+      "java/lang/String.substring",
+      38
+    ],
+    [
+      "java/lang/Long.getChars",
+      30
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader$Task.buildRecord",
+      28
+    ],
+    [
+      "java/util/Arrays.copyOf",
+      28
+    ],
+    [
+      "java/util/zip/ZipFile.read",
+      24
+    ],
+    [
+      "java/lang/Integer.getChars",
+      24
+    ],
+    [
+      "java/util/HashMap.putVal",
+      23
+    ],
+    [
+      "org/postgresql/jdbc/TimestampUtils.parseBackendTimestamp",
+      23
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor.joinRows",
+      22
+    ],
+    [
+      "sun/nio/cs/UTF_8.newDecoder",
+      22
+    ],
+    [
+      "com/alibaba/datax/common/util/Configuration.findObject",
+      19
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksBaseSerializer.fieldConvertion",
+      18
+    ],
+    [
+      "org/apache/commons/lang3/time/FastDatePrinter.applyRules",
+      17
+    ],
+    [
+      "java/math/BigDecimal.<init>",
+      17
+    ],
+    [
+      "java/util/zip/ZipFile.open",
+      16
+    ],
+    [
+      "java/lang/Long.valueOf",
+      15
+    ],
+    [
+      "java/util/zip/Inflater.inflateBytes",
+      14
+    ],
+    [
+      "com/alibaba/fastjson2/JSONWriter.writeName",
+      13
+    ],
+    [
+      "java/lang/String.indexOf",
+      13
+    ],
+    [
+      "com/alibaba/fastjson2/JSONWriter.getObjectWriter",
+      11
+    ]
+  ],
+  "stack_presence": [
+    [
+      "java/lang/Thread.run",
+      6073
+    ],
+    [
+      "java/net/SocketInputStream.read",
+      5025
+    ],
+    [
+      "java/net/SocketInputStream.socketRead0",
+      5024
+    ],
+    [
+      "java/net/SocketInputStream.socketRead",
+      5024
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksWriterManager.asyncFlush",
+      4395
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksWriterManager$1.run",
+      4395
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksWriterManager.access$100",
+      4395
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor.doStreamLoad",
+      4392
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor.doHttpPut",
+      4359
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/client/CloseableHttpClient.execute",
+      4317
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/client/InternalHttpClient.doExecute",
+      4317
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/execchain/RedirectExec.execute",
+      4317
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/execchain/RetryExec.execute",
+      4317
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/execchain/ProtocolExec.execute",
+      4317
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/execchain/MainClientExec.execute",
+      4314
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/protocol/HttpRequestExecutor.execute",
+      4305
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/io/SessionInputBufferImpl.fillBuffer",
+      4248
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/io/SessionInputBufferImpl.streamRead",
+      4248
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/protocol/HttpRequestExecutor.doReceiveResponse",
+      4100
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/conn/CPoolProxy.receiveResponseHeader",
+      4098
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/conn/DefaultHttpResponseParser.parseHead",
+      4098
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/io/AbstractMessageParser.parse",
+      4098
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/DefaultBHttpClientConnection.receiveResponseHeader",
+      4098
+    ],
+    [
+      "com/starrocks/shade/org/apache/http/impl/io/SessionInputBufferImpl.readLine",
+      4097
+    ],
+    [
+      "com/alibaba/datax/core/taskgroup/runner/ReaderRunner.run",
+      1017
+    ],
+    [
+      "com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader$Task.startRead",
+      1016
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader$Task.startRead",
+      1016
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.ensureBytes",
+      785
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.read",
+      785
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.processResults",
+      783
+    ],
+    [
+      "org/postgresql/jdbc/PgResultSet.next",
+      780
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.fetch",
+      779
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.readMore",
+      777
+    ],
+    [
+      "com/alibaba/datax/core/taskgroup/runner/WriterRunner.run",
+      652
+    ],
+    [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/StarRocksWriter$Task.startWrite",
+      650
+    ]
+  ],
+  "allocation_events": [
+    [
+      "[C",
+      554
+    ],
+    [
+      "[B",
+      409
+    ],
+    [
+      "java/lang/String",
+      141
+    ],
+    [
+      "[Ljava/lang/Object;",
+      136
+    ],
+    [
+      "[I",
+      83
+    ],
+    [
+      "java/util/HashMap$Node",
+      72
+    ],
+    [
+      "sun/nio/cs/UTF_8$Decoder",
+      52
+    ],
+    [
+      "[Ljava/lang/String;",
+      49
+    ],
+    [
+      "com/alibaba/fastjson2/JSONWriterUTF8",
+      43
+    ],
+    [
+      "java/lang/Long",
+      32
+    ],
+    [
+      "java/math/BigInteger",
+      32
+    ],
+    [
+      "sun/util/calendar/Gregorian$Date",
+      29
+    ],
+    [
+      "java/util/GregorianCalendar",
+      28
+    ],
+    [
+      "java/util/AbstractList$Itr",
+      27
+    ],
+    [
+      "com/alibaba/fastjson2/JSONWriter$Context",
+      26
+    ]
+  ],
+  "gc": [
+    {
+      "startTime": "2026-09-26T22:59:20.304441164Z",
+      "duration": "PT0.00473525S",
+      "gcId": 0,
+      "name": "ParallelScavenge",
+      "cause": "Metadata GC Threshold",
+      "sumOfPauses": "PT0.00473525S",
+      "longestPause": "PT0.00473525S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:20.309178872Z",
+      "duration": "PT0.011736334S",
+      "gcId": 1,
+      "name": "ParallelOld",
+      "cause": "Metadata GC Threshold",
+      "sumOfPauses": "PT0.011736334S",
+      "longestPause": "PT0.011736334S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:20.687890081Z",
+      "duration": "PT0.003672416S",
+      "gcId": 2,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.003672416S",
+      "longestPause": "PT0.003672416S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:21.018470206Z",
+      "duration": "PT0.002875083S",
+      "gcId": 3,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002875083S",
+      "longestPause": "PT0.002875083S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:21.429736914Z",
+      "duration": "PT0.00220275S",
+      "gcId": 4,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.00220275S",
+      "longestPause": "PT0.00220275S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:21.824270289Z",
+      "duration": "PT0.002240458S",
+      "gcId": 5,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002240458S",
+      "longestPause": "PT0.002240458S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:22.237495164Z",
+      "duration": "PT0.002721792S",
+      "gcId": 6,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002721792S",
+      "longestPause": "PT0.002721792S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:22.630659081Z",
+      "duration": "PT0.00183475S",
+      "gcId": 7,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.00183475S",
+      "longestPause": "PT0.00183475S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:23.045099247Z",
+      "duration": "PT0.002430042S",
+      "gcId": 8,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002430042S",
+      "longestPause": "PT0.002430042S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:23.365510747Z",
+      "duration": "PT0.001594792S",
+      "gcId": 9,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.001594792S",
+      "longestPause": "PT0.001594792S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:23.768354539Z",
+      "duration": "PT0.002635125S",
+      "gcId": 10,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002635125S",
+      "longestPause": "PT0.002635125S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:24.196888831Z",
+      "duration": "PT0.00261025S",
+      "gcId": 11,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.00261025S",
+      "longestPause": "PT0.00261025S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:24.590949664Z",
+      "duration": "PT0.001895208S",
+      "gcId": 12,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.001895208S",
+      "longestPause": "PT0.001895208S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:24.999678456Z",
+      "duration": "PT0.002455958S",
+      "gcId": 13,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002455958S",
+      "longestPause": "PT0.002455958S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:25.493260414Z",
+      "duration": "PT0.002948542S",
+      "gcId": 14,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002948542S",
+      "longestPause": "PT0.002948542S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:25.896400956Z",
+      "duration": "PT0.002485875S",
+      "gcId": 15,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002485875S",
+      "longestPause": "PT0.002485875S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:26.301284372Z",
+      "duration": "PT0.002889625S",
+      "gcId": 16,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.002889625S",
+      "longestPause": "PT0.002889625S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:26.712517122Z",
+      "duration": "PT0.003246917S",
+      "gcId": 17,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.003246917S",
+      "longestPause": "PT0.003246917S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:27.129125456Z",
+      "duration": "PT0.001859791S",
+      "gcId": 18,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.001859791S",
+      "longestPause": "PT0.001859791S"
+    },
+    {
+      "startTime": "2026-09-26T22:59:27.550932414Z",
+      "duration": "PT0.001869S",
+      "gcId": 19,
+      "name": "ParallelScavenge",
+      "cause": "Allocation Failure",
+      "sumOfPauses": "PT0.001869S",
+      "longestPause": "PT0.001869S"
+    }
+  ],
+  "execution_only": {
+    "samples": 987,
+    "threads": {
+      "job-0": 33,
+      "0-0-0-reader": 240,
+      "JFR Periodic Tasks": 5,
+      "Reference Handler": 1,
+      "Finalizer": 1,
+      "0-0-0-writer": 648,
+      "Thread-2": 55,
+      "pool-1-thread-1": 4
+    },
+    "top_frames": [
+      [
+        "com/alibaba/fastjson2/JSONWriterUTF8.writeString",
+        206
+      ],
+      [
+        "sun/nio/cs/UTF_8$Decoder.decode",
+        51
+      ],
+      [
+        "sun/util/calendar/BaseCalendar.getFixedDate",
+        49
+      ],
+      [
+        "java/lang/String.substring",
+        38
+      ],
+      [
+        "java/lang/Long.getChars",
+        30
+      ],
+      [
+        "com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader$Task.buildRecord",
+        28
+      ],
+      [
+        "java/util/Arrays.copyOf",
+        28
+      ],
+      [
+        "java/lang/Integer.getChars",
+        24
+      ],
+      [
+        "java/util/HashMap.putVal",
+        23
+      ],
+      [
+        "org/postgresql/jdbc/TimestampUtils.parseBackendTimestamp",
+        23
+      ],
+      [
+        "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor.joinRows",
+        22
+      ],
+      [
+        "sun/nio/cs/UTF_8.newDecoder",
+        22
+      ],
+      [
+        "com/alibaba/datax/common/util/Configuration.findObject",
+        19
+      ],
+      [
+        "com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksBaseSerializer.fieldConvertion",
+        18
+      ],
+      [
+        "org/apache/commons/lang3/time/FastDatePrinter.applyRules",
+        17
+      ],
+      [
+        "java/math/BigDecimal.<init>",
+        17
+      ],
+      [
+        "java/lang/Long.valueOf",
+        15
+      ],
+      [
+        "com/alibaba/fastjson2/JSONWriter.writeName",
+        13
+      ],
+      [
+        "java/lang/String.indexOf",
+        13
+      ],
+      [
+        "com/alibaba/fastjson2/JSONWriter.getObjectWriter",
+        11
+      ],
+      [
+        "java/util/Calendar.setWeekCountData",
+        11
+      ],
+      [
+        "com/alibaba/fastjson2/writer/ObjectWriterImplMap.write",
+        11
+      ],
+      [
+        "java/lang/reflect/Constructor.newInstance",
+        11
+      ],
+      [
+        "com/alibaba/datax/common/element/DateCast.asString",
+        9
+      ],
+      [
+        "org/postgresql/core/VisibleBufferedInputStream.ensureBytes",
+        8
+      ]
+    ],
+    "selected_stack_presence": {
+      "java/util/concurrent/ConcurrentHashMap.transfer": 1,
+      "java/util/concurrent/ConcurrentHashMap.putIfAbsent": 1,
+      "java/util/concurrent/ConcurrentHashMap.putVal": 2,
+      "java/util/concurrent/ConcurrentHashMap.addCount": 1,
+      "com/alibaba/fastjson2/JSONWriter$Context.getObjectWriter": 1,
+      "org/apache/commons/lang3/time/FastDateParser$TimeZoneStrategy.<init>": 2,
+      "org/apache/commons/lang3/time/FastDateParser.<init>": 4,
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.serializeBytes": 496,
+      "org/apache/commons/lang3/time/FastDateParser.init": 4,
+      "org/apache/commons/lang3/time/FastDateFormat$1.createInstance": 4,
+      "org/apache/commons/lang3/time/FastDateParser.getLocaleSpecificStrategy": 2,
+      "com/alibaba/datax/common/element/DateCast.asString": 168,
+      "org/apache/commons/lang3/time/FastDateParser.getStrategy": 2,
+      "org/apache/commons/lang3/time/FastDateFormat.<init>": 4,
+      "org/apache/commons/lang3/time/FastDateFormat.getInstance": 12,
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.rowMap": 243,
+      "java/util/HashMap.put": 25,
+      "java/util/HashMap.putVal": 25,
+      "com/alibaba/fastjson2/JSONWriter.ofUTF8": 3,
+      "org/apache/commons/lang3/time/FastDatePrinter.format": 143,
+      "org/apache/commons/lang3/time/FastDateFormat.format": 143,
+      "com/alibaba/fastjson2/JSONWriterUTF8.writeString": 206,
+      "com/alibaba/fastjson2/JSONWriter.writeName": 46,
+      "com/alibaba/fastjson2/writer/ObjectWriterImplMap.write": 230,
+      "com/alibaba/fastjson2/JSONWriter.getObjectWriter": 12,
+      "org/apache/commons/lang3/time/FastDatePrinter.newCalendar": 53,
+      "java/util/concurrent/ConcurrentHashMap.get": 16,
+      "org/apache/commons/lang3/time/FastDatePrinter.applyRulesToString": 65,
+      "org/apache/commons/lang3/time/FastDatePrinter$CharacterLiteral.appendTo": 10,
+      "org/apache/commons/lang3/time/FastDatePrinter.applyRules": 65,
+      "org/apache/commons/lang3/time/FastDatePrinter$TwoDigitMonthField.appendTo": 7,
+      "org/apache/commons/lang3/time/FastDatePrinter$PaddedNumberField.appendTo": 17,
+      "org/apache/commons/lang3/time/FastDatePrinter$TwoDigitNumberField.appendTo": 14,
+      "java/util/HashMap.resize": 2,
+      "java/util/concurrent/ConcurrentHashMap.put": 2,
+      "java/util/concurrent/ConcurrentHashMap$EntryIterator.next": 1,
+      "java/util/concurrent/ConcurrentHashMap$Traverser.advance": 1,
+      "com/alibaba/fastjson2/JSONWriterUTF8.<init>": 2,
+      "java/util/HashMap.getNode": 1,
+      "java/util/LinkedHashMap.get": 1,
+      "com/alibaba/fastjson2/JSONWriterUTF8.close": 1
+    }
+  }
+}

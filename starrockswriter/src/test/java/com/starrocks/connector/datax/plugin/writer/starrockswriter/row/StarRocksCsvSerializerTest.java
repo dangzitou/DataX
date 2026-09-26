@@ -80,4 +80,37 @@ public class StarRocksCsvSerializerTest {
         try { new StarRocksCsvSerializer("0", null, BinaryEncoding.HEX).serialize(row); fail("Encoding must not bypass delimiter guards"); }
         catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("Unsafe CSV")); }
     }
+    @Test public void jsonBytesMatchMapAcrossFieldOrdersAndSpecialKeys() {
+        java.util.List<java.util.List<String>> layouts = new java.util.ArrayList<>();
+        layouts.add(java.util.Arrays.asList("id", "null", "bool", "decimal", "中文😀\"\n", "bytes"));
+        layouts.add(java.util.Arrays.asList("repeat", "repeat", null, "bool", "decimal", "bytes"));
+        layouts.add(Collections.<String>emptyList());
+        java.util.List<String> wide = new java.util.ArrayList<>();
+        // Many colliding keys exercise HashMap's tree buckets and iteration order.
+        for (int i = 0; i < 128; i++) {
+            StringBuilder key = new StringBuilder();
+            for (int bit = 0; bit < 7; bit++) key.append((i & (1 << bit)) == 0 ? "Aa" : "BB");
+            wide.add(key.toString());
+        }
+        layouts.add(wide);
+        final Column[] values = {new com.alibaba.datax.common.element.LongColumn("18446744073709551615"),
+            new StringColumn(), new com.alibaba.datax.common.element.BoolColumn(true),
+            new com.alibaba.datax.common.element.DoubleColumn("12345678901234567890.123456789012345678"),
+            new StringColumn("中文😀\"\n\t\\"), new BytesColumn(new byte[]{0,1,(byte)255})};
+        Record row = (Record) Proxy.newProxyInstance(Record.class.getClassLoader(),new Class<?>[]{Record.class},
+            (proxy, method, args) -> {
+                if (method.getName().equals("getColumn")) return values[(Integer) args[0] % values.length];
+                throw new UnsupportedOperationException(method.getName());
+            });
+        for (java.util.List<String> layout : layouts) {
+            java.util.List<String> fields = new java.util.ArrayList<>(layout);
+            StarRocksJsonSerializer codec = new StarRocksJsonSerializer(fields, BinaryEncoding.HEX);
+            assertArrayEquals(codec.serialize(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.serializeBytes(row));
+            if (!fields.isEmpty()) {
+                fields.set(0,"changed after construction");
+                assertArrayEquals(codec.serialize(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.serializeBytes(row));
+            }
+        }
+    }
+
 }

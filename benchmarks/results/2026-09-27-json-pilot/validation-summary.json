@@ -1,0 +1,12 @@
+{
+  "scope": "Rejected prototype; no released-runtime speed claim.",
+  "complete_comparisons": 4,
+  "completed_measured_and_warmup_jobs": 48,
+  "completed_groups_gate_25_passed": 0,
+  "completed_groups_gate_50_passed": 0,
+  "additional_incomplete_groups_validated_jobs": 13,
+  "additional_engine_success_without_completed_validation": 1,
+  "profile_jobs_with_data_validation": 1,
+  "prototype_and_retained_source_unit_tests_each": 57,
+  "prototype_retained": false
+}

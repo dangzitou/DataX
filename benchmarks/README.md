@@ -118,6 +118,12 @@ checks reproduce two committed tail batches after an earlier failure in upstream
 the candidate stops those queued writes. In-flight and earlier commits cannot be
 retracted. This is a reliability fix with no new throughput or billion-row claim.
 
+[Rejected direct JSON encoding prototype (中文)](REPORT-json-pilot.zh-CN.md)
+records four complete million-row comparisons, two interrupted controls, and
+current-runtime JFR samples. The prototype was reverted after a Doris regression;
+no released-code speed claim follows from it. The benchmark now uses Doris's
+actual batchSize key and preserves unvalidated runs for explicit gate rejection.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

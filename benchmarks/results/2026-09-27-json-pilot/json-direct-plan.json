@@ -1,0 +1,34 @@
+{
+  "scope": "Fixed pilot of direct JSON byte encoding; not a full-goal acceptance. Profiling is excluded from timings.",
+  "rows": 1000000,
+  "rounds": 5,
+  "order": "one warmup each, then five AB/BA pairs",
+  "comparisons": [
+    {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "reference": "previous"
+    },
+    {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "reference": "upstream"
+    },
+    {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "reference": "previous"
+    },
+    {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "reference": "upstream"
+    }
+  ],
+  "retention_rule": "Do not retain added production complexity unless both JSON writer medians improve over previous fork with no failed correctness gate. All +25/+50 per-pair gates are still required for the overall goal.",
+  "baseline_runtime": "/tmp/datax-perf/baseline-all",
+  "previous_runtime": "/tmp/datax-perf/candidate-stream-queue",
+  "candidate_runtime": "/tmp/datax-perf/candidate-json-direct",
+  "batch_bytes": 5242880,
+  "Doris_parameter_correction": "Use batchSize; earlier olap_scenarios.py used maxBatchSize, which Doris ignores, so earlier Doris reports used its 90 MiB default."
+}

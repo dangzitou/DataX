@@ -1,0 +1,13 @@
+{
+  "scope": "Owned disposable data only; images, Maven and workspaces excluded. Between-run storage guard, not hard quota.",
+  "before_temporary_root_kib": 996128,
+  "after_temporary_root_kib": 850824,
+  "postgres_kib": 1439048,
+  "removed_prototype_runtime_bytes": 147383881,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-stream-queue"
+  ],
+  "no_olap_containers_remain": true,
+  "max_sampled_active_database_bytes": 5481373696
+}

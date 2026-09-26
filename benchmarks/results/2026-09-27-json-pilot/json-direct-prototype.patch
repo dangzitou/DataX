@@ -1,0 +1,217 @@
+diff --git a/doriswriter/src/main/java/com/alibaba/datax/plugin/writer/doriswriter/DorisJsonCodec.java b/doriswriter/src/main/java/com/alibaba/datax/plugin/writer/doriswriter/DorisJsonCodec.java
+index bb6477a..e0b6df8 100644
+--- a/doriswriter/src/main/java/com/alibaba/datax/plugin/writer/doriswriter/DorisJsonCodec.java
++++ b/doriswriter/src/main/java/com/alibaba/datax/plugin/writer/doriswriter/DorisJsonCodec.java
+@@ -3,6 +3,8 @@ package com.alibaba.datax.plugin.writer.doriswriter;
+ import com.alibaba.datax.common.element.Record;
+ import com.alibaba.datax.common.util.BinaryEncoding;
+ import com.alibaba.fastjson2.JSON;
++import com.alibaba.fastjson2.JSONWriter;
++import java.util.ArrayList;
+ 
+ import java.util.HashMap;
+ import java.util.List;
+@@ -13,6 +15,8 @@ public class DorisJsonCodec extends DorisBaseCodec implements DorisCodec {
+     private static final long serialVersionUID = 1L;
+ 
+     private final List<String> fieldNames;
++    private final List<String> originalFields;
++    private final int[] jsonOrder;
+ 
+     public DorisJsonCodec ( List<String> fieldNames) {
+         this(fieldNames, BinaryEncoding.REJECT);
+@@ -21,6 +25,18 @@ public class DorisJsonCodec extends DorisBaseCodec implements DorisCodec {
+     public DorisJsonCodec(List<String> fieldNames, BinaryEncoding binaryEncoding) {
+         super(binaryEncoding);
+         this.fieldNames = fieldNames;
++        this.originalFields = fieldNames == null ? null : new ArrayList<>(fieldNames);
++        Map<String, Integer> order = new HashMap<>(fieldNames == null ? 0 : fieldNames.size());
++        if (fieldNames != null) {
++            for (int i = 0; i < fieldNames.size(); i++) order.put(fieldNames.get(i), i);
++        }
++        if (fieldNames == null || order.containsKey(null) || order.size() != fieldNames.size()) {
++            jsonOrder = null;
++        } else {
++            jsonOrder = new int[order.size()];
++            int i = 0;
++            for (int index : order.values()) jsonOrder[i++] = index;
++        }
+     }
+ 
+     @Override
+@@ -33,7 +49,24 @@ public class DorisJsonCodec extends DorisBaseCodec implements DorisCodec {
+ 
+     @Override
+     public byte[] codecBytes(Record row) {
+-        return fieldNames == null ? new byte[0] : JSON.toJSONBytes(rowMap(row));
++        if (fieldNames == null) return new byte[0];
++        // Keep the established Map behavior for unusual or subsequently changed field lists.
++        if (jsonOrder == null || !originalFields.equals(fieldNames)) return JSON.toJSONBytes(rowMap(row));
++        try (JSONWriter writer = JSONWriter.ofUTF8()) {
++            // Preserve configured global JSON features through the existing Map serializer.
++            if (writer.getFeatures() != 0) return JSON.toJSONBytes(rowMap(row));
++            String[] values = new String[fieldNames.size()];
++            for (int i = 0; i < values.length; i++) values[i] = convertionField(row.getColumn(i));
++            writer.startObject();
++            for (int index : jsonOrder) {
++                if (values[index] == null) continue;
++                writer.writeName(fieldNames.get(index));
++                writer.writeColon();
++                writer.writeString(values[index]);
++            }
++            writer.endObject();
++            return writer.getBytes();
++        }
+     }
+ 
+     private Map<String, Object> rowMap(Record row) {
+diff --git a/doriswriter/src/test/java/com/alibaba/datax/plugin/writer/doriswriter/DorisCsvCodecTest.java b/doriswriter/src/test/java/com/alibaba/datax/plugin/writer/doriswriter/DorisCsvCodecTest.java
+index eb713c2..5ba694a 100644
+--- a/doriswriter/src/test/java/com/alibaba/datax/plugin/writer/doriswriter/DorisCsvCodecTest.java
++++ b/doriswriter/src/test/java/com/alibaba/datax/plugin/writer/doriswriter/DorisCsvCodecTest.java
+@@ -80,4 +80,37 @@ public class DorisCsvCodecTest {
+         try { new DorisCsvCodec("0", null, BinaryEncoding.HEX).codec(row); fail("Encoding must not bypass delimiter guards"); }
+         catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("Unsafe CSV")); }
+     }
++    @Test public void jsonBytesMatchMapAcrossFieldOrdersAndSpecialKeys() {
++        java.util.List<java.util.List<String>> layouts = new java.util.ArrayList<>();
++        layouts.add(java.util.Arrays.asList("id", "null", "bool", "decimal", "中文😀\"\n", "bytes"));
++        layouts.add(java.util.Arrays.asList("repeat", "repeat", null, "bool", "decimal", "bytes"));
++        layouts.add(Collections.<String>emptyList());
++        java.util.List<String> wide = new java.util.ArrayList<>();
++        // Many colliding keys exercise HashMap's tree buckets and iteration order.
++        for (int i = 0; i < 128; i++) {
++            StringBuilder key = new StringBuilder();
++            for (int bit = 0; bit < 7; bit++) key.append((i & (1 << bit)) == 0 ? "Aa" : "BB");
++            wide.add(key.toString());
++        }
++        layouts.add(wide);
++        final Column[] values = {new com.alibaba.datax.common.element.LongColumn("18446744073709551615"),
++            new StringColumn(), new com.alibaba.datax.common.element.BoolColumn(true),
++            new com.alibaba.datax.common.element.DoubleColumn("12345678901234567890.123456789012345678"),
++            new StringColumn("中文😀\"\n\t\\"), new BytesColumn(new byte[]{0,1,(byte)255})};
++        Record row = (Record) Proxy.newProxyInstance(Record.class.getClassLoader(),new Class<?>[]{Record.class},
++            (proxy, method, args) -> {
++                if (method.getName().equals("getColumn")) return values[(Integer) args[0] % values.length];
++                throw new UnsupportedOperationException(method.getName());
++            });
++        for (java.util.List<String> layout : layouts) {
++            java.util.List<String> fields = new java.util.ArrayList<>(layout);
++            DorisJsonCodec codec = new DorisJsonCodec(fields, BinaryEncoding.HEX);
++            assertArrayEquals(codec.codec(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.codecBytes(row));
++            if (!fields.isEmpty()) {
++                fields.set(0,"changed after construction");
++                assertArrayEquals(codec.codec(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.codecBytes(row));
++            }
++        }
++    }
++
+ }
+diff --git a/starrockswriter/src/main/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.java b/starrockswriter/src/main/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.java
+index a63e8e7..f322226 100644
+--- a/starrockswriter/src/main/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.java
++++ b/starrockswriter/src/main/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksJsonSerializer.java
+@@ -7,12 +7,16 @@ import java.util.Map;
+ import com.alibaba.datax.common.element.Record;
+ import com.alibaba.datax.common.util.BinaryEncoding;
+ import com.alibaba.fastjson2.JSON;
++import com.alibaba.fastjson2.JSONWriter;
++import java.util.ArrayList;
+ 
+ public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements StarRocksISerializer {
+ 
+     private static final long serialVersionUID = 1L;
+     
+     private final List<String> fieldNames;
++    private final List<String> originalFields;
++    private final int[] jsonOrder;
+ 
+     public StarRocksJsonSerializer(List<String> fieldNames) {
+         this(fieldNames, BinaryEncoding.REJECT);
+@@ -21,6 +25,18 @@ public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements
+     public StarRocksJsonSerializer(List<String> fieldNames, BinaryEncoding binaryEncoding) {
+         super(binaryEncoding);
+         this.fieldNames = fieldNames;
++        this.originalFields = fieldNames == null ? null : new ArrayList<>(fieldNames);
++        Map<String, Integer> order = new HashMap<>(fieldNames == null ? 0 : fieldNames.size());
++        if (fieldNames != null) {
++            for (int i = 0; i < fieldNames.size(); i++) order.put(fieldNames.get(i), i);
++        }
++        if (fieldNames == null || order.containsKey(null) || order.size() != fieldNames.size()) {
++            jsonOrder = null;
++        } else {
++            jsonOrder = new int[order.size()];
++            int i = 0;
++            for (int index : order.values()) jsonOrder[i++] = index;
++        }
+     }
+ 
+     @Override
+@@ -33,7 +49,24 @@ public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements
+ 
+     @Override
+     public byte[] serializeBytes(Record row) {
+-        return fieldNames == null ? new byte[0] : JSON.toJSONBytes(rowMap(row));
++        if (fieldNames == null) return new byte[0];
++        // Keep the established Map behavior for unusual or subsequently changed field lists.
++        if (jsonOrder == null || !originalFields.equals(fieldNames)) return JSON.toJSONBytes(rowMap(row));
++        try (JSONWriter writer = JSONWriter.ofUTF8()) {
++            // Preserve configured global JSON features through the existing Map serializer.
++            if (writer.getFeatures() != 0) return JSON.toJSONBytes(rowMap(row));
++            String[] values = new String[fieldNames.size()];
++            for (int i = 0; i < values.length; i++) values[i] = fieldConvertion(row.getColumn(i));
++            writer.startObject();
++            for (int index : jsonOrder) {
++                if (values[index] == null) continue;
++                writer.writeName(fieldNames.get(index));
++                writer.writeColon();
++                writer.writeString(values[index]);
++            }
++            writer.endObject();
++            return writer.getBytes();
++        }
+     }
+ 
+     private Map<String, Object> rowMap(Record row) {
+diff --git a/starrockswriter/src/test/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksCsvSerializerTest.java b/starrockswriter/src/test/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksCsvSerializerTest.java
+index 50a0050..f0c837d 100644
+--- a/starrockswriter/src/test/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksCsvSerializerTest.java
++++ b/starrockswriter/src/test/java/com/starrocks/connector/datax/plugin/writer/starrockswriter/row/StarRocksCsvSerializerTest.java
+@@ -80,4 +80,37 @@ public class StarRocksCsvSerializerTest {
+         try { new StarRocksCsvSerializer("0", null, BinaryEncoding.HEX).serialize(row); fail("Encoding must not bypass delimiter guards"); }
+         catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("Unsafe CSV")); }
+     }
++    @Test public void jsonBytesMatchMapAcrossFieldOrdersAndSpecialKeys() {
++        java.util.List<java.util.List<String>> layouts = new java.util.ArrayList<>();
++        layouts.add(java.util.Arrays.asList("id", "null", "bool", "decimal", "中文😀\"\n", "bytes"));
++        layouts.add(java.util.Arrays.asList("repeat", "repeat", null, "bool", "decimal", "bytes"));
++        layouts.add(Collections.<String>emptyList());
++        java.util.List<String> wide = new java.util.ArrayList<>();
++        // Many colliding keys exercise HashMap's tree buckets and iteration order.
++        for (int i = 0; i < 128; i++) {
++            StringBuilder key = new StringBuilder();
++            for (int bit = 0; bit < 7; bit++) key.append((i & (1 << bit)) == 0 ? "Aa" : "BB");
++            wide.add(key.toString());
++        }
++        layouts.add(wide);
++        final Column[] values = {new com.alibaba.datax.common.element.LongColumn("18446744073709551615"),
++            new StringColumn(), new com.alibaba.datax.common.element.BoolColumn(true),
++            new com.alibaba.datax.common.element.DoubleColumn("12345678901234567890.123456789012345678"),
++            new StringColumn("中文😀\"\n\t\\"), new BytesColumn(new byte[]{0,1,(byte)255})};
++        Record row = (Record) Proxy.newProxyInstance(Record.class.getClassLoader(),new Class<?>[]{Record.class},
++            (proxy, method, args) -> {
++                if (method.getName().equals("getColumn")) return values[(Integer) args[0] % values.length];
++                throw new UnsupportedOperationException(method.getName());
++            });
++        for (java.util.List<String> layout : layouts) {
++            java.util.List<String> fields = new java.util.ArrayList<>(layout);
++            StarRocksJsonSerializer codec = new StarRocksJsonSerializer(fields, BinaryEncoding.HEX);
++            assertArrayEquals(codec.serialize(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.serializeBytes(row));
++            if (!fields.isEmpty()) {
++                fields.set(0,"changed after construction");
++                assertArrayEquals(codec.serialize(row).getBytes(java.nio.charset.StandardCharsets.UTF_8), codec.serializeBytes(row));
++            }
++        }
++    }
++
+ }

@@ -147,12 +147,7 @@ def main():
                 execute('TRUNCATE TABLE datax_bench.olap_perf_target;')
             elif scenario == 'reader-pg':
                 sql('DROP TABLE IF EXISTS pg_perf_target; CREATE TABLE pg_perf_target (LIKE pg_perf_source INCLUDING ALL)')
-            report['pending_run'] = {'round': number, 'variant': variant, 'name': name, 'phase': 'running'}
-            (output / 'results.json').write_text(json.dumps(report, indent=2))
             seconds = run(getattr(args, variant).resolve(), config, output, name, jvm_options=jvm_options)
-            report['pending_run'].update(phase='validating', seconds=seconds,
-                                         **process_metrics(output / (name + '.log')))
-            (output / 'results.json').write_text(json.dumps(report, indent=2))
             if scenario.startswith('writer-'):
                 check = validate_olap('olap_perf_target')
             elif scenario == 'reader-pg':
@@ -167,7 +162,6 @@ def main():
                      'database_storage_before_bytes': storage_before,
                      **process_metrics(output / (name + '.log'))}
             report['runs'].append(entry)
-            del report['pending_run']
             (output / 'results.json').write_text(json.dumps(report, indent=2))
             print(json.dumps(entry), flush=True)
     medians = {v: statistics.median(r['seconds'] for r in report['runs'] if r['round'] and r['variant'] == v)

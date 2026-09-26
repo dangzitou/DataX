@@ -1,0 +1,85 @@
+{
+  "common": {
+    "column": {
+      "timeZone": "UTC"
+    }
+  },
+  "core": {
+    "container": {
+      "job": {
+        "sleepInterval": 200
+      },
+      "taskGroup": {
+        "channel": 1
+      }
+    }
+  },
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 1
+      },
+      "errorLimit": {
+        "record": 0
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "postgresqlreader",
+          "parameter": {
+            "username": "postgres",
+            "password": "datax-local-benchmark",
+            "fetchSize": 1024,
+            "connection": [
+              {
+                "jdbcUrl": [
+                  "jdbc:postgresql://127.0.0.1:25432/datax_bench"
+                ],
+                "querySql": [
+                  "SELECT * FROM pg_perf_source ORDER BY id"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "starrockswriter",
+          "parameter": {
+            "username": "root",
+            "password": "",
+            "column": [
+              "id",
+              "tenant",
+              "amount",
+              "created",
+              "message",
+              "payload"
+            ],
+            "loadUrl": [
+              "127.0.0.1:28040"
+            ],
+            "connection": [
+              {
+                "table": [
+                  "olap_perf_target"
+                ],
+                "jdbcUrl": "jdbc:mysql://127.0.0.1:29030/datax_bench",
+                "selectedDatabase": "datax_bench"
+              }
+            ],
+            "maxBatchRows": 500000,
+            "maxBatchSize": 5242880,
+            "flushQueueLength": 1,
+            "loadProps": {
+              "format": "json",
+              "strict_mode": true,
+              "max_filter_ratio": 0,
+              "strip_outer_array": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}
