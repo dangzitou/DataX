@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -321,7 +322,15 @@ public class CommonRdbmsReader {
                     case Types.TINYINT:
                     case Types.INTEGER:
                     case Types.BIGINT:
-                        record.addColumn(new LongColumn(rs.getString(i)));
+                        if (dataBaseType == DataBaseType.PostgreSQL) {
+                            // PostgreSQL integral types fit in long, including their binary wire format.
+                            // Other drivers may expose unsigned BIGINT or padded text; keep their path.
+                            long integer = rs.getLong(i);
+                            record.addColumn(rs.wasNull() ? new LongColumn() :
+                                    new LongColumn(BigInteger.valueOf(integer), Long.toString(integer).length()));
+                        } else {
+                            record.addColumn(new LongColumn(rs.getString(i)));
+                        }
                         break;
 
                     case Types.NUMERIC:

@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.rdbms.reader;
 
 import com.alibaba.datax.common.element.Column;
+import com.alibaba.datax.common.element.LongColumn;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.util.Configuration;
@@ -40,6 +41,7 @@ public class RdbmsReaderRegressionTest {
     }
     private static class Task extends CommonRdbmsReader.Task {
         Task() { super(DataBaseType.MySql); }
+        Task(DataBaseType type) { super(type); }
         void read(Sender sender, ResultSet rs, ResultSetMetaData meta, String encoding, Collector collector) {
             transportOneRecord(sender, rs, meta, 1, encoding, collector);
         }
@@ -107,6 +109,36 @@ public class RdbmsReaderRegressionTest {
         for (int i = 0; i < 100; i++) task.read(sender, rs, meta, "", new Collector());
         verify(meta, times(1)).getColumnType(1);
         assertEquals("9223372036854775808", sender.rows.get(0).getColumn(0).asString());
+    }
+
+    @Test public void postgresqlNativeIntegersPreserveValuesNullAndByteCounts() throws Exception {
+        for (int type : new int[]{Types.SMALLINT, Types.INTEGER, Types.BIGINT}) {
+            Task task = new Task(DataBaseType.PostgreSQL);
+            ResultSetMetaData meta = metadata(type);
+            for (Long value : new Long[]{null, 0L, 1L, -1L, -32768L, 32767L,
+                    (long) Integer.MIN_VALUE, (long) Integer.MAX_VALUE, Long.MIN_VALUE, Long.MAX_VALUE}) {
+                ResultSet rs = mock(ResultSet.class);
+                when(rs.getLong(1)).thenReturn(value == null ? 0L : value);
+                when(rs.wasNull()).thenReturn(value == null);
+                Sender sender = new Sender();
+                task.read(sender, rs, meta, "", new Collector());
+                Column actual = sender.rows.get(0).getColumn(0);
+                LongColumn expected = new LongColumn(value == null ? null : value.toString());
+                assertEquals(expected.getRawData(), actual.getRawData());
+                assertEquals(expected.getByteSize(), actual.getByteSize());
+                verify(rs, never()).getString(1);
+            }
+        }
+        ResultSet failing = mock(ResultSet.class);
+        when(failing.getLong(1)).thenThrow(new SQLException("connection lost", "08006"));
+        Sender sender = new Sender(); Collector collector = new Collector();
+        try {
+            new Task(DataBaseType.PostgreSQL).read(sender, failing, metadata(Types.BIGINT), "", collector);
+            fail("JDBC failure was swallowed");
+        } catch (DataXException expected) {
+            assertEquals(0, collector.dirty);
+            assertTrue(sender.rows.isEmpty());
+        }
     }
 
     @Test public void explicitBinaryLabelsBypassLossyTextConversion() throws Exception {

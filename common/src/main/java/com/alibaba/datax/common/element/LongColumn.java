@@ -56,7 +56,8 @@ public class LongColumn extends Column {
 		this(data, null == data ? 0 : 8);
 	}
 
-	private LongColumn(BigInteger data, int byteSize) {
+	/** An already parsed integer with the source representation's byte count. */
+	public LongColumn(BigInteger data, int byteSize) {
 		super(data, Column.Type.LONG, byteSize);
 	}
 
