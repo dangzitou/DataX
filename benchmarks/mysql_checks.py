@@ -131,6 +131,22 @@ def main():
     results.append({"case": "wide-server-prepare-fallback", "seconds": seconds,
                     "expected": 1024, "actual": actual, "mismatched_rows": mismatched})
 
+    sql("DROP TABLE IF EXISTS integer_unsigned_source; CREATE TABLE integer_unsigned_source ("
+        "id BIGINT PRIMARY KEY, small_value SMALLINT UNSIGNED NULL, int_value INT UNSIGNED NULL); "
+        "INSERT INTO integer_unsigned_source VALUES (1,NULL,NULL),(2,0,0),(3,32767,2147483647),"
+        "(4,32768,2147483648),(5,65535,4294967295)")
+    for attempt in range(1,5):
+        sql('DROP TABLE IF EXISTS integer_unsigned_target; CREATE TABLE integer_unsigned_target LIKE integer_unsigned_source')
+        config = job(False,1,'integer_unsigned_target','SELECT * FROM integer_unsigned_source ORDER BY id')
+        config['job']['content'][0]['writer']['parameter'].update(column=['id','small_value','int_value'],batchSize=2)
+        name = 'narrow-unsigned-integers-'+str(attempt)
+        seconds = run(runtime,config,output,name)
+        actual = int(sql('SELECT count(*) FROM integer_unsigned_target'))
+        differences = int(sql('SELECT count(*) FROM integer_unsigned_source s LEFT JOIN integer_unsigned_target t USING(id) '
+                              'WHERE NOT (s.id <=> t.id AND s.small_value <=> t.small_value AND s.int_value <=> t.int_value)'))
+        assert actual == 5 and differences == 0, (actual,differences)
+        results.append({'case':name,'seconds':seconds,'expected':5,'actual':actual,'mismatched_rows':differences})
+
     failures = [
         ("missing-table", "SELECT * FROM absent_datax_table", {}, "MYSQLErrCode-04"),
         ("missing-column", "SELECT nonexistent_column FROM source_data", {}, "MYSQLErrCode-06"),

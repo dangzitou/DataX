@@ -466,6 +466,12 @@ public class CommonRdbmsWriter {
                             || column.asBigInteger().bitLength() <= 63)) {
                         Long value = column.asLong();
                         if (value == null) preparedStatement.setNull(columnIndex + 1, columnSqltype);
+                        // Match NULL parameter types, otherwise pgJDBC repeatedly reparses nullable integers.
+                        // Values outside the signed target range keep setLong: never truncate unsigned/invalid input.
+                        else if (columnSqltype == Types.SMALLINT && value >= Short.MIN_VALUE && value <= Short.MAX_VALUE)
+                            preparedStatement.setShort(columnIndex + 1, value.shortValue());
+                        else if (columnSqltype == Types.INTEGER && value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE)
+                            preparedStatement.setInt(columnIndex + 1, value.intValue());
                         else preparedStatement.setLong(columnIndex + 1, value);
                         break;
                     }

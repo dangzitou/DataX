@@ -174,6 +174,23 @@ public class RdbmsWriterRegressionTest {
         }
     }
 
+    @Test public void narrowIntegerBindingMatchesNullTypesWithoutTruncation() throws Exception {
+        for (int type : new int[]{Types.SMALLINT, Types.INTEGER}) {
+            long low = type == Types.SMALLINT ? Short.MIN_VALUE : Integer.MIN_VALUE;
+            long high = type == Types.SMALLINT ? Short.MAX_VALUE : Integer.MAX_VALUE;
+            for (long value : new long[]{low, high, low-1, high+1, 4294967295L}) {
+                PreparedStatement statement = mock(PreparedStatement.class);
+                task().fillPreparedStatementColumnType(statement, 0, type, "integer", new LongColumn(value));
+                if (value < low || value > high) verify(statement).setLong(1, value);
+                else if (type == Types.SMALLINT) verify(statement).setShort(1, (short)value);
+                else verify(statement).setInt(1, (int)value);
+                task().fillPreparedStatementColumnType(statement, 0, type, "integer", new LongColumn());
+                verify(statement).setNull(1, type);
+                verifyNoMoreInteractions(statement);
+            }
+        }
+    }
+
     @Test public void mysqlWriterDefaultsRespectExplicitDriverOptions() {
         String url = "jdbc:mysql://localhost/test";
         String defaults = DataBaseType.MySql.appendJDBCSuffixForWriter(url);

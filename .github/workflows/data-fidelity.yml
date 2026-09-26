@@ -49,6 +49,8 @@ jobs:
           docker exec datax-perf-postgres pg_isready -U postgres
       - name: PostgreSQL field fidelity and rerun hazards
         run: python3 benchmarks/postgresql_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/pg-checks
+      - name: PostgreSQL nullable integer binding and overflow
+        run: python3 benchmarks/postgresql_binding_checks.py /tmp/datax-candidate /tmp/pg-binding-checks
       - name: JDBC commit acknowledgement fault injection with real PostgreSQL
         run: |
           python3 benchmarks/jdbc_commit_checks.py /tmp/datax-baseline /tmp/commit-baseline --expect-legacy
