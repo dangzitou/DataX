@@ -33,6 +33,10 @@ records ten completed comparisons, one incomplete comparison with a server
 memory failure, and 131 validated successful transfers. Every +50% gate failed.
 Raw failures, memory controls and bounded-storage execution records are retained.
 
+[Stream Load status and interruption checks (中文)](REPORT-stream-status.zh-CN.md)
+documents rejection of unknown/null/empty results and interrupted label polling.
+The 48 Engine checks use a loopback HTTP simulator, separately from real-server tests.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
