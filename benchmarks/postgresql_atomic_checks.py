@@ -162,16 +162,16 @@ def main():
         check(case, cfg, rows, 1 if success else 0, success, diagnostic)
 
     seed()
-    sql('DROP SCHEMA IF EXISTS pg_atomic_collision CASCADE; CREATE SCHEMA pg_atomic_collision; '
-        'CREATE TABLE pg_atomic_collision.target (LIKE pg_atomic_source); '
-        'CREATE TABLE pg_atomic_collision.__datax_atomic_batches_v1 (target_oid oid)')
+    sql('DROP SCHEMA IF EXISTS datax_atomic_collision CASCADE; CREATE SCHEMA datax_atomic_collision; '
+        'CREATE TABLE datax_atomic_collision.target (LIKE pg_atomic_source); '
+        'CREATE TABLE datax_atomic_collision.__datax_atomic_batches_v1 (target_oid oid)')
     try:
         cfg = config('bad-ledger')
-        cfg['job']['content'][0]['writer']['parameter']['connection'][0]['table'] = ['pg_atomic_collision.target']
+        cfg['job']['content'][0]['writer']['parameter']['connection'][0]['table'] = ['datax_atomic_collision.target']
         check('bad-ledger', cfg, 0, 0, False, 'ledger structure is unsafe')
-        assert sql('SELECT count(*) FROM pg_atomic_collision.target') == '0'
+        assert sql('SELECT count(*) FROM datax_atomic_collision.target') == '0'
     finally:
-        sql('DROP SCHEMA pg_atomic_collision CASCADE')
+        sql('DROP SCHEMA datax_atomic_collision CASCADE')
 
     # Two real Engines: old worker resumes after the owner connection dies and a
     # replacement job has recreated its stage. Neither count checks nor an owner
