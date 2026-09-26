@@ -2,6 +2,7 @@ name: PostgreSQL, StarRocks and Doris data fidelity
 on:
   push:
     branches: [master, 'perf/**']
+    paths-ignore: ['**/*.md', 'benchmarks/results/**']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -50,6 +51,8 @@ jobs:
         run: |
           python3 benchmarks/jdbc_commit_checks.py /tmp/datax-baseline /tmp/commit-baseline --expect-legacy
           python3 benchmarks/jdbc_commit_checks.py /tmp/datax-candidate /tmp/commit-candidate
+          python3 benchmarks/postgresql_commit_wire_checks.py /tmp/datax-baseline /tmp/commit-wire-baseline --expect-legacy
+          python3 benchmarks/postgresql_commit_wire_checks.py /tmp/datax-candidate /tmp/commit-wire-candidate
       - name: PostgreSQL shared snapshot and source changes
         run: |
           python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-baseline /tmp/snapshot-baseline --expect-inconsistent

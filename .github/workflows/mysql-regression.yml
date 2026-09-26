@@ -2,6 +2,7 @@ name: MySQL reader and transport regression
 on:
   push:
     branches: [master, 'perf/**']
+    paths-ignore: ['**/*.md', 'benchmarks/results/**']
   pull_request:
   workflow_dispatch:
 permissions:

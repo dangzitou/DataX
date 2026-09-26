@@ -80,6 +80,7 @@ public class JdbcCommitFaultCheck extends CommonRdbmsWriter.Task {
                     catch (Exception expected) { failure = expected; }
                     // Observe using a separate connection, so only committed rows are visible.
                     int count = 0;
+                    int[] multiplicity = new int[2];
                     try (Connection observer = connect(mysql); Statement query = observer.createStatement();
                          ResultSet result = query.executeQuery("SELECT id,txt FROM pg_commit_fault_target ORDER BY id")) {
                         while (result.next()) {
@@ -87,6 +88,7 @@ public class JdbcCommitFaultCheck extends CommonRdbmsWriter.Task {
                             if (id < 1 || id > 2 || !result.getString(2).equals("中文😀-" + id))
                                 throw new AssertionError("Unexpected field value");
                             count++;
+                            multiplicity[(int) id - 1]++;
                         }
                     }
                     Map<String, Object> result = new LinkedHashMap<>();
@@ -95,6 +97,9 @@ public class JdbcCommitFaultCheck extends CommonRdbmsWriter.Task {
                     result.put("injected", injected[0]);
                     result.put("input_rows", 2);
                     result.put("visible_rows", count);
+                    result.put("row_multiplicities", multiplicity);
+                    result.put("database", actual.getMetaData().getDatabaseProductVersion());
+                    result.put("jdbc_driver", actual.getMetaData().getDriverVersion());
                     result.put("failed", failure != null);
                     result.put("error", failure == null ? null : failure.toString());
                     System.out.println("RESULT " + JSON.toJSONString(result));
@@ -103,6 +108,8 @@ public class JdbcCommitFaultCheck extends CommonRdbmsWriter.Task {
                     boolean shouldFail = !legacy && point.endsWith("-commit");
                     if (count != expected || (failure != null) != shouldFail)
                         throw new AssertionError("Unexpected outcome: " + result);
+                    if (multiplicity[0] != expected/2 || multiplicity[1] != expected/2)
+                        throw new AssertionError("Missing or duplicated key: " + result);
                     if (shouldFail && !failure.toString().contains("DBUtilErrorCode-25"))
                         throw new AssertionError("Missing commit-outcome diagnostic");
                 }
