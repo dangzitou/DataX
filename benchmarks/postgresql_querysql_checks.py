@@ -41,7 +41,9 @@ def main():
     scenarios += ['source-change-%d' % n for n in range(1, 5)]
     scenarios += ['missing-snapshot', 'bad-key', 'wrong-case', 'text-key', 'multiple-statements',
                   'dryrun-valid', 'dryrun-wrong-case', 'dryrun-text-key', 'dryrun-second-query',
-                  'dryrun-write-cte', 'dryrun-write-function']
+                  'dryrun-write-cte', 'dryrun-write-function', 'dryrun-default-valid',
+                  'dryrun-default-second-query', 'dryrun-table-valid', 'dryrun-table-missing',
+                  'dryrun-timeout']
     for name in scenarios:
         seed()
         config = job(destination='pg_query_target', query=QUERY, channels=4)
@@ -89,6 +91,16 @@ def main():
         elif name == 'dryrun-second-query':
             queries.append('SELECT no_such_column FROM pg_query_source')
             diagnostic = 'no_such_column'
+        elif name.startswith('dryrun-default-') or name.startswith('dryrun-table-'):
+            del reader['querySqlSplitPk']
+            del reader['consistentSnapshot']
+            if name == 'dryrun-default-second-query':
+                queries.append('SELECT no_such_column FROM pg_query_source')
+                diagnostic = 'no_such_column'
+        elif name == 'dryrun-timeout':
+            reader['queryTimeout'] = 1
+            queries = ['SELECT 1::bigint AS id FROM pg_sleep(3)']
+            diagnostic = 'SQLState=57014'
         elif name in ('dryrun-write-cte', 'dryrun-write-function'):
             # Use an owner account here so missing write privileges cannot mask a read-only failure.
             reader['username'] = 'postgres'
@@ -100,6 +112,12 @@ def main():
                 queries = ['SELECT pg_query_write_probe() AS id']
             diagnostic = 'read-only transaction'
         reader['connection'][0]['querySql'] = queries
+        if name.startswith('dryrun-table-'):
+            del reader['connection'][0]['querySql']
+            reader['connection'][0]['table'] = ['pg_query_source']
+            reader['column'] = COLUMNS if name.endswith('valid') else ['no_such_column']
+            if name.endswith('missing'):
+                diagnostic = 'no_such_column'
         if dryrun:
             config['job']['setting']['dryRun'] = True
         elif diagnostic is None:
@@ -115,6 +133,8 @@ def main():
         count = int(sql('SELECT count(*) FROM pg_query_target'))
         if diagnostic:
             assert diagnostic in log, (name, diagnostic)
+            if name == 'dryrun-timeout':
+                assert 'DBUtilErrorCode-24' in log, name
         if dryrun or diagnostic:
             assert count == 0, (name, count)
             assert sql('SELECT count(*) FROM pg_query_source') == '9', name

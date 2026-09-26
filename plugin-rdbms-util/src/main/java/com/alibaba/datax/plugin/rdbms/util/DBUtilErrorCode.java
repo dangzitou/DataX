@@ -48,6 +48,7 @@ public enum DBUtilErrorCode implements ErrorCode {
     CONN_DB_ERROR("DBUtilErrorCode-10", "连接数据库失败. 请检查您的 账号、密码、数据库名称、IP、Port或者向 DBA 寻求帮助(注意网络环境)."),
     CONNECTION_LOST("DBUtilErrorCode-21", "数据库连接中断，请检查数据库状态与网络；不能将该错误忽略为脏数据。"),
     QUERY_TIMEOUT("DBUtilErrorCode-22", "数据库查询超时，请检查执行计划、锁等待以及 queryTimeout/socketTimeout 配置。"),
+    QUERY_CANCELLED("DBUtilErrorCode-24", "数据库查询被取消，可能触发查询超时或被外部取消；请核对超时配置及数据库日志。"),
     TRANSACTION_CONFLICT("DBUtilErrorCode-23", "数据库事务发生死锁或锁等待超时；重试前确认已写入数据，避免重复。"),
     GET_COLUMN_INFO_FAILED("DBUtilErrorCode-01", "获取表字段相关信息失败."),
     UNSUPPORTED_TYPE("DBUtilErrorCode-12", "不支持的数据库类型. 请注意查看 DataX 已经支持的数据库类型以及数据库版本."),

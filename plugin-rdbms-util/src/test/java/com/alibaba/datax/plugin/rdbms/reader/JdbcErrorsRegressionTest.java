@@ -50,6 +50,19 @@ public class JdbcErrorsRegressionTest {
                 error, "SELECT SLEEP(10)", null, "test").getErrorCode().getCode());
     }
 
+    @Test public void postgresCancellationIsNotAColumnErrorOrAssumedDeadline() {
+        for (String message : new String[]{null, "本地化取消信息", "canceling statement due to user request"}) {
+            SQLException cancelled = new SQLException(message, "57014");
+            SQLException wrapper = new SQLException("wrapper");
+            wrapper.setNextException(cancelled);
+            DataXException result = RdbmsException.asQueryException(DataBaseType.PostgreSQL,
+                    wrapper, "SELECT pg_sleep(3)", null, "test");
+            assertEquals(DBUtilErrorCode.QUERY_CANCELLED, result.getErrorCode());
+            assertTrue(result.getMessage().contains("SQLState=57014"));
+            assertSame(wrapper, result.getCause());
+        }
+    }
+
     @Test public void failedQueryClosesOwnedStatement() throws Exception {
         Connection conn = mock(Connection.class);
         Statement stmt = mock(Statement.class);

@@ -154,6 +154,9 @@ public class RdbmsException extends DataXException{
                     || "HYT00".equals(state)
                     || "HYT01".equals(state) || "S1T00".equals(state)) {
                 code = DBUtilErrorCode.QUERY_TIMEOUT;
+            } else if (database == DataBaseType.PostgreSQL && "57014".equals(state)) {
+                // PG uses the same SQLState for client/server deadlines and explicit cancellation.
+                code = DBUtilErrorCode.QUERY_CANCELLED;
             } else if (state != null && state.startsWith("08")) {
                 code = DBUtilErrorCode.CONNECTION_LOST;
             } else if ("40001".equals(state) || "40P01".equals(state)) {

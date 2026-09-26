@@ -53,6 +53,11 @@ explicit failure when the exported snapshot expires. Real eight-row tests
 cover concurrent key movement, deletion and insertion. Reruns and previously
 committed target batches still require a separate recovery/publication strategy.
 
+[PostgreSQL querySql splitting and measured controls (中文)](REPORT-pg-query.zh-CN.md)
+extends automatic integer-range splitting to PG with a mandatory shared snapshot,
+adds read-only query prechecks, and compares automatic splitting with both an
+untouched single-query baseline and manually partitioned upstream queries.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
@@ -237,10 +242,12 @@ BIT, arbitrary binary data, Unicode/control characters and millisecond timestamp
 
 ## Use parallel querySql
 
-Add `querySqlSplitPk` to `mysqlreader.parameter`; the named field must be a
+Add `querySqlSplitPk` to `mysqlreader.parameter` or `postgresqlreader.parameter`; the named field must be a
 simple output column/alias of integer type. All querySql entries in that reader
 must expose the field. Set `job.setting.speed.channel` to the desired total
 concurrency. Existing querySql arrays still work without the option.
+PostgreSQL also requires `consistentSnapshot=true`; the key must exactly match
+the case of the output column/alias. MySQL retains its case-insensitive matching.
 
 ```json
 {
@@ -266,13 +273,15 @@ and all-NULL keys can produce fewer tasks. A channel limit of one keeps one task
 There is no OFFSET pagination. Filters, joins, output aliases and expressions
 remain inside the original query.
 
-Use a **stable source and deterministic SELECT**: independently connected tasks
-do not share a database snapshot. Concurrent updates, nondeterministic functions,
-session variables, and unordered LIMIT queries can produce inconsistent results.
-This is not a CDC or snapshot-isolation implementation. Ordered output is not
+Use a **deterministic SELECT**. MySQL additionally needs a stable source because
+its independently connected tasks do not share a database snapshot. PG splitting
+imports one exported snapshot into range discovery and every task; see its
+[limits](../postgresqlreader/doc/postgresqlreader.md). Nondeterministic functions,
+session variables, and unordered LIMIT queries can still produce inconsistent results.
+This is not a CDC or cross-rerun snapshot implementation. Ordered output is not
 preserved across tasks. Check EXPLAIN: an indexed range key usually helps;
 materialized derived queries, skewed keys and a saturated writer may provide
-little benefit or regress. The feature currently supports MySQL; unsupported
+little benefit or regress. The feature currently supports MySQL and PostgreSQL; unsupported
 databases and noninteger keys fail explicitly. The opt-in parser is the existing
 Druid version, so newer SQL dialect features may require a manually partitioned
 querySql array instead.
