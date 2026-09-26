@@ -33,6 +33,14 @@ public final class ReaderSplitUtil {
 
         List<Object> conns = originalSliceConfig.getList(Constant.CONN_MARK, Object.class);
 
+        int queryCount = 0;
+        if (!isTableMode) {
+            for (Object connection : conns) {
+                queryCount += Configuration.from(connection.toString()).getList(Key.QUERY_SQL, String.class).size();
+            }
+        }
+        int perQuery = queryCount == 0 ? 1 : (int) Math.ceil((double) adviceNumber / queryCount);
+
         List<Configuration> splittedConfigs = new ArrayList<Configuration>();
 
         for (int i = 0, len = conns.size(); i < len; i++) {
@@ -102,7 +110,11 @@ public final class ReaderSplitUtil {
                 for (String querySql : sqls) {
                     tempSlice = sliceConfig.clone();
                     tempSlice.set(Key.QUERY_SQL, querySql);
-                    splittedConfigs.add(tempSlice);
+                    if (originalSliceConfig.get(Key.QUERY_SQL_SPLIT_PK) != null) {
+                        splittedConfigs.addAll(QuerySqlSplitUtil.split(tempSlice, perQuery, SingleTableSplitUtil.DATABASE_TYPE));
+                    } else {
+                        splittedConfigs.add(tempSlice);
+                    }
                 }
             }
 
@@ -124,6 +136,9 @@ public final class ReaderSplitUtil {
         for (int i = 0, len = conns.size(); i < len; i++){
             Configuration connConf = Configuration.from(conns.get(i).toString());
             List<String> querys = new ArrayList<String>();
+            connConf.set(Key.QUERY_TIMEOUT, originalSliceConfig.getInt(Key.QUERY_TIMEOUT,
+                    com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
+            connConf.set(Key.QUERY_SQL_SPLIT_PK, originalSliceConfig.getString(Key.QUERY_SQL_SPLIT_PK));
             List<String> splitPkQuerys = new ArrayList<String>();
             String connPath = String.format("connection[%d]",i);
             // 说明是配置的 table 方式

@@ -428,9 +428,14 @@ public final class DBUtil {
         conn.setAutoCommit(false);
         Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY);
-        stmt.setFetchSize(fetchSize);
-        stmt.setQueryTimeout(queryTimeout);
-        return query(stmt, sql);
+        try {
+            stmt.setFetchSize(fetchSize);
+            stmt.setQueryTimeout(queryTimeout);
+            return query(stmt, sql);
+        } catch (SQLException | RuntimeException e) {
+            closeDBResources(stmt, null);
+            throw e;
+        }
     }
 
     /**
@@ -661,9 +666,13 @@ public final class DBUtil {
             throws SQLException {
         Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY);
-        //默认3600 seconds
-        stmt.setQueryTimeout(Constant.SOCKET_TIMEOUT_INSECOND);
-        return query(stmt, sql);
+        try {
+            stmt.setQueryTimeout(Constant.SOCKET_TIMEOUT_INSECOND);
+            return query(stmt, sql);
+        } catch (SQLException | RuntimeException e) {
+            closeDBResources(stmt, null);
+            throw e;
+        }
     }
 
     private static boolean doPreCheck(Connection conn, String pre) {
@@ -746,17 +755,20 @@ public final class DBUtil {
                             e);
         }
 
-        for (String sessionSql : sessions) {
-            LOG.info("execute sql:[{}]", sessionSql);
-            try {
-                DBUtil.executeSqlWithoutResultSet(stmt, sessionSql);
-            } catch (SQLException e) {
-                throw DataXException.asDataXException(
-                        DBUtilErrorCode.SET_SESSION_ERROR, String.format(
-                                "session配置有误. 因为根据您的配置执行 session 设置失败. 上下文信息是:[%s]. 请检查您的配置并作出修改.", message), e);
+        try {
+            for (String sessionSql : sessions) {
+                LOG.info("execute sql:[{}]", sessionSql);
+                try {
+                    DBUtil.executeSqlWithoutResultSet(stmt, sessionSql);
+                } catch (SQLException e) {
+                    throw DataXException.asDataXException(
+                            DBUtilErrorCode.SET_SESSION_ERROR, String.format(
+                                    "session配置有误. 因为根据您的配置执行 session 设置失败. 上下文信息是:[%s]. 请检查您的配置并作出修改.", message), e);
+                }
             }
+        } finally {
+            DBUtil.closeDBResources(stmt, null);
         }
-        DBUtil.closeDBResources(stmt, null);
     }
 
     public static void sqlValid(String sql, DataBaseType dataBaseType){

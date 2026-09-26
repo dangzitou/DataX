@@ -31,6 +31,10 @@ public final class Key {
 
     public final static String QUERY_SQL = "querySql";
 
+    public final static String QUERY_SQL_SPLIT_PK = "querySqlSplitPk";
+
+    public final static String QUERY_TIMEOUT = "queryTimeout";
+
     public final static String SPLIT_PK_SQL = "splitPkSql";
 
 

@@ -2,6 +2,12 @@ package com.alibaba.datax.plugin.rdbms.util;
 
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.spi.ErrorCode;
+import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
 
 /**
  * Created by judy.lt on 2015/6/5.
@@ -12,6 +18,8 @@ public class RdbmsException extends DataXException{
     }
 
     public static DataXException asConnException(DataBaseType dataBaseType,Exception e,String userName,String dbName){
+        DataXException classified = classifyJdbc(dataBaseType, e, null);
+        if (classified != null) return classified;
         if (dataBaseType.equals(DataBaseType.MySql)){
             DBUtilErrorCode dbUtilErrorCode = mySqlConnectionErrorAna(e.getMessage());
             if (dbUtilErrorCode == DBUtilErrorCode.MYSQL_CONN_DB_ERROR && dbName !=null ){
@@ -37,6 +45,7 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode mySqlConnectionErrorAna(String e){
+        if (e == null) return DBUtilErrorCode.CONN_DB_ERROR;
         if (e.contains(Constant.MYSQL_DATABASE)){
             return DBUtilErrorCode.MYSQL_CONN_DB_ERROR;
         }
@@ -53,6 +62,7 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode oracleConnectionErrorAna(String e){
+        if (e == null) return DBUtilErrorCode.CONN_DB_ERROR;
         if (e.contains(Constant.ORACLE_DATABASE)){
             return DBUtilErrorCode.ORACLE_CONN_DB_ERROR;
         }
@@ -69,6 +79,9 @@ public class RdbmsException extends DataXException{
     }
 
     public static DataXException asQueryException(DataBaseType dataBaseType, Exception e,String querySql,String table,String userName){
+        if (e instanceof DataXException) return (DataXException) e;
+        DataXException classified = classifyJdbc(dataBaseType, e, querySql);
+        if (classified != null) return classified;
         if (dataBaseType.equals(DataBaseType.MySql)) {
             DBUtilErrorCode dbUtilErrorCode = mySqlQueryErrorAna(e.getMessage());
             if (dbUtilErrorCode == DBUtilErrorCode.MYSQL_QUERY_TABLE_NAME_ERROR && table != null) {
@@ -98,6 +111,7 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode mySqlQueryErrorAna(String e){
+        if (e == null) return DBUtilErrorCode.READ_RECORD_FAIL;
         if (e.contains(Constant.MYSQL_TABLE_NAME_ERR1) && e.contains(Constant.MYSQL_TABLE_NAME_ERR2)){
             return DBUtilErrorCode.MYSQL_QUERY_TABLE_NAME_ERROR;
         }else if (e.contains(Constant.MYSQL_SELECT_PRI)){
@@ -111,6 +125,7 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode oracleQueryErrorAna(String e){
+        if (e == null) return DBUtilErrorCode.READ_RECORD_FAIL;
         if (e.contains(Constant.ORACLE_TABLE_NAME)){
             return DBUtilErrorCode.ORACLE_QUERY_TABLE_NAME_ERROR;
         }else if (e.contains(Constant.ORACLE_SQL)){
@@ -119,6 +134,50 @@ public class RdbmsException extends DataXException{
             return DBUtilErrorCode.ORACLE_QUERY_SELECT_PRI_ERROR;
         }
         return DBUtilErrorCode.READ_RECORD_FAIL;
+    }
+
+    private static DataXException classifyJdbc(DataBaseType database, Exception original, String query) {
+        ArrayDeque<Throwable> pending = new ArrayDeque<Throwable>();
+        Set<Throwable> seen = Collections.newSetFromMap(new IdentityHashMap<Throwable, Boolean>());
+        pending.add(original);
+        while (!pending.isEmpty()) {
+            Throwable error = pending.removeFirst();
+            if (!seen.add(error)) continue;
+            if (error.getCause() != null) pending.add(error.getCause());
+            if (!(error instanceof SQLException)) continue;
+            SQLException sql = (SQLException) error;
+            if (sql.getNextException() != null) pending.add(sql.getNextException());
+            DBUtilErrorCode code = null;
+            String state = sql.getSQLState();
+            if (sql instanceof SQLTimeoutException
+                    || "com.mysql.jdbc.exceptions.MySQLTimeoutException".equals(sql.getClass().getName())
+                    || "HYT00".equals(state)
+                    || "HYT01".equals(state) || "S1T00".equals(state)) {
+                code = DBUtilErrorCode.QUERY_TIMEOUT;
+            } else if (state != null && state.startsWith("08")) {
+                code = DBUtilErrorCode.CONNECTION_LOST;
+            } else if ("40001".equals(state) || "40P01".equals(state)) {
+                code = DBUtilErrorCode.TRANSACTION_CONFLICT;
+            }
+            if (database == DataBaseType.MySql) {
+                switch (sql.getErrorCode()) {
+                    case 1045: code = DBUtilErrorCode.MYSQL_CONN_USERPWD_ERROR; break;
+                    case 1049: code = DBUtilErrorCode.MYSQL_CONN_DB_ERROR; break;
+                    case 1146: code = DBUtilErrorCode.MYSQL_QUERY_TABLE_NAME_ERROR; break;
+                    case 1054: code = DBUtilErrorCode.MYSQL_QUERY_COLUMN_ERROR; break;
+                    case 1064: code = DBUtilErrorCode.MYSQL_QUERY_SQL_ERROR; break;
+                    case 1142: case 1143: code = DBUtilErrorCode.MYSQL_QUERY_SELECT_PRI_ERROR; break;
+                    case 1205: case 1213: code = DBUtilErrorCode.TRANSACTION_CONFLICT; break;
+                    default: break;
+                }
+            }
+            if (code != null) {
+                return DataXException.asDataXException(code,
+                        "SQLState=" + state + ", vendorCode=" + sql.getErrorCode()
+                                + (query == null ? "" : ", SQL=" + query) + ", " + sql.getMessage(), original);
+            }
+        }
+        return null;
     }
 
     public static DataXException asSqlParserException(DataBaseType dataBaseType, Exception e,String querySql){

@@ -28,6 +28,11 @@ public final class OriginalConfPretreatmentUtil {
                 DBUtilErrorCode.REQUIRED_VALUE);
         originalConfig.getNecessaryValue(Key.PASSWORD,
                 DBUtilErrorCode.REQUIRED_VALUE);
+        if (originalConfig.getInt(Key.QUERY_TIMEOUT,
+                com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND) < 0) {
+            throw DataXException.asDataXException(DBUtilErrorCode.ILLEGAL_VALUE,
+                    "queryTimeout must be >= 0 seconds (0 disables the JDBC statement timeout).");
+        }
         dealWhere(originalConfig);
 
         simplifyConf(originalConfig);
@@ -55,6 +60,13 @@ public final class OriginalConfPretreatmentUtil {
     private static void simplifyConf(Configuration originalConfig) {
         boolean isTableMode = recognizeTableOrQuerySqlMode(originalConfig);
         originalConfig.set(Constant.IS_TABLE_MODE, isTableMode);
+        if (isTableMode && originalConfig.get(Key.QUERY_SQL_SPLIT_PK) != null) {
+            throw DataXException.asDataXException(DBUtilErrorCode.ILLEGAL_VALUE,
+                    "querySqlSplitPk is only available in querySql mode; use splitPk for tables.");
+        }
+        if (originalConfig.get(Key.QUERY_SQL_SPLIT_PK) != null) {
+            QuerySqlSplitUtil.validateKey(originalConfig.getString(Key.QUERY_SQL_SPLIT_PK), DATABASE_TYPE);
+        }
 
         dealJdbcAndTable(originalConfig);
 

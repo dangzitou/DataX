@@ -21,7 +21,6 @@ import com.alibaba.datax.plugin.rdbms.util.DBUtil;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 import com.alibaba.datax.plugin.rdbms.util.RdbmsException;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +38,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CommonRdbmsReader {
 
@@ -77,24 +77,23 @@ public class CommonRdbmsReader {
                 PreCheckTask t = new PreCheckTask(username,password,connConf,dataBaseType,splitPK);
                 taskList.add(t);
             }
-            List<Future<Boolean>> results = Lists.newArrayList();
             try {
-                results = exec.invokeAll(taskList);
+                java.util.concurrent.CompletionService<Boolean> completed =
+                        new java.util.concurrent.ExecutorCompletionService<Boolean>(exec);
+                for (PreCheckTask task : taskList) completed.submit(task);
+                for (int i = 0; i < taskList.size(); i++) completed.take().get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                throw DataXException.asDataXException(DBUtilErrorCode.SQL_EXECUTE_FAIL,
+                        "Database precheck interrupted", e);
+            } catch (ExecutionException e) {
+                if (e.getCause() instanceof DataXException) throw (DataXException) e.getCause();
+                throw DataXException.asDataXException(DBUtilErrorCode.SQL_EXECUTE_FAIL,
+                        "Database precheck failed", e.getCause());
+            } finally {
+                exec.shutdownNow();
             }
 
-            for (Future<Boolean> result : results){
-                try {
-                    result.get();
-                } catch (ExecutionException e) {
-                    DataXException de = (DataXException) e.getCause();
-                    throw de;
-                }catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            exec.shutdownNow();
         }
 
 
@@ -127,6 +126,9 @@ public class CommonRdbmsReader {
         private String password;
         private String jdbcUrl;
         private String mandatoryEncoding;
+        private ResultSetMetaData cachedMetaData;
+        private int[] columnTypes;
+        private boolean[] yearColumns;
 
         // 作为日志显示信息时，需要附带的通用信息。比如信息所对应的数据库连接等信息，针对哪个表做的操作
         private String basicMsg;
@@ -185,14 +187,16 @@ public class CommonRdbmsReader {
             Connection conn = DBUtil.getConnection(this.dataBaseType, jdbcUrl,
                     username, password);
 
-            // session config .etc related
-            DBUtil.dealWithSessionConfig(conn, readerSliceConfig,
-                    this.dataBaseType, basicMsg);
-
             int columnNumber = 0;
             ResultSet rs = null;
+            Statement statement = null;
             try {
-                rs = DBUtil.query(conn, querySql, fetchSize);
+                // Keep session initialization within the connection cleanup scope.
+                DBUtil.dealWithSessionConfig(conn, readerSliceConfig, this.dataBaseType, basicMsg);
+                rs = DBUtil.query(conn, querySql, fetchSize,
+                        readerSliceConfig.getInt(Key.QUERY_TIMEOUT,
+                                com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
+                statement = rs.getStatement();
                 queryPerfRecord.end();
 
                 ResultSetMetaData metaData = rs.getMetaData();
@@ -216,10 +220,12 @@ public class CommonRdbmsReader {
                 LOG.info("Finished read record by Sql: [{}\n] {}.",
                         querySql, basicMsg);
 
-            }catch (Exception e) {
+            } catch (DataXException e) {
+                throw e;
+            } catch (Exception e) {
                 throw RdbmsException.asQueryException(this.dataBaseType, e, querySql, table, username);
             } finally {
-                DBUtil.closeDBResources(null, conn);
+                DBUtil.closeDBResources(rs, statement, conn);
             }
         }
 
@@ -235,7 +241,7 @@ public class CommonRdbmsReader {
                 ResultSetMetaData metaData, int columnNumber, String mandatoryEncoding, 
                 TaskPluginCollector taskPluginCollector) {
             Record record = buildRecord(recordSender,rs,metaData,columnNumber,mandatoryEncoding,taskPluginCollector); 
-            recordSender.sendToWriter(record);
+            if (record != null) recordSender.sendToWriter(record);
             return record;
         }
         protected Record buildRecord(RecordSender recordSender,ResultSet rs, ResultSetMetaData metaData, int columnNumber, String mandatoryEncoding,
@@ -243,8 +249,18 @@ public class CommonRdbmsReader {
         	Record record = recordSender.createRecord();
 
             try {
+                if (cachedMetaData != metaData) {
+                    columnTypes = new int[columnNumber];
+                    yearColumns = new boolean[columnNumber];
+                    for (int i = 0; i < columnNumber; i++) {
+                        columnTypes[i] = metaData.getColumnType(i + 1);
+                        yearColumns[i] = columnTypes[i] == Types.DATE
+                                && "year".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
+                    }
+                    cachedMetaData = metaData;
+                }
                 for (int i = 1; i <= columnNumber; i++) {
-                    switch (metaData.getColumnType(i)) {
+                    switch (columnTypes[i - 1]) {
 
                     case Types.CHAR:
                     case Types.NCHAR:
@@ -256,8 +272,8 @@ public class CommonRdbmsReader {
                         if(StringUtils.isBlank(mandatoryEncoding)){
                             rawData = rs.getString(i);
                         }else{
-                            rawData = new String((rs.getBytes(i) == null ? EMPTY_CHAR_ARRAY : 
-                                rs.getBytes(i)), mandatoryEncoding);
+                            byte[] bytes = rs.getBytes(i);
+                            rawData = bytes == null ? null : new String(bytes, mandatoryEncoding);
                         }
                         record.addColumn(new StringColumn(rawData));
                         break;
@@ -291,8 +307,9 @@ public class CommonRdbmsReader {
 
                     // for mysql bug, see http://bugs.mysql.com/bug.php?id=35115
                     case Types.DATE:
-                        if (metaData.getColumnTypeName(i).equalsIgnoreCase("year")) {
-                            record.addColumn(new LongColumn(rs.getInt(i)));
+                        if (yearColumns[i - 1]) {
+                            int year = rs.getInt(i);
+                            record.addColumn(rs.wasNull() ? new LongColumn() : new LongColumn(year));
                         } else {
                             record.addColumn(new DateColumn(rs.getDate(i)));
                         }
@@ -313,7 +330,8 @@ public class CommonRdbmsReader {
                     // warn: bit(>1) -> Types.VARBINARY 可使用BytesColumn
                     case Types.BOOLEAN:
                     case Types.BIT:
-                        record.addColumn(new BoolColumn(rs.getBoolean(i)));
+                        boolean value = rs.getBoolean(i);
+                        record.addColumn(rs.wasNull() ? new BoolColumn() : new BoolColumn(value));
                         break;
 
                     case Types.NULL:
@@ -335,16 +353,18 @@ public class CommonRdbmsReader {
                                                 metaData.getColumnClassName(i)));
                     }
                 }
+            } catch (SQLException e) {
+                // JDBC access failures are task failures, never partially valid records.
+                throw RdbmsException.asQueryException(dataBaseType, e, null, null, username);
+            } catch (DataXException e) {
+                throw e;
             } catch (Exception e) {
                 if (IS_DEBUG) {
                     LOG.debug("read data " + record.toString()
                             + " occur exception:", e);
                 }
-                //TODO 这里识别为脏数据靠谱吗？
                 taskPluginCollector.collectDirtyRecord(record, e);
-                if (e instanceof DataXException) {
-                    throw (DataXException) e;
-                }
+                return null;
             }
             return record;
         }

@@ -154,9 +154,11 @@ public class SingleTableSplitUtil {
         String table = configuration.getString(Key.TABLE);
 
         Connection conn = DBUtil.getConnection(DATABASE_TYPE, jdbcURL, username, password);
-        Pair<Object, Object> minMaxPK = checkSplitPk(conn, pkRangeSQL, fetchSize, table, username, configuration);
-        DBUtil.closeDBResources(null, null, conn);
-        return minMaxPK;
+        try {
+            return checkSplitPk(conn, pkRangeSQL, fetchSize, table, username, configuration);
+        } finally {
+            DBUtil.closeDBResources(null, null, conn);
+        }
     }
 
     public static void precheckSplitPk(Connection conn, String pkRangeSQL, int fetchSize,

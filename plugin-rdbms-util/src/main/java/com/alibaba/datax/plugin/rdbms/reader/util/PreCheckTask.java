@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -63,26 +64,31 @@ public class PreCheckTask implements Callable<Boolean>{
 
             /*verify query*/
                 ResultSet rs = null;
+                Statement statement = null;
                 try {
-                    DBUtil.sqlValid(querySql,dataBaseType);
-                    if(i == 0) {
-                        rs = DBUtil.query(conn, querySql, fetchSize);
-                    }
+                    String querySplitKey = connection.getString(Key.QUERY_SQL_SPLIT_PK);
+                    if (querySplitKey == null) DBUtil.sqlValid(querySql, dataBaseType);
+                    else QuerySqlSplitUtil.validateSql(querySql);
+                    statement = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+                    statement.setFetchSize(fetchSize);
+                    statement.setMaxRows(1);
+                    statement.setQueryTimeout(connection.getInt(Key.QUERY_TIMEOUT,
+                            com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
+                    rs = statement.executeQuery(querySql);
+                    if (querySplitKey != null) QuerySqlSplitUtil.validateColumn(rs.getMetaData(), querySplitKey);
                 } catch (ParserException e) {
                     throw RdbmsException.asSqlParserException(this.dataBaseType, e, querySql);
                 } catch (Exception e) {
                     throw RdbmsException.asQueryException(this.dataBaseType, e, querySql, table, userName);
                 } finally {
-                    DBUtil.closeDBResources(rs, null, null);
+                    DBUtil.closeDBResources(rs, statement, null);
                 }
             /*verify splitPK*/
                 try{
                     if (splitPkSqls != null && !splitPkSqls.isEmpty()) {
                         splitPkSql = splitPkSqls.get(i).toString();
                         DBUtil.sqlValid(splitPkSql,dataBaseType);
-                        if(i == 0) {
-                            SingleTableSplitUtil.precheckSplitPk(conn, splitPkSql, fetchSize, table, userName);
-                        }
+                        SingleTableSplitUtil.precheckSplitPk(conn, splitPkSql, fetchSize, table, userName);
                     }
                 } catch (ParserException e) {
                     throw RdbmsException.asSqlParserException(this.dataBaseType, e, splitPkSql);

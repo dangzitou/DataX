@@ -24,8 +24,13 @@ public class LongColumn extends Column {
 		}
 
 		try {
-			BigInteger rawData = NumberUtils.createBigDecimal(data)
-					.toBigInteger();
+			BigInteger rawData;
+			try {
+				rawData = new BigInteger(data);
+			} catch (NumberFormatException notAnInteger) {
+				// Preserve scientific notation and decimal truncation compatibility.
+				rawData = NumberUtils.createBigDecimal(data).toBigInteger();
+			}
 			super.setRawData(rawData);
 
 			// 当 rawData 为[0-127]时，rawData.bitLength() < 8，导致其 byteSize = 0，简单起见，直接认为其长度为 data.length()
