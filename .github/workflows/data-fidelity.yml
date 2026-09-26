@@ -95,6 +95,10 @@ jobs:
         run: |
           python3 benchmarks/olap_binary_checks.py /tmp/datax-baseline /tmp/sr-binary-baseline --expect-legacy
           python3 benchmarks/olap_binary_checks.py /tmp/datax-candidate /tmp/sr-binary-candidate
+      - name: StarRocks queued failure against real server with response proxy
+        run: |
+          python3 benchmarks/stream_load_queue_checks.py /tmp/datax-baseline /tmp/starrocks-queue-before --backends starrocks --real-database --expect-unsafe
+          python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/starrocks-queue-after --backends starrocks --real-database
       - name: StarRocks rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-row-checks
       - name: Start disposable Doris
@@ -116,5 +120,9 @@ jobs:
         run: |
           python3 benchmarks/olap_binary_checks.py /tmp/datax-baseline /tmp/doris-binary-baseline --backend doris --expect-legacy
           python3 benchmarks/olap_binary_checks.py /tmp/datax-candidate /tmp/doris-binary-candidate --backend doris
+      - name: Doris queued failure against real server with response proxy
+        run: |
+          python3 benchmarks/stream_load_queue_checks.py /tmp/datax-baseline /tmp/doris-queue-before --backends doris --real-database --expect-unsafe
+          python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/doris-queue-after --backends doris --real-database
       - name: Doris rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-row-checks --backend doris

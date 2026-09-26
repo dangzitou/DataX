@@ -10,19 +10,26 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.InetSocketAddress;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 
 /** Real managers, Tasks and HTTP clients; loopback simulator, not database or Engine. */
 public class StreamLoadQueueFailureCheck {
+    static boolean realDatabase;
+    static String backendUnderTest;
     public static void main(String[] args) throws Exception {
         boolean unsafe = Arrays.asList(args).contains("--expect-unsafe");
+        realDatabase = Arrays.asList(args).contains("--real-database");
         String backends = args[0];
         for (String backend : backends.split(",")) {
+            backendUnderTest = backend;
             for (int attempt = 1; attempt <= 4; attempt++) {
                 failedBatch(backend, attempt, unsafe);
-                if (!unsafe) {
+                if (!unsafe && !realDatabase) {
                     successfulClose(backend, attempt, false);
                     successfulClose(backend, attempt, true);
                     failedTask(backend, attempt);
@@ -39,6 +46,7 @@ public class StreamLoadQueueFailureCheck {
         final List<String> bodies = Collections.synchronizedList(new ArrayList<String>());
         volatile String first;
         volatile Throwable failure;
+        String firstDatabaseResponse;
         final boolean failFirst;
 
         Endpoint(boolean failFirst, boolean blockFirst) throws IOException {
@@ -76,6 +84,16 @@ public class StreamLoadQueueFailureCheck {
                             : "{\"Status\":\"Success\",\"NumberTotalRows\":" + rows
                               + ",\"NumberLoadedRows\":" + rows
                               + ",\"NumberFilteredRows\":0,\"NumberUnselectedRows\":0}";
+                        if (realDatabase) {
+                            // The real server rejects the first batch; replay that rejection on retries.
+                            // This keeps the queue barrier deterministic without changing the database response.
+                            if (failed && firstDatabaseResponse != null) response = firstDatabaseResponse;
+                            else response = forward(request, bytes.toByteArray());
+                            if (failed) {
+                                require(response.contains("\"Fail\""), "Real server did not reject bad row: " + response);
+                                firstDatabaseResponse = response;
+                            }
+                        }
                     }
                 } else if (uri.startsWith("/upload/")) {
                     bodies.add(body);
@@ -94,6 +112,36 @@ public class StreamLoadQueueFailureCheck {
         public void close() { release.countDown(); server.stop(0); }
     }
 
+    static String forward(HttpExchange request, byte[] body) throws Exception {
+        int port = backendUnderTest.equals("starrocks") ? 28040 : 28041;
+        HttpURLConnection connection = (HttpURLConnection) new URL("http://127.0.0.1:" + port + request.getRequestURI()).openConnection();
+        connection.setRequestMethod("PUT"); connection.setDoOutput(true);
+        connection.setConnectTimeout(5000); connection.setReadTimeout(10000);
+        for (Map.Entry<String, List<String>> header : request.getRequestHeaders().entrySet()) {
+            if (!Arrays.asList("host", "content-length", "connection", "expect").contains(header.getKey().toLowerCase(Locale.ROOT)))
+                connection.setRequestProperty(header.getKey(), header.getValue().get(0));
+        }
+        connection.setFixedLengthStreamingMode(body.length);
+        try {
+            try (OutputStream output = connection.getOutputStream()) { output.write(body); }
+            require(connection.getResponseCode() == 200, "Real Stream Load HTTP status " + connection.getResponseCode());
+            ByteArrayOutputStream response = new ByteArrayOutputStream();
+            try (InputStream input = connection.getInputStream()) {
+                byte[] buffer = new byte[4096]; int count;
+                while ((count = input.read(buffer)) != -1) response.write(buffer, 0, count);
+            }
+            String text = new String(response.toByteArray(), StandardCharsets.UTF_8);
+            System.out.println("DATABASE_RESPONSE " + text.replace('\n', ' '));
+            return text;
+        } finally { connection.disconnect(); }
+    }
+
+    static Connection database() throws Exception {
+        Class.forName("com.mysql.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:"
+            + (backendUnderTest.equals("starrocks") ? 29030 : 29031) + "/?useSSL=false", "root", "");
+    }
+
     static Configuration config(Endpoint endpoint, int rows, int interval) {
         Configuration config = Configuration.newDefault();
         config.set("column", Arrays.asList("id", "txt"));
@@ -105,6 +153,13 @@ public class StreamLoadQueueFailureCheck {
         config.set("loadProps", new HashMap<String, Object>());
         config.set("maxBatchRows", rows); config.set("flushQueueLength", 2);
         config.set("flushInterval", interval);
+        if (realDatabase) {
+            config.set("username", "root");
+            config.set("selectedDatabase", "datax_bench"); config.set("table", "queue_failure");
+            config.set("connection[0].selectedDatabase", "datax_bench");
+            config.set("connection[0].table[0]", "queue_failure");
+            config.set("loadProps.strict_mode", true); config.set("loadProps.max_filter_ratio", 0);
+        }
         return config;
     }
     static String prefix(String backend) {
@@ -142,6 +197,14 @@ public class StreamLoadQueueFailureCheck {
     }
 
     static void failedBatch(String backend, int attempt, boolean unsafe) throws Exception {
+        if (realDatabase) {
+            try (Connection connection = database(); Statement statement = connection.createStatement()) {
+                statement.execute("CREATE DATABASE IF NOT EXISTS datax_bench");
+                statement.execute("CREATE TABLE IF NOT EXISTS datax_bench.queue_failure(id BIGINT,txt BIGINT) DUPLICATE KEY(id) "
+                    + "DISTRIBUTED BY HASH(id) BUCKETS 1 PROPERTIES(\"replication_num\"=\"1\")");
+                statement.execute("TRUNCATE TABLE datax_bench.queue_failure");
+            }
+        }
         ExecutorService closer = Executors.newSingleThreadExecutor();
         try (Endpoint endpoint = new Endpoint(true, true)) {
             Object manager = manager(backend, config(endpoint, 1, 60000));
@@ -149,7 +212,7 @@ public class StreamLoadQueueFailureCheck {
             int attempts = (Integer) options.getClass().getMethod("getMaxRetries").invoke(options) + 1;
             write(manager, "1\t中文😀");
             require(endpoint.arrived.await(10, TimeUnit.SECONDS), "First request missing");
-            write(manager, "2\tqueued"); write(manager, "3\tqueued");
+            write(manager, "2\t20"); write(manager, "3\t30");
             Future<?> close = closer.submit(() -> { try { rejected(manager, "close"); } catch (Exception e) { throw new RuntimeException(e); } });
             endpoint.release.countDown(); close.get(20, TimeUnit.SECONDS);
             if (!unsafe) terminated(manager);
@@ -157,8 +220,18 @@ public class StreamLoadQueueFailureCheck {
             require(later == (unsafe ? 2 : 0), "Later batch requests: " + later);
             require(Collections.frequency(endpoint.labels, endpoint.first) == attempts, "Unexpected retry count");
             require(endpoint.failure == null, "HTTP handler failed: " + endpoint.failure);
+            if (realDatabase) {
+                StringBuilder actual = new StringBuilder();
+                try (Connection connection = database(); Statement statement = connection.createStatement();
+                     ResultSet rows = statement.executeQuery("SELECT id,txt FROM datax_bench.queue_failure ORDER BY id,txt")) {
+                    while (rows.next()) actual.append(rows.getLong(1)).append(':').append(rows.getLong(2)).append(',');
+                }
+                require(actual.toString().equals(unsafe ? "2:20,3:30," : ""), "Unexpected committed rows: " + actual);
+                System.out.println("DATABASE_ROWS " + actual);
+            }
             result(backend, attempt, "terminal-failure", "\"first_batch_attempts\":" + attempts
-                + ",\"later_batch_requests\":" + later + ",\"close_failed\":true");
+                + ",\"later_batch_requests\":" + later + ",\"close_failed\":true,\"real_database\":" + realDatabase
+                + (realDatabase ? ",\"exact_target_rows\":" + (unsafe ? 2 : 0) : ""));
         } finally { closer.shutdownNow(); }
     }
 
@@ -200,7 +273,7 @@ public class StreamLoadQueueFailureCheck {
                 });
                 throw new AssertionError("Malformed row was accepted");
             } catch (com.alibaba.datax.common.exception.DataXException expected) {
-                require(expected.toString().contains("WRITE_DATA_ERROR") || expected.getCause() != null, "Unexpected task error");
+                require(expected.getMessage().contains("not equal"), "Unexpected task error: " + expected);
             } finally { task.destroy(); }
             terminated(manager); rejected(manager, "close");
             require(endpoint.labels.isEmpty(), "Failed task flushed its buffered row");
