@@ -85,7 +85,7 @@ public class StreamLoadQueueFailureCheck {
                 }
                 byte[] result = response.getBytes(StandardCharsets.UTF_8);
                 request.sendResponseHeaders(status, result.length == 0 ? -1 : result.length);
-                try (OutputStream output = request.getResponseBody()) { output.write(result); }
+                try (OutputStream output = request.getResponseBody()) { if (result.length > 0) output.write(result); }
             } catch (Throwable e) {
                 failure = e; request.close();
             }
