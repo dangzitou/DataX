@@ -87,6 +87,15 @@ a hundred-million-row capacity claim. See the [real fault checks (中文)](REPOR
 the [writer contract](../postgresqlwriter/doc/postgresqlwriter.md)
 and run `postgresql_atomic_checks.py` against the disposable PG server.
 
+[Binary-field fidelity and remaining reader hazards (中文)](REPORT-binary.zh-CN.md)
+adds explicit `binaryEncoding=hex|base64` to StarRocks/Doris/SelectDB writers;
+raw non-NULL BYTES now fail by default instead of being folded into a long.
+JDBC readers accept exact result labels in `binaryColumns` to use `getBytes`
+when a driver reports binary output as text. Native StarRocks binary reads still
+need that explicit configuration. Real PG/StarRocks/Doris checks compare every
+byte, including NULL and empty values; SelectDB has codec checks only. This adds
+no throughput, whole-job recovery or hundred-million-row guarantee.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

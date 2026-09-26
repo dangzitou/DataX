@@ -4,8 +4,10 @@
 
 > 当前目标为所有场景吞吐至少 +25%，继续争取 +50%；**全场景目标和亿级零重复、零遗漏、零脏数据均未验收**。见[全部已测对照](benchmarks/REPORT-25pct.zh-CN.md)。
 > 最新[文件完整性修复](benchmarks/REPORT-file.zh-CN.md)解决并发输出行内容交错、分隔符截断及取消被吞掉；百万行 PG→文件中位吞吐 +9.47%，仍未达到 +25%。
-> PG 已增加显式开启的[共享快照与 querySql 自动分片](benchmarks/REPORT-pg-query.zh-CN.md)，已测单查询→四分片吞吐 +85.48%；同任务数对照未达标。重跑重复、失败残留已提交批次及整作业原子发布仍未解决。
-> [JDBC 提交异常修复](benchmarks/REPORT-commit.zh-CN.md)：提交确认异常时禁止自动重放批次，避免在已提交后重复插入；PG/MySQL 故障注入及真实 PG 断连证据分别记录。完整作业重跑仍不具备幂等保证。
+> PG 已增加显式开启的[共享快照与 querySql 自动分片](benchmarks/REPORT-pg-query.zh-CN.md)，已测单查询→四分片吞吐 +85.48%；同任务数对照未达标。普通写入仍有重跑重复与失败残留已提交批次的问题。
+> [JDBC 提交异常修复](benchmarks/REPORT-commit.zh-CN.md)：提交确认异常时禁止自动重放批次，避免在已提交后重复插入；PG/MySQL 故障注入及真实 PG 断连证据分别记录。普通模式的完整作业重跑仍不具备幂等保证。
+> PG writer 另有实验性、显式开启的[批次原子追加](benchmarks/REPORT-pg-atomic.zh-CN.md)：暂存后事务发布，同一不可变批次 ID 重跑核对内容。限 PG 单表追加，未验收亿级容量，也不覆盖其他 writer。
+> 最新[二进制字段实测](benchmarks/REPORT-binary.zh-CN.md)：修复 StarRocks/Doris/SelectDB writer 将 BYTES 折算成 long 的静默失真，默认拒绝未指定编码的 BYTES；已测 PG↔StarRocks/Doris 的显式编码往返。StarRocks 原生二进制 reader 仍须配置 `binaryColumns`，SelectDB 仅测编码器，未实测服务端。
 
 > 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
 > 100 万行真实 MySQL 同步，单条 querySql 开启自动四路并行：七轮吞吐提升均超过 50%，最低 **62.86%**，按耗时中位数计算提升 **72.66%**，逐字段校验零差异。

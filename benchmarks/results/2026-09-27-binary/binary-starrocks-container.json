@@ -1,0 +1,291 @@
+{
+  "Id": "88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c",
+  "Created": "2026-09-26T20:33:06.581158585Z",
+  "Path": "/usr/bin/tini-static",
+  "Args": [
+    "--",
+    "./entrypoint.sh"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 365050,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-26T20:33:06.646836628Z",
+    "FinishedAt": "0001-01-01T00:00:00Z",
+    "Health": {
+      "Status": "healthy",
+      "FailingStreak": 0,
+      "Log": [
+        {
+          "Start": "2026-09-27T04:59:41.211318636+08:00",
+          "End": "2026-09-27T04:59:41.395234292+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T05:00:11.396091219+08:00",
+          "End": "2026-09-27T05:00:11.567915876+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T05:00:41.572059833+08:00",
+          "End": "2026-09-27T05:00:41.745544133+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T05:01:11.751981884+08:00",
+          "End": "2026-09-27T05:01:11.930347365+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        },
+        {
+          "Start": "2026-09-27T05:01:41.931816322+08:00",
+          "End": "2026-09-27T05:01:42.103754615+08:00",
+          "ExitCode": 0,
+          "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+        }
+      ]
+    }
+  },
+  "Image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+  "ResolvConfPath": "/var/lib/docker/containers/88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c/hostname",
+  "HostsPath": "/var/lib/docker/containers/88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c/hosts",
+  "LogPath": "/var/lib/docker/containers/88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c/88534f39397f5e7c3bbca0bed697015c575dc64596db487a957fb9f0ae31931c-json.log",
+  "Name": "/datax-perf-starrocks",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "5",
+        "max-size": "20m"
+      }
+    },
+    "NetworkMode": "bridge",
+    "PortBindings": {
+      "8030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28030"
+        }
+      ],
+      "8040/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28040"
+        }
+      ],
+      "9030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "29030"
+        }
+      ]
+    },
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 4196401152,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 4294967296,
+    "NanoCpus": 4000000000,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 8589934592,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  },
+  "Storage": {
+    "RootFS": {
+      "Snapshot": {
+        "Name": "overlayfs"
+      }
+    }
+  },
+  "SizeRw": 611942400,
+  "SizeRootFs": 3821182976,
+  "Mounts": [],
+  "Config": {
+    "Hostname": "88534f39397f",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "ExposedPorts": {
+      "8030/tcp": {},
+      "8040/tcp": {},
+      "9030/tcp": {}
+    },
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "SR_HOME=/data/deploy/starrocks",
+      "JAVA_HOME=/lib/jvm/java-17-openjdk"
+    ],
+    "Cmd": [
+      "./entrypoint.sh"
+    ],
+    "Healthcheck": {
+      "Test": [
+        "CMD-SHELL",
+        "./health_check.sh"
+      ],
+      "Interval": 30000000000,
+      "Timeout": 15000000000,
+      "StartPeriod": 30000000000
+    },
+    "Image": "starrocks/allin1-ubuntu@sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+    "Volumes": null,
+    "WorkingDir": "/data/deploy",
+    "Entrypoint": [
+      "/usr/bin/tini-static",
+      "--"
+    ],
+    "Labels": {
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "NetworkSettings": {
+    "SandboxID": "6ba7891b2139a716a4222b6a88906a8dcdcdd6fc875fa0ecfd96431ec085df82",
+    "SandboxKey": "/var/run/docker/netns/6ba7891b2139",
+    "Ports": {
+      "8030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28030"
+        }
+      ],
+      "8040/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "28040"
+        }
+      ],
+      "9030/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "29030"
+        }
+      ]
+    },
+    "Networks": {
+      "bridge": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "DriverOpts": null,
+        "GwPriority": 0,
+        "NetworkID": "0ea3571be46ca8ac7797487a8a4a186c897513039b1f986383e5836cbe7e7592",
+        "EndpointID": "75c369e55c3a76409698cfd07ef16d9ffeddea66f822b66b0a4c7b4153d4a799",
+        "Gateway": "192.168.215.1",
+        "IPAddress": "192.168.215.4",
+        "MacAddress": "7e:4d:05:99:bc:a7",
+        "IPPrefixLen": 24,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "DNSNames": null
+      }
+    }
+  },
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:ee96cdee08524e8b67c45d269c74aecc2bd2696757bb880e368f8576ac5f7da5",
+    "size": 2008,
+    "platform": {
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  }
+}

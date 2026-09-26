@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-09-26T21:08:20.671377+00:00",
+  "source_revision": "d9b2decd73d6c223918f809f589387597b8bcdda",
+  "runtime_revision": "5b81262f85aa9698792890abbf213306e7825eda",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "suites": [
+    {
+      "suite": "sr-binary-upstream",
+      "result_entries": 8,
+      "engine_runs": 8,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "sr-binary-previous",
+      "result_entries": 8,
+      "engine_runs": 8,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "sr-binary-final",
+      "result_entries": 53,
+      "engine_runs": 57,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "sr-unhinted-upstream",
+      "result_entries": 4,
+      "engine_runs": 4,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "sr-unhinted-candidate",
+      "result_entries": 4,
+      "engine_runs": 4,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "doris-binary-upstream",
+      "result_entries": 8,
+      "engine_runs": 8,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "doris-binary-previous",
+      "result_entries": 8,
+      "engine_runs": 8,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "doris-binary-final",
+      "result_entries": 44,
+      "engine_runs": 44,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "sr-binary-text-regression",
+      "result_entries": 16,
+      "engine_runs": 16,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "doris-binary-text-regression",
+      "result_entries": 16,
+      "engine_runs": 16,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "binary-pg-atomic-regression",
+      "result_entries": 85,
+      "engine_runs": 93,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "binary-pg-fidelity-regression",
+      "result_entries": 14,
+      "engine_runs": 14,
+      "scope": "functional assertion, not performance benchmark"
+    },
+    {
+      "suite": "binary-codec-final",
+      "result_entries": 0,
+      "engine_runs": 0,
+      "scope": "functional assertion, not performance benchmark",
+      "codec_checks": 105,
+      "exit_code": 0
+    }
+  ],
+  "total_engine_runs": 280,
+  "total_result_entries": 268,
+  "junit_tests": 52,
+  "codec_checks": 105,
+  "note": "Final StarRocks main suite ran before adding unhinted_reader_checks; four upstream and four candidate unhinted probes were then run separately against the final native fixture. Timings include concurrently running functional regressions and are not throughput controls. Expected baseline corruption and candidate rejection/hazards count as assertions, not successful data transfers."
+}

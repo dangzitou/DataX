@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-09-26T21:09:06.541369+00:00",
+  "host_free_bytes_before_cleanup": 284112859136,
+  "old_runtime_metadata_matches_prior_archive": true,
+  "old_runtime_bytes": 135843080,
+  "doris_inspect": "binary-doris-container.json",
+  "starrocks_inspect": "binary-starrocks-container.json",
+  "pg_data_bytes": 1439526912,
+  "peak_sampled_generated_pg_plus_olap_bytes": 2050514944,
+  "removed_doris_container_id": "dd8e8509d13047bc953d0f4b8e99c832671acfa9858a5edd0801790ecd0be586",
+  "removed_old_runtime": "/tmp/datax-perf/candidate-pg-atomic",
+  "remaining_runtimes": [
+    "baseline-all",
+    "candidate-binary"
+  ],
+  "tmp_root_disk_kib_after_cleanup": 791680,
+  "host_free_bytes_after_cleanup": 284257898496,
+  "scope": "PG data plus active OLAP writable layer sampling; cached Docker images, Maven dependencies and workspaces are not included in this fixture budget. StarRocks and Doris ran sequentially. No global prune or unrelated container/image deletion."
+}
