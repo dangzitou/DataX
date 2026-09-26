@@ -83,7 +83,8 @@ columns, counts and a probabilistic content fingerprint; publication compares
 the complete binary row multisets in the same transaction as the ledger insert.
 It rejects dirty/filtered input and target precision changes detected during
 publication. It is not source-to-target proof, cross-writer recovery, upsert or
-a billion-row capacity claim. See the [writer contract](../postgresqlwriter/doc/postgresqlwriter.md)
+a hundred-million-row capacity claim. See the [real fault checks (中文)](REPORT-pg-atomic.zh-CN.md),
+the [writer contract](../postgresqlwriter/doc/postgresqlwriter.md)
 and run `postgresql_atomic_checks.py` against the disposable PG server.
 
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory

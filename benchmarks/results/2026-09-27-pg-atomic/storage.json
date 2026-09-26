@@ -1,0 +1,22 @@
+{
+  "database_checks": {
+    "stages": 0,
+    "atomic_connections": 0,
+    "rows_in_fixture": 8,
+    "final_target_rows": 8
+  },
+  "postgres_data_bytes": 1439559680,
+  "temporary_root_allocated_bytes": 787402752,
+  "host_available_bytes": 284551200768,
+  "remaining_distributions": {
+    "/tmp/datax-perf/baseline-all": 191451136,
+    "/tmp/datax-perf/candidate-pg-atomic": 136937472
+  },
+  "removed": "candidate-commit-guard (build metadata verified against previously archived copy)",
+  "new_fixture": "8 rows, 9 columns, duplicate source rows intentional; no million/hundred-million-row seed",
+  "durability": {
+    "fsync": "on",
+    "synchronous_commit": "on",
+    "full_page_writes": "on"
+  }
+}
