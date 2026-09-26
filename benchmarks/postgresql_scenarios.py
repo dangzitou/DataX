@@ -14,7 +14,13 @@ from mysql_scenarios import fingerprint
 from performance_gate import evaluate
 
 COLUMNS = ['id', 'tenant', 'amount', 'created', 'message', 'payload']
-SCENARIOS = ['query-single', 'query-parallel', 'table-single', 'table-parallel', 'pg-to-file', 'stream-to-pg']
+SCENARIOS = ['query-single', 'query-parallel', 'table-single', 'table-parallel', 'pg-to-file',
+             'pg-integer-file', 'stream-to-pg']
+INTEGER_COLUMNS = ['id', 'negated', 'tenant', 'large', 'negative_large', 'near_max', 'near_min', 'nullable']
+INTEGER_QUERY = """SELECT id,-id AS negated,id%100 AS tenant,id*1000000000000 AS large,
+    -id*1000000000000 AS negative_large,9223372036854775807::bigint-id AS near_max,
+    '-9223372036854775808'::bigint+id AS near_min,
+    CASE WHEN id%17=0 THEN NULL ELSE id*13 END AS nullable FROM pg_perf_source ORDER BY id"""
 
 
 def seed(rows):
@@ -48,9 +54,11 @@ def configuration(scenario, rows, output, rewrite):
         reader['column'] = COLUMNS
         if scenario == 'table-parallel':
             reader['splitPk'] = 'id'
-    if scenario == 'pg-to-file':
+    if scenario.endswith('-file'):
         content['writer'] = {'name': 'streamwriter', 'parameter': {
             'path': str(output), 'fileName': 'actual.tsv', 'print': False}}
+        if scenario == 'pg-integer-file':
+            reader['connection'][0]['querySql'] = [INTEGER_QUERY]
     if scenario == 'stream-to-pg':
         assert rows % channels == 0
         content['reader'] = {'name': 'streamreader', 'parameter': {
@@ -130,7 +138,7 @@ def main():
             connection['querySql'] = ['SELECT * FROM (' + query + ') AS datax_query WHERE ' + pred
                                       for pred in predicates]
     if args.candidate_copy:
-        assert args.scenario != 'pg-to-file'
+        assert not args.scenario.endswith('-file')
         configs['candidate']['job']['content'][0]['writer']['parameter']['useCopy'] = True
     report = {'scenario': args.scenario, 'rows': args.rows, 'runs': [], 'host': platform.platform(),
         'storage_before': storage_before, 'baseline_manual_split': args.baseline_manual_split,
@@ -144,10 +152,13 @@ def main():
         'driver_control': {'baseline_rewrite': args.baseline_rewrite, 'candidate_rewrite': args.candidate_rewrite,
                            'candidate_copy': args.candidate_copy}}
     expected_file = None
-    if args.scenario == 'pg-to-file':
+    if args.scenario.endswith('-file'):
         # This fixture has no tabs, backslashes or newlines in text fields.
         query = "COPY (SELECT id,coalesce(tenant::text,'null'),coalesce(amount::text,'null')," \
                 "coalesce(created::text,'null'),coalesce(message,'null'),payload FROM pg_perf_source ORDER BY id) TO STDOUT"
+        if args.scenario == 'pg-integer-file':
+            query = "COPY (SELECT " + ','.join("coalesce("+c+"::text,'null')" for c in INTEGER_COLUMNS) \
+                    + " FROM (" + INTEGER_QUERY + ") expected ORDER BY id) TO STDOUT"
         reference = output / 'reference.tsv'
         with reference.open('wb') as stream:
             subprocess.run(['docker','exec','-i','datax-perf-postgres','psql','-X','-q','-U','postgres',
@@ -159,12 +170,12 @@ def main():
         for variant in (['candidate', 'baseline'] if number % 2 == 0 else ['baseline', 'candidate']):
             storage = disk_guard(output)
             name = ('warmup' if number == 0 else str(number)) + '-' + variant
-            if args.scenario != 'pg-to-file':
+            if not args.scenario.endswith('-file'):
                 suffix = '' if args.scenario == 'stream-to-pg' else ' INCLUDING ALL'
                 sql('DROP TABLE IF EXISTS pg_perf_target; CREATE TABLE pg_perf_target (LIKE pg_perf_source' + suffix + ')')
             seconds = run(getattr(args, variant).resolve(), configs[variant], output, name,
                           jvm_options=report['jvm_options'])
-            if args.scenario == 'pg-to-file':
+            if args.scenario.endswith('-file'):
                 actual = fingerprint(output / 'actual.tsv')
                 assert actual == expected_file, (actual, expected_file)
                 check = {'expected': args.rows, 'actual': actual['rows'], 'mismatched_rows': 0, 'file': actual}
