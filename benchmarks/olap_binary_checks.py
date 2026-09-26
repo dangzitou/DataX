@@ -21,6 +21,26 @@ def legacy(value):
     return str(result if result < 1 << 63 else result-(1 << 64))
 
 
+def unhinted_reader_checks(runtime, output, record):
+    """Requires the native StarRocks fixture; deliberately reproduces the default reader hazard."""
+    for attempt in range(1,5):
+        sql('DROP TABLE IF EXISTS pg_binary_unhinted; CREATE TABLE pg_binary_unhinted (LIKE pg_binary_source)')
+        cfg=job(destination='pg_binary_unhinted')
+        cfg['job']['content'][0]['reader']={'name':'starrocksreader','parameter':{
+            'username':'datax','password':'datax-local-benchmark','connection':[{
+                'jdbcUrl':['jdbc:mysql://127.0.0.1:29030/datax_bench'],
+                'querySql':['SELECT id,payload FROM binary_target ORDER BY id']}]}}
+        cfg['job']['content'][0]['writer']['parameter']['column']=['id','payload']
+        name='unhinted-native-reader-'+str(attempt)
+        seconds=run(runtime,cfg,output,name)
+        differences=int(sql('SELECT count(*) FROM ((TABLE pg_binary_source EXCEPT ALL TABLE pg_binary_unhinted) '
+                            'UNION ALL (TABLE pg_binary_unhinted EXCEPT ALL TABLE pg_binary_source)) d'))
+        rows=int(sql('SELECT count(*) FROM pg_binary_unhinted'))
+        assert differences==6 and rows==len(PAYLOADS),(differences,rows)
+        record(dict(case=name,seconds=seconds,rows=rows,binary_differences=differences,
+                    expected_unhinted_reader_hazard=True))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('runtime', type=Path)
@@ -180,6 +200,7 @@ def main():
                 assert 'binaryColumns' in (output/(name+'.log')).read_text()
                 assert sql('SELECT count(*) FROM pg_binary_roundtrip')=='0'
                 record(dict(case=name,rejected=True,target_rows=0))
+            unhinted_reader_checks(runtime,output,record)
 
 
 if __name__=='__main__':

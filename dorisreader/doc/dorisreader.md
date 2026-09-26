@@ -222,3 +222,9 @@ SQL语句，然后发送到远程Doris数据库，并将该SQL执行返回结果
 
 
 
+
+## 显式二进制结果列
+
+reader 的 `parameter.binaryColumns` 是按查询结果列标签精确匹配的可选列表，例如 `["payload"]`。它让该字段通过 JDBC `getBytes` 读取为 BytesColumn，避免驱动将实际字节错误报告为文本后的字符转换。默认空，不改变其他字段。重名、缺失、重复配置或非字符串/二进制字段会明确拒绝。需要以实际结果列别名配置，大小写精确匹配。
+
+编码文本可以在 querySql 中用 `CASE WHEN payload='' THEN '' ELSE FROM_BASE64(payload) END AS payload`（hex 用 UNHEX）恢复，并将该结果列列入 binaryColumns；保留空字节串与 NULL 的区别。该选项不自动推断任意表达式的语义，也不提供整任务幂等。检查脚本见 [olap_binary_checks.py](../../benchmarks/olap_binary_checks.py)。
