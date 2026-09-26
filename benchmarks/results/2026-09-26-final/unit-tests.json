@@ -1,0 +1,50 @@
+[
+  {
+    "name": "com.alibaba.datax.common.element.LongColumnRegressionTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.025"
+  },
+  {
+    "name": "com.alibaba.datax.core.transport.channel.memory.MemoryChannelRegressionTest",
+    "tests": "6",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.116"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.JdbcErrorsRegressionTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.01"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.RdbmsReaderRegressionTest",
+    "tests": "5",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.097"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.util.QuerySqlSplitTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.108"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.writer.RdbmsWriterRegressionTest",
+    "tests": "6",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.013"
+  }
+]

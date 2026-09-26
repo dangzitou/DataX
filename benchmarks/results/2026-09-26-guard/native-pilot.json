@@ -1,0 +1,41 @@
+[
+  {
+    "variant": "client",
+    "seconds": 7.015323125,
+    "commands": {
+      "Com_commit": 980,
+      "Com_stmt_close": 0,
+      "Com_stmt_execute": 0,
+      "Com_stmt_prepare": 0
+    },
+    "expected": 1000000,
+    "actual": 1000000,
+    "mismatched_rows": 0
+  },
+  {
+    "variant": "server",
+    "seconds": 7.867833124999999,
+    "commands": {
+      "Com_commit": 980,
+      "Com_stmt_close": 1960,
+      "Com_stmt_execute": 980,
+      "Com_stmt_prepare": 1960
+    },
+    "expected": 1000000,
+    "actual": 1000000,
+    "mismatched_rows": 0
+  },
+  {
+    "variant": "cached-server",
+    "seconds": 6.703098291,
+    "commands": {
+      "Com_commit": 980,
+      "Com_stmt_close": 0,
+      "Com_stmt_execute": 980,
+      "Com_stmt_prepare": 12
+    },
+    "expected": 1000000,
+    "actual": 1000000,
+    "mismatched_rows": 0
+  }
+]

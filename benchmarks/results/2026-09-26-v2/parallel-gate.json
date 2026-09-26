@@ -1,0 +1,46 @@
+{
+  "parallel.json": {
+    "metric": "throughput",
+    "required_gain_percent": 50,
+    "rounds": [
+      {
+        "round": 1,
+        "gain_percent": 82.32067815884206,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "gain_percent": 82.36489157526752,
+        "passed": true
+      },
+      {
+        "round": 3,
+        "gain_percent": 72.63977249315192,
+        "passed": true
+      },
+      {
+        "round": 4,
+        "gain_percent": 94.7072699700937,
+        "passed": true
+      },
+      {
+        "round": 5,
+        "gain_percent": 55.47607015830991,
+        "passed": true
+      },
+      {
+        "round": 6,
+        "gain_percent": 58.49370369532807,
+        "passed": true
+      },
+      {
+        "round": 7,
+        "gain_percent": 77.79011400939851,
+        "passed": true
+      }
+    ],
+    "minimum_gain_percent": 55.47607015830991,
+    "passed": true,
+    "scope": "Measured workload and rounds only; not a universal or future guarantee."
+  }
+}

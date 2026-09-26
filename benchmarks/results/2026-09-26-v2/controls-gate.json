@@ -1,0 +1,70 @@
+{
+  "same-config.json": {
+    "metric": "throughput",
+    "required_gain_percent": 50.0,
+    "rounds": [
+      {
+        "round": 1,
+        "gain_percent": -8.095409798679531,
+        "passed": false
+      },
+      {
+        "round": 2,
+        "gain_percent": -18.18125995535702,
+        "passed": false
+      },
+      {
+        "round": 3,
+        "gain_percent": -4.153808595480301,
+        "passed": false
+      },
+      {
+        "round": 4,
+        "gain_percent": 1.4726068522747493,
+        "passed": false
+      },
+      {
+        "round": 5,
+        "gain_percent": -6.362298786739718,
+        "passed": false
+      }
+    ],
+    "minimum_gain_percent": -18.18125995535702,
+    "passed": false,
+    "scope": "Measured workload and rounds only; not a universal or future guarantee."
+  },
+  "manual-control.json": {
+    "metric": "throughput",
+    "required_gain_percent": 50.0,
+    "rounds": [
+      {
+        "round": 1,
+        "gain_percent": -3.712240710401571,
+        "passed": false
+      },
+      {
+        "round": 2,
+        "gain_percent": 14.85598497690319,
+        "passed": false
+      },
+      {
+        "round": 3,
+        "gain_percent": -9.929661460681249,
+        "passed": false
+      },
+      {
+        "round": 4,
+        "gain_percent": 11.986810226113764,
+        "passed": false
+      },
+      {
+        "round": 5,
+        "gain_percent": 4.073491695125697,
+        "passed": false
+      }
+    ],
+    "minimum_gain_percent": -9.929661460681249,
+    "passed": false,
+    "scope": "Measured workload and rounds only; not a universal or future guarantee."
+  }
+}

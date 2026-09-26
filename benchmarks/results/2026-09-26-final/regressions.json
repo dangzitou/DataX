@@ -1,0 +1,14 @@
+{
+  "baseline": {
+    "rounds": 4,
+    "tests_per_round": 26,
+    "failures_each_round": 22,
+    "expected_failure": true
+  },
+  "candidate": {
+    "rounds": 4,
+    "tests_per_round": 26,
+    "failures_each_round": 0,
+    "expected_failure": false
+  }
+}

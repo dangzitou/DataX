@@ -111,6 +111,8 @@ MysqlWriter 通过 DataX 框架获取 Reader 生成的协议数据，根据你�
 
 	* 描述：目的数据库的 JDBC 连接信息。作业运行时，DataX 会在你提供的 jdbcUrl 后面追加如下属性：yearIsDateType=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
 
+	  本 fork 还在 URL 未设置对应属性时默认添加 `useServerPrepStmts=true`、`cachePrepStmts=true`、`prepStmtCacheSqlLimit=65535`，使用现有 JDBC 驱动的服务端预编译缓存；显式配置的值保持不变。需使用客户端预编译时可设置 `useServerPrepStmts=false`，关闭缓存可设置 `cachePrepStmts=false`。批次提交边界不变；宽表超出服务端预编译限制时由驱动回退。配置、兼容性检查及实测范围见[复现指南](../../benchmarks/README.md)和[最终报告](../../benchmarks/REPORT-final.zh-CN.md)。
+
                注意：1、在一个数据库上只能配置一个 jdbcUrl 值。这与 MysqlReader 支持多个备库探测不同，因为此处不支持同一个数据库存在多个主库的情况(双主导入数据情况)
                     2、jdbcUrl按照Mysql官方规范，并可以填写连接附加控制信息，比如想指定连接编码为 gbk ，则在 jdbcUrl 后面追加属性 useUnicode=true&characterEncoding=gbk。具体请参看 Mysql官方文档或者咨询对应 DBA。
 

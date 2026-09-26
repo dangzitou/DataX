@@ -1,0 +1,46 @@
+{
+  "parallel.json": {
+    "metric": "elapsed",
+    "required_gain_percent": 50.0,
+    "rounds": [
+      {
+        "round": 1,
+        "gain_percent": 51.358863524663946,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "gain_percent": 38.598458133236804,
+        "passed": false
+      },
+      {
+        "round": 3,
+        "gain_percent": 42.41310262592466,
+        "passed": false
+      },
+      {
+        "round": 4,
+        "gain_percent": 38.92739340005603,
+        "passed": false
+      },
+      {
+        "round": 5,
+        "gain_percent": 44.77731941075501,
+        "passed": false
+      },
+      {
+        "round": 6,
+        "gain_percent": 41.598528579636664,
+        "passed": false
+      },
+      {
+        "round": 7,
+        "gain_percent": 39.94042985072742,
+        "passed": false
+      }
+    ],
+    "minimum_gain_percent": 38.598458133236804,
+    "passed": false,
+    "scope": "Measured workload and rounds only; not a universal or future guarantee."
+  }
+}

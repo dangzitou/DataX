@@ -1,5 +1,10 @@
 # MySQL / querySql performance and reliability validation
 
+[Final measured results and complete controls (中文)](REPORT-final.zh-CN.md):
+seven paired million-row transfers each exceeded +50% throughput, with a
+minimum of +62.86% and a ratio-of-medians gain of +72.66%. Same-task-count
+controls gained +4.80% and +3.72%; the result is workload-specific.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
@@ -124,7 +129,8 @@ URL; `cachePrepStmts=false` also disables the driver's prepare cache. These
 settings affect performance and must be kept fixed when accepting a workload.
 Connection options are documented in the [Connector/J guide](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-performance-extensions.html).
 
-Before borrowing a prepared statement, the writer clears any pending batch.
+After obtaining a prepared statement, the writer clears any pending batch
+before adding rows.
 This matters after a type conversion fails before `executeBatch`: older driver
 caches can otherwise replay the partial batch later. The real-database checks
 include a target without a primary key so duplicate rows cannot be hidden by

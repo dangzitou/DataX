@@ -3,8 +3,9 @@
 # DataX
 
 > 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
-> 100 万行真实 MySQL 同步五轮实测：吞吐中位数提升 **50.79%**；该提升主要来自自动分片，不代表所有任务普遍提速。
-> [完整实测报告与对照数据](benchmarks/REPORT.zh-CN.md) · [构建、配置及复现指南](benchmarks/README.md)
+> 100 万行真实 MySQL 同步，单条 querySql 开启自动四路并行：七轮吞吐提升均超过 50%，最低 **62.86%**，按耗时中位数计算提升 **72.66%**，逐字段校验零差异。
+> 该结果限于已测负载；不开分片、原版已手工并行的对照分别为 +4.80%、+3.72%，不代表所有任务普遍提升 50%。
+> [最终实测报告与完整对照数据](benchmarks/REPORT-final.zh-CN.md) · [构建、配置及复现指南](benchmarks/README.md)（使用本 fork 的改进请按此构建，下面的上游下载包不包含改动）
 
 [![Leaderboard](https://img.shields.io/badge/DataX-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=datax)
 
@@ -202,5 +203,4 @@ This software is free to use under the Apache License [Apache license](https://g
 用户咨询支持：
 
 钉钉群目前暂时受到了一些管控策略影响，建议大家有问题优先在这里提交问题 Issue，DataX研发和社区会定期回答Issue中的问题，知识库丰富后也能帮助到后来的使用者。
-
 

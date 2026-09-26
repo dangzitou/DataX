@@ -1,0 +1,30 @@
+[
+  {
+    "round": 1,
+    "seconds": 0.8182617920000002,
+    "expected_rows": 5,
+    "actual_rows": 6,
+    "ids": "1\n1\n3\n4\n5\n6"
+  },
+  {
+    "round": 2,
+    "seconds": 0.7187562079999998,
+    "expected_rows": 5,
+    "actual_rows": 6,
+    "ids": "1\n1\n3\n4\n5\n6"
+  },
+  {
+    "round": 3,
+    "seconds": 0.7007394169999999,
+    "expected_rows": 5,
+    "actual_rows": 6,
+    "ids": "1\n1\n3\n4\n5\n6"
+  },
+  {
+    "round": 4,
+    "seconds": 0.7161377500000001,
+    "expected_rows": 5,
+    "actual_rows": 6,
+    "ids": "1\n1\n3\n4\n5\n6"
+  }
+]

@@ -1,5 +1,7 @@
 # DataX MySQL / querySql 优化与实测报告
 
+> 历史结果：本文件保留第一轮原始结果；当前交付版本及逐轮验收见[最终报告](REPORT-final.zh-CN.md)。第一轮中位数达标，但并非每轮都达到 +50%，不能作为最终逐轮验收结果。
+
 测试日期：2026-09-26。性能代码提交：[`456a29b`](https://github.com/dangzitou/DataX/commit/456a29b655ce5560b49c0d5d4349158c0a236dc1)。
 原版基线：Alibaba DataX [`80ec23d`](https://github.com/alibaba/DataX/commit/80ec23d5c5328eb90ca364d2749e92dfaf44541e)，独立 worktree，源码未修改。
 

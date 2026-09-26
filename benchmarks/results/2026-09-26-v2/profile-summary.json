@@ -1,0 +1,247 @@
+{
+  "v1": {
+    "java_sampling": {
+      "sampled_threads": {
+        "main": 3,
+        "0-0-0-reader": 64,
+        "0-0-0-writer": 182,
+        "pool-1-thread-1": 2
+      },
+      "top_java_samples": [
+        [
+          "com/mysql/jdbc/StringUtils.getBytes",
+          43
+        ],
+        [
+          "sun/nio/cs/UTF_8$Encoder.encodeArrayLoop",
+          15
+        ],
+        [
+          "java/text/SimpleDateFormat.format",
+          14
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.setNull",
+          14
+        ],
+        [
+          "java/nio/charset/Charset.encode",
+          13
+        ],
+        [
+          "com/mysql/jdbc/Buffer.readFieldLength",
+          13
+        ],
+        [
+          "java/text/SimpleDateFormat.subFormat",
+          8
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.setInternal",
+          7
+        ],
+        [
+          "java/math/BigDecimal.<init>",
+          7
+        ],
+        [
+          "java/math/BigInteger.getInt",
+          7
+        ],
+        [
+          "sun/nio/cs/UTF_8$Decoder.decodeLoop",
+          7
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.fillSendPacket",
+          6
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.setTimestampInternal",
+          5
+        ],
+        [
+          "com/mysql/jdbc/ResultSetImpl.getStringInternal",
+          5
+        ],
+        [
+          "java/util/concurrent/ConcurrentHashMap.get",
+          5
+        ],
+        [
+          "sun/util/calendar/BaseCalendar.getFixedDate",
+          5
+        ],
+        [
+          "sun/nio/cs/UTF_8$Encoder.encodeLoop",
+          5
+        ],
+        [
+          "com/mysql/jdbc/ResultSetRow.getTimestampFast",
+          4
+        ],
+        [
+          "com/mysql/jdbc/ConnectionImpl.getServerCharset",
+          3
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.computeMaxParameterSetSizeAndBatchSize",
+          3
+        ]
+      ],
+      "gc_pauses": [
+        "PT0.004210083S",
+        "PT0.012310708S",
+        "PT0.000906333S",
+        "PT0.000857625S",
+        "PT0.000835792S",
+        "PT0.000635417S",
+        "PT0.000678208S",
+        "PT0.000860334S",
+        "PT0.001207333S",
+        "PT0.00061275S",
+        "PT0.001051041S",
+        "PT0.001637708S",
+        "PT0.001001625S",
+        "PT0.001614125S",
+        "PT0.001204792S",
+        "PT0.0010035S",
+        "PT0.000994541S",
+        "PT0.00255025S",
+        "PT0.000997125S",
+        "PT0.000676333S",
+        "PT0.000854541S",
+        "PT0.001335333S",
+        "PT0.000524583S",
+        "PT0.000915417S",
+        "PT0.00077875S",
+        "PT0.000763458S",
+        "PT0.0006915S"
+      ]
+    },
+    "database_statements_tsv": "SELECT `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` FROM `source_data`\t1\t12.719\nINSERT INTO `target_candidate` ( `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` ) VALUES (...) /* , ... */\t977\t5.686\nCOMMIT\t977\t3.199\nSELECT @@SESSION . `transaction_read_only`\t977\t0.031\nTRUNCATE TABLE `performance_schema` . `events_statements_summary_by_digest`\t1\t0.024\nSET `autocommit` = ?\t984\t0.023\nSELECT * FROM `target_candidate` WHERE ? = ?\t1\t0.003\nSELECT @@SESSION . `auto_increment_increment` AS `auto_increment_increment` , @@`character_set_client` AS `character_set_client` , @@`character_set_connection` AS `character_set_connection` , @@`character_set_results` AS `character_set_results` , @@`character_set_server` AS `character_set_server` , @@`collation_server` AS `collation_server` , @@`collation_connection` AS `collation_connection` , @@`init_connect` AS `init_connect` , @@`interactive_timeout` AS `interactive_timeout` , @@`license` AS `license` , @@`lower_case_table_names` AS `lower_case_table_names` , @@`max_allowed_packet` AS `max_allowed_packet` , @@`net_buffer_length` AS `net_buffer_length` , @@`net_write_timeout` AS `net_write_timeout` , @@`sql_mode` AS `sql_mode` , @@`system_time_zone` AS `system_time_zone` , @@`time_zone` AS `time_zone` , @@`transaction_isolation` AS `transaction_isolation` , @@`wait_timeout` AS `wait_timeout`\t6\t0.002\nSET NAMES `utf8mb4`\t6\t0.001\nSET `character_set_results` = ?\t6\t0.000\nSELECT `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` FROM `target_candidate` WHERE ? = ?\t2\t0.000\nSELECT @@`version_comment` LIMIT ?\t1\t0.000\nSET `net_write_timeout` = ?\t2\t0.000\nROLLBACK\t2\t0.000\n"
+  },
+  "v2": {
+    "java_sampling": {
+      "sampled_threads": {
+        "main": 6,
+        "0-0-0-writer": 196,
+        "0-0-0-reader": 89,
+        "pool-1-thread-1": 3
+      },
+      "top_java_samples": [
+        [
+          "com/mysql/jdbc/StringUtils.getBytes",
+          50
+        ],
+        [
+          "sun/nio/cs/UTF_8$Encoder.encodeArrayLoop",
+          18
+        ],
+        [
+          "java/util/concurrent/ConcurrentHashMap.get",
+          16
+        ],
+        [
+          "java/math/BigInteger.getInt",
+          15
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.setNull",
+          12
+        ],
+        [
+          "sun/nio/cs/UTF_8$Decoder.decodeArrayLoop",
+          11
+        ],
+        [
+          "java/lang/Integer.parseInt",
+          10
+        ],
+        [
+          "com/mysql/jdbc/Buffer.readFieldLength",
+          10
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.setInternal",
+          7
+        ],
+        [
+          "com/mysql/jdbc/ResultSetRow.getTimestampFast",
+          7
+        ],
+        [
+          "sun/util/calendar/BaseCalendar.getFixedDate",
+          7
+        ],
+        [
+          "java/text/SimpleDateFormat.format",
+          7
+        ],
+        [
+          "com/mysql/jdbc/ResultSetImpl.getStringInternal",
+          7
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement.computeMaxParameterSetSizeAndBatchSize",
+          6
+        ],
+        [
+          "sun/nio/cs/UTF_8$Decoder.decodeLoop",
+          5
+        ],
+        [
+          "sun/nio/cs/ThreadLocalCoders.encoderFor",
+          5
+        ],
+        [
+          "java/text/SimpleDateFormat.subFormat",
+          5
+        ],
+        [
+          "com/mysql/jdbc/ResultSetImpl.getString",
+          5
+        ],
+        [
+          "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.fillPreparedStatementColumnType",
+          4
+        ],
+        [
+          "com/mysql/jdbc/PreparedStatement$ParseInfo.buildInfoForBatch",
+          4
+        ]
+      ],
+      "gc_pauses": [
+        "PT0.004260625S",
+        "PT0.011973041S",
+        "PT0.001107417S",
+        "PT0.00077825S",
+        "PT0.00098S",
+        "PT0.000794833S",
+        "PT0.00181475S",
+        "PT0.001064791S",
+        "PT0.001335208S",
+        "PT0.001321167S",
+        "PT0.001265084S",
+        "PT0.001276833S",
+        "PT0.000731583S",
+        "PT0.001486083S",
+        "PT0.001080125S",
+        "PT0.002119041S",
+        "PT0.001174083S",
+        "PT0.00193775S",
+        "PT0.00071575S",
+        "PT0.0010645S",
+        "PT0.00044375S",
+        "PT0.000940083S",
+        "PT0.000503084S",
+        "PT0.001129917S",
+        "PT0.001432041S",
+        "PT0.001279042S",
+        "PT0.0007345S"
+      ]
+    },
+    "database_statements_tsv": "SELECT `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` FROM `source_data`\t1\t12.484\nINSERT INTO `target_candidate` ( `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` ) VALUES (...) /* , ... */\t977\t5.897\nCOMMIT\t977\t2.915\nSELECT @@SESSION . `transaction_read_only`\t977\t0.031\nTRUNCATE TABLE `performance_schema` . `events_statements_summary_by_digest`\t1\t0.005\nSELECT * FROM `target_candidate` WHERE ? = ?\t1\t0.002\nSELECT @@SESSION . `auto_increment_increment` AS `auto_increment_increment` , @@`character_set_client` AS `character_set_client` , @@`character_set_connection` AS `character_set_connection` , @@`character_set_results` AS `character_set_results` , @@`character_set_server` AS `character_set_server` , @@`collation_server` AS `collation_server` , @@`collation_connection` AS `collation_connection` , @@`init_connect` AS `init_connect` , @@`interactive_timeout` AS `interactive_timeout` , @@`license` AS `license` , @@`lower_case_table_names` AS `lower_case_table_names` , @@`max_allowed_packet` AS `max_allowed_packet` , @@`net_buffer_length` AS `net_buffer_length` , @@`net_write_timeout` AS `net_write_timeout` , @@`sql_mode` AS `sql_mode` , @@`system_time_zone` AS `system_time_zone` , @@`time_zone` AS `time_zone` , @@`transaction_isolation` AS `transaction_isolation` , @@`wait_timeout` AS `wait_timeout`\t6\t0.001\nSET `autocommit` = ?\t8\t0.001\nSET `character_set_results` = ?\t6\t0.001\nSET NAMES `utf8mb4`\t6\t0.001\nSELECT `id` , `tenant` , `amount` , `created` , `optional_text` , `payload` FROM `target_candidate` WHERE ? = ?\t2\t0.000\nSET `net_write_timeout` = ?\t2\t0.000\nSELECT @@`version_comment` LIMIT ?\t1\t0.000\nROLLBACK\t2\t0.000\n"
+  },
+  "scope": "Diagnostic samples only, excluded from formal performance results; JFR files with host environment metadata are not published."
+}
