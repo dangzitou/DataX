@@ -20,9 +20,7 @@ public final class OverFlowUtil {
 			String.valueOf(Double.MAX_VALUE));
 
 	public static boolean isLongOverflow(final BigInteger integer) {
-		return (integer.compareTo(OverFlowUtil.MAX_LONG) > 0 || integer
-				.compareTo(OverFlowUtil.MIN_LONG) < 0);
-
+		return integer.bitLength() > 63;
 	}
 
 	public static void validateLongNotOverFlow(final BigInteger integer) {

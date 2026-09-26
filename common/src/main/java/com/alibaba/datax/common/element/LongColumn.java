@@ -26,7 +26,8 @@ public class LongColumn extends Column {
 		try {
 			BigInteger rawData;
 			try {
-				rawData = new BigInteger(data);
+				// Short integer text cannot overflow long; large/unsigned values keep BigInteger parsing.
+				rawData = data.length() < 19 ? BigInteger.valueOf(Long.parseLong(data)) : new BigInteger(data);
 			} catch (NumberFormatException notAnInteger) {
 				// Preserve scientific notation and decimal truncation compatibility.
 				rawData = NumberUtils.createBigDecimal(data).toBigInteger();
@@ -117,10 +118,11 @@ public class LongColumn extends Column {
 
 	@Override
 	public String asString() {
-		if (null == this.getRawData()) {
+		BigInteger value = (BigInteger) this.getRawData();
+		if (null == value) {
 			return null;
 		}
-		return ((BigInteger) this.getRawData()).toString();
+		return value.bitLength() <= 63 ? Long.toString(value.longValue()) : value.toString();
 	}
 
 	@Override
