@@ -16,8 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Opt-in splitting of a repeatable MySQL SELECT by an integer output column.
- * ponytail: independent snapshots; use a frozen source or exported snapshot for mutable data.
+ * Opt-in splitting of a repeatable MySQL/PostgreSQL SELECT by an integer output column.
+ * ponytail: MySQL tasks need a stable source; PostgreSQL requires its exported snapshot mode.
  */
 public final class QuerySqlSplitUtil {
     private QuerySqlSplitUtil() { }
@@ -26,11 +26,12 @@ public final class QuerySqlSplitUtil {
         String key = config.getString(Key.QUERY_SQL_SPLIT_PK);
         validateKey(key, database);
         String sql = config.getString(Key.QUERY_SQL).trim();
-        validateSql(sql);
+        validateSql(sql, database);
         if (count <= 1) return Collections.singletonList(config);
         if (sql.endsWith(";")) sql = sql.substring(0, sql.length() - 1);
         String table = "(\n" + sql + "\n) AS datax_query";
-        String column = "`" + key + "`";
+        String quote = database == DataBaseType.PostgreSQL ? "\"" : "`";
+        String column = quote + key + quote;
         String rangeSql = SingleTableSplitUtil.genPKSql(column, table, null);
         String min, max;
         try (Connection conn = DBUtil.getConnection(database, config.getString(Key.JDBC_URL),
@@ -58,15 +59,16 @@ public final class QuerySqlSplitUtil {
     }
 
     public static void validateKey(String key, DataBaseType database) {
-        if (database != DataBaseType.MySql || key == null || !key.matches("[A-Za-z_][A-Za-z0-9_]*")) {
+        if ((database != DataBaseType.MySql && database != DataBaseType.PostgreSQL)
+                || key == null || !key.matches("[A-Za-z_][A-Za-z0-9_]*")) {
             throw DataXException.asDataXException(DBUtilErrorCode.ILLEGAL_VALUE,
-                    "querySqlSplitPk requires MySQL and a simple integer output column name.");
+                    "querySqlSplitPk requires MySQL/PostgreSQL and a simple integer output column name.");
         }
     }
 
-    public static void validateSql(String sql) {
+    public static void validateSql(String sql, DataBaseType database) {
         try {
-            List<SQLStatement> statements = SQLUtils.parseStatements(sql, "mysql");
+            List<SQLStatement> statements = SQLUtils.parseStatements(sql, database.getTypeName());
             if (statements.size() != 1 || !(statements.get(0) instanceof SQLSelectStatement)) {
                 throw new IllegalArgumentException("expected exactly one SELECT");
             }
@@ -76,9 +78,10 @@ public final class QuerySqlSplitUtil {
         }
     }
 
-    static void validateColumn(ResultSetMetaData metadata, String key) throws SQLException {
+    static void validateColumn(ResultSetMetaData metadata, String key, DataBaseType database) throws SQLException {
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
-            if (key.equalsIgnoreCase(metadata.getColumnLabel(i))) {
+            String label = metadata.getColumnLabel(i);
+            if (database == DataBaseType.PostgreSQL ? key.equals(label) : key.equalsIgnoreCase(label)) {
                 validateType(metadata.getColumnType(i));
                 return;
             }

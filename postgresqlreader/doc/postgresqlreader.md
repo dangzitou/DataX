@@ -245,6 +245,25 @@ PostgresqlReader插件实现了从PostgreSQL读取数据。在底层实现上，
 
 ## 4 性能报告
 
+### 本 fork：querySql 自动并行读取
+
+显式设置 `reader.parameter.querySqlSplitPk` 为 SELECT 输出中的简单整数列名，同时设置
+`consistentSnapshot=true` 及 `job.setting.speed.channel`，可将一条 querySql 包装为多条范围查询。
+例如输出列为 `id` 时，设置 `"querySqlSplitPk":"id"`、`"consistentSnapshot":true` 和 4 个 channel。
+不启用共享快照会在初始化时失败。普通 querySql 配置保持原有行为。
+
+PG 列名按实际输出区分大小写：`AS "SplitID"` 必须配置 `SplitID`，不能配置 `splitid`。
+分片键支持 smallint/integer/bigint，包含 NULL、重复键和 BIGINT 极值；不支持 numeric、浮点或文本键。
+边界查询及各读取任务使用同一导出快照，不使用 OFFSET。空结果、全 NULL 键、常量键或小范围可能
+减少实际任务数；多条 querySql 共用并发预算，但用户提供的不同 querySql 本身必须互不重叠。
+
+原 SELECT 仍须是确定性的只读查询。共享快照不会固定 random()、有副作用/易变函数、外部表或
+无稳定排序的 LIMIT 结果；也不保证不同任务之间输出有序。索引、范围偏斜及目标写入瓶颈影响收益，
+不能保证所有 SQL 都提速。解析使用项目已有 Druid PG 方言，无法解析的 SQL 明确失败。
+
+PG Reader 现接入 `job.setting.dryRun=true` 查询预检查：每条查询都检查，使用只读事务，最多读取一行，
+检查分片列是否存在、大小写及类型。预检查成功只验证这些条件，不证明完整作业的数据正确性或性能。
+
 ### 本 fork：同一作业的共享快照
 
 在 reader.parameter 中设置 `"consistentSnapshot": true`，可让普通表的分片边界查询及所有读取任务使用同一份 PostgreSQL 导出快照。默认关闭。作业在 Reader prepare 阶段开启一个只读 REPEATABLE READ 事务并导出快照，任务在查询前导入；作业结束时关闭导出连接。导入失败会使作业失败，不会自动退回各自独立的读取视图。

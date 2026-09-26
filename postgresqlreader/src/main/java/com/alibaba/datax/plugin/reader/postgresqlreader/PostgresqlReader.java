@@ -37,6 +37,11 @@ public class PostgresqlReader extends Reader {
                 throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
                         Key.POSTGRESQL_SNAPSHOT + " is reserved; use consistentSnapshot=true");
             }
+            if (this.originalConfig.get(Key.QUERY_SQL_SPLIT_PK) != null
+                    && !this.originalConfig.getBool(Key.CONSISTENT_SNAPSHOT, false)) {
+                throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                        "PostgreSQL querySqlSplitPk requires consistentSnapshot=true");
+            }
             int fetchSize = this.originalConfig.getInt(com.alibaba.datax.plugin.rdbms.reader.Constant.FETCH_SIZE,
                     Constant.DEFAULT_FETCH_SIZE);
             if (fetchSize < 1) {
@@ -47,6 +52,12 @@ public class PostgresqlReader extends Reader {
 
             this.commonRdbmsReaderMaster = new CommonRdbmsReader.Job(DATABASE_TYPE);
             this.commonRdbmsReaderMaster.init(this.originalConfig);
+        }
+
+        @Override
+        public void preCheck() {
+            init();
+            this.commonRdbmsReaderMaster.preCheck(this.originalConfig, DATABASE_TYPE);
         }
 
         @Override

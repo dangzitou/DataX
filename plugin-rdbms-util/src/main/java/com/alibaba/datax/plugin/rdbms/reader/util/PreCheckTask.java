@@ -4,6 +4,7 @@ import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.reader.Key;
 import com.alibaba.datax.plugin.rdbms.util.DBUtil;
+import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 import com.alibaba.datax.plugin.rdbms.util.RdbmsException;
 import com.alibaba.druid.sql.parser.ParserException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -52,6 +54,15 @@ public class PreCheckTask implements Callable<Boolean>{
             fetchSize = Integer.MIN_VALUE;
         }
         try{
+            if (dataBaseType == DataBaseType.PostgreSQL) {
+                try {
+                    conn.setReadOnly(true);
+                    conn.setAutoCommit(false);
+                } catch (SQLException e) {
+                    throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,
+                            "Cannot start read-only PostgreSQL precheck", e);
+                }
+            }
             for (int i=0;i<querySqls.size();i++) {
 
                 String splitPkSql = null;
@@ -68,14 +79,14 @@ public class PreCheckTask implements Callable<Boolean>{
                 try {
                     String querySplitKey = connection.getString(Key.QUERY_SQL_SPLIT_PK);
                     if (querySplitKey == null) DBUtil.sqlValid(querySql, dataBaseType);
-                    else QuerySqlSplitUtil.validateSql(querySql);
+                    else QuerySqlSplitUtil.validateSql(querySql, dataBaseType);
                     statement = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
                     statement.setFetchSize(fetchSize);
                     statement.setMaxRows(1);
                     statement.setQueryTimeout(connection.getInt(Key.QUERY_TIMEOUT,
                             com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
                     rs = statement.executeQuery(querySql);
-                    if (querySplitKey != null) QuerySqlSplitUtil.validateColumn(rs.getMetaData(), querySplitKey);
+                    if (querySplitKey != null) QuerySqlSplitUtil.validateColumn(rs.getMetaData(), querySplitKey, dataBaseType);
                 } catch (ParserException e) {
                     throw RdbmsException.asSqlParserException(this.dataBaseType, e, querySql);
                 } catch (Exception e) {

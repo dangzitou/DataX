@@ -46,6 +46,8 @@ jobs:
         run: |
           python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-baseline /tmp/snapshot-baseline --expect-inconsistent
           python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-candidate /tmp/snapshot-candidate
+      - name: PostgreSQL querySql splitting and read-only prechecks
+        run: python3 benchmarks/postgresql_querysql_checks.py /tmp/datax-candidate /tmp/pg-query-checks
       - name: PostgreSQL native writer regression
         run: |
           python3 benchmarks/postgresql_writer_checks.py /tmp/datax-candidate /tmp/pg-driver-checks

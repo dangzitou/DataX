@@ -5,17 +5,20 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import shutil
 import statistics
+import subprocess
 from postgresql_checks import sql, job
 from mysql_querysql import run, process_metrics
 from mysql_scenarios import fingerprint
 from performance_gate import evaluate
 
 COLUMNS = ['id', 'tenant', 'amount', 'created', 'message', 'payload']
-SCENARIOS = ['query-single', 'table-single', 'table-parallel', 'pg-to-file', 'stream-to-pg']
+SCENARIOS = ['query-single', 'query-parallel', 'table-single', 'table-parallel', 'pg-to-file', 'stream-to-pg']
 
 
 def seed(rows):
+    assert 1 <= rows <= 1000000, 'Disposable fixture is capped at one million rows'
     sql('''DROP TABLE IF EXISTS pg_perf_source;
         CREATE TABLE pg_perf_source (id bigint PRIMARY KEY, tenant integer,
             amount numeric(20,4), created timestamp(0), message text, payload text);
@@ -30,7 +33,7 @@ def seed(rows):
 
 
 def configuration(scenario, rows, output, rewrite):
-    channels = 4 if scenario in ['table-parallel', 'stream-to-pg'] else 1
+    channels = 4 if scenario in ['query-parallel', 'table-parallel', 'stream-to-pg'] else 1
     config = job(destination='pg_perf_target', query='SELECT * FROM pg_perf_source ORDER BY id', channels=channels)
     content = config['job']['content'][0]
     reader, writer = content['reader']['parameter'], content['writer']['parameter']
@@ -58,6 +61,17 @@ def configuration(scenario, rows, output, rewrite):
                 {'type': 'string', 'value': '中文😀-constant'},
                 {'type': 'string', 'value': 'abcd' * 64}]}}
     return config, channels
+
+
+def disk_guard(output):
+    pg_bytes = int(subprocess.check_output(['docker', 'exec', 'datax-perf-postgres', 'du', '-sk',
+                                          '/var/lib/postgresql/data'], text=True).split()[0]) * 1024
+    output_bytes = sum(p.stat().st_size for p in output.rglob('*') if p.is_file())
+    free = shutil.disk_usage(output).free
+    # Keep 1 GiB of headroom inside a 6 GiB test-data budget; this is not a hard quota.
+    if pg_bytes + output_bytes > 5 * 1024**3 or free < 8 * 1024**3:
+        raise RuntimeError('PostgreSQL benchmark storage guard: clean owned test data before continuing')
+    return {'postgres_bytes': pg_bytes, 'output_bytes': output_bytes, 'host_free_bytes': free}
 
 
 def validate(rows, constant=False):
@@ -88,18 +102,38 @@ def main():
     p.add_argument('--baseline-rewrite', action='store_true')
     p.add_argument('--candidate-rewrite', action='store_true')
     p.add_argument('--candidate-copy', action='store_true')
+    p.add_argument('--baseline-manual-split', action='store_true',
+                   help='query-parallel control: manually split the original into the same four ranges')
     args = p.parse_args()
-    assert args.rows > 0 and args.rounds >= 1
+    assert 1 <= args.rows <= 1000000 and args.rounds >= 1
+    assert not args.baseline_manual_split or args.scenario == 'query-parallel'
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=True)
     assert not (output / 'results.json').exists(), 'Use a fresh evidence directory'
+    storage_before = disk_guard(output)
     if args.seed: seed(args.rows)
     assert int(sql('SELECT count(*) FROM pg_perf_source')) == args.rows
     configs = {v: configuration(args.scenario, args.rows, output, getattr(args, v + '_rewrite'))[0]
                for v in ['baseline', 'candidate']}
+    if args.scenario == 'query-parallel':
+        configs['candidate']['job']['content'][0]['reader']['parameter'].update(
+            querySqlSplitPk='id', consistentSnapshot=True)
+        if args.baseline_manual_split:
+            # Same boundaries as RangeSplitUtil for this static indexed fixture (id=1..rows).
+            step, remainder = divmod(args.rows - 1, 4)
+            bounds = [1 + step*i + min(i, remainder) for i in range(1, 4)]
+            predicates = ['("id" < %d OR "id" IS NULL)' % bounds[0],
+                          '"id" >= %d AND "id" < %d' % (bounds[0], bounds[1]),
+                          '"id" >= %d AND "id" < %d' % (bounds[1], bounds[2]),
+                          '"id" >= %d' % bounds[2]]
+            connection = configs['baseline']['job']['content'][0]['reader']['parameter']['connection'][0]
+            query = connection['querySql'][0]
+            connection['querySql'] = ['SELECT * FROM (' + query + ') AS datax_query WHERE ' + pred
+                                      for pred in predicates]
     if args.candidate_copy:
         assert args.scenario != 'pg-to-file'
         configs['candidate']['job']['content'][0]['writer']['parameter']['useCopy'] = True
     report = {'scenario': args.scenario, 'rows': args.rows, 'runs': [], 'host': platform.platform(),
+        'storage_before': storage_before, 'baseline_manual_split': args.baseline_manual_split,
         'database': sql('SELECT version()'), 'jvm_options': ['-Duser.timezone=UTC'],
         'fsync': sql('SHOW fsync'), 'synchronous_commit': sql('SHOW synchronous_commit'),
         'full_page_writes': sql('SHOW full_page_writes'),
@@ -112,7 +146,6 @@ def main():
     expected_file = None
     if args.scenario == 'pg-to-file':
         # This fixture has no tabs, backslashes or newlines in text fields.
-        import subprocess
         query = "COPY (SELECT id,coalesce(tenant::text,'null'),coalesce(amount::text,'null')," \
                 "coalesce(created::text,'null'),coalesce(message,'null'),payload FROM pg_perf_source ORDER BY id) TO STDOUT"
         reference = output / 'reference.tsv'
@@ -124,6 +157,7 @@ def main():
         report['expected_file'] = expected_file
     for number in range(args.rounds + 1):
         for variant in (['candidate', 'baseline'] if number % 2 == 0 else ['baseline', 'candidate']):
+            storage = disk_guard(output)
             name = ('warmup' if number == 0 else str(number)) + '-' + variant
             if args.scenario != 'pg-to-file':
                 suffix = '' if args.scenario == 'stream-to-pg' else ' INCLUDING ALL'
@@ -138,6 +172,7 @@ def main():
             else:
                 check = validate(args.rows, args.scenario == 'stream-to-pg')
             entry = {'round': number, 'variant': variant, 'seconds': seconds,
+                     'storage_before_run': storage,
                      'rows_per_second': args.rows / seconds, **check,
                      **process_metrics(output / (name + '.log'))}
             report['runs'].append(entry)
@@ -146,7 +181,8 @@ def main():
     medians = {v: statistics.median(r['seconds'] for r in report['runs'] if r['round'] and r['variant'] == v)
                for v in ['baseline', 'candidate']}
     report.update(median_seconds=medians, throughput_gain_percent=(medians['baseline']/medians['candidate']-1)*100,
-                  elapsed_reduction_percent=(1-medians['candidate']/medians['baseline'])*100)
+                  elapsed_reduction_percent=(1-medians['candidate']/medians['baseline'])*100,
+                  storage_after=disk_guard(output))
     (output/'results.json').write_text(json.dumps(report,indent=2))
     (output/'gate.json').write_text(json.dumps(evaluate(report,minimum_rounds=args.rounds),indent=2))
     print(json.dumps({'medians':medians,'throughput_gain_percent':report['throughput_gain_percent']}),flush=True)
