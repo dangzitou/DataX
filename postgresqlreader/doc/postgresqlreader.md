@@ -231,12 +231,15 @@ PostgresqlReader插件实现了从PostgreSQL读取数据。在底层实现上，
 | -------- | -----  |
 | Long     |bigint, bigserial, integer, smallint, serial |
 | Double   |double precision, money, numeric, real |
-| String   |varchar, char, text, bit, inet|
-| Date     |date, time, timestamp |
+| String   |varchar, char, text, bit, inet, time, timetz|
+| Date     |date, timestamp |
 | Boolean  |bool|
 | Bytes    |bytea|
 
 请注意:
+
+* 本 fork 对 `time` / `timetz` 保留 PG 的完整文本（包括微秒、原始偏移和 `24:00:00`），不再经过只能保存有限时间信息的 `java.sql.Time`。因此 DataX 内部列类型变为 String，`common.column.timeFormat` 不再裁剪这些值；依赖 DateColumn 的自定义 transformer 或其他数据库 writer 需要验证兼容性。postgresqlwriter 的 JDBC 与 COPY 路径支持直接写回这些文本。
+* 现用 PG JDBC 42.3.3 的二进制时间转换也会丢失信息，所以读取任务将 `time`、`timetz` 两种 OID 加入 `binaryTransferDisable`，保留已有禁用列表和其他类型的传输设置。
 
 * `除上述罗列字段类型外，其他类型均不支持; money,inet,bit需用户使用a_inet::varchar类似的语法转换`。
 

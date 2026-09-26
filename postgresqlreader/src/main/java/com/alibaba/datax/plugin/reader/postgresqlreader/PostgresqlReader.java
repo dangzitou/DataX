@@ -5,10 +5,15 @@ import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.spi.Reader;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.reader.CommonRdbmsReader;
+import com.alibaba.datax.plugin.rdbms.reader.Key;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 
 import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import org.postgresql.Driver;
+import org.postgresql.PGProperty;
 
 public class PostgresqlReader extends Reader {
 
@@ -59,6 +64,17 @@ public class PostgresqlReader extends Reader {
         @Override
         public void init() {
             this.readerSliceConfig = super.getPluginJobConf();
+            String url = this.readerSliceConfig.getString(Key.JDBC_URL);
+            // PG JDBC 42.3.3 getString still converts binary TIME/TIMETZ through java.sql.Time.
+            // Preserve existing disabled types while requesting lossless text for these two OIDs.
+            String disabled = PGProperty.BINARY_TRANSFER_DISABLE.get(Driver.parseURL(url, null));
+            disabled = (disabled == null || disabled.isEmpty() ? "" : disabled + ",") + "1083,1266";
+            try {
+                this.readerSliceConfig.set(Key.JDBC_URL, url + (url.contains("?") ? "&" : "?")
+                        + "binaryTransferDisable=" + URLEncoder.encode(disabled, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new IllegalStateException(e);
+            }
             this.commonRdbmsReaderSlave = new CommonRdbmsReader.Task(DATABASE_TYPE,super.getTaskGroupId(), super.getTaskId());
             this.commonRdbmsReaderSlave.init(this.readerSliceConfig);
         }

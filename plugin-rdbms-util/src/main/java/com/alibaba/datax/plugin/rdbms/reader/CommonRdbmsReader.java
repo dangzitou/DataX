@@ -302,7 +302,9 @@ public class CommonRdbmsReader {
                         break;
 
                     case Types.TIME:
-                        record.addColumn(new DateColumn(rs.getTime(i)));
+                        // java.sql.Time cannot retain PG microseconds, TIMETZ offsets or 24:00.
+                        record.addColumn(dataBaseType == DataBaseType.PostgreSQL
+                                ? new StringColumn(rs.getString(i)) : new DateColumn(rs.getTime(i)));
                         break;
 
                     // for mysql bug, see http://bugs.mysql.com/bug.php?id=35115

@@ -46,6 +46,9 @@ jobs:
         run: |
           python3 benchmarks/postgresql_writer_checks.py /tmp/datax-candidate /tmp/pg-driver-checks
           python3 benchmarks/postgresql_copy_checks.py /tmp/datax-candidate /tmp/pg-copy-checks
+          python3 benchmarks/postgresql_time_checks.py /tmp/datax-baseline /tmp/pg-time-baseline --mode jdbc --expect-loss
+          python3 benchmarks/postgresql_time_checks.py /tmp/datax-candidate /tmp/pg-time-candidate
+          python3 benchmarks/postgresql_time_checks.py /tmp/datax-candidate /tmp/pg-time-binary --binary
       - name: Start disposable StarRocks
         run: |
           docker run -d --name datax-perf-starrocks --memory 4g \

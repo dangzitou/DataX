@@ -88,6 +88,7 @@ public class PostgresqlWriter extends Writer {
             case Types.DATE:
                 return dates.toString(null, new java.sql.Date(column.asDate().getTime()));
             case Types.TIME:
+                if (column.getType() == Column.Type.STRING) return column.asString();
                 return dates.toString(null, new java.sql.Time(column.asDate().getTime()));
             case Types.TIMESTAMP:
                 java.util.Date date = column.asDate();
@@ -107,6 +108,17 @@ public class PostgresqlWriter extends Writer {
 			this.writerSliceConfig = super.getPluginJobConf();
 			this.commonRdbmsWriterSlave = new CommonRdbmsWriter.Task(DATABASE_TYPE){
                 private String copySql;
+
+                @Override
+                protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement statement,
+                        int index, int type, String typeName, Column column) throws SQLException {
+                    if (type == Types.TIME && column.getType() == Column.Type.STRING) {
+                        // calcValueHolder supplies the PG time/timetz cast; do not parse via java.sql.Time.
+                        statement.setString(index + 1, column.asString());
+                        return statement;
+                    }
+                    return super.fillPreparedStatementColumnType(statement, index, type, typeName, column);
+                }
 
                 @Override
                 protected void doBatchInsert(Connection connection, List<Record> buffer) throws SQLException {
