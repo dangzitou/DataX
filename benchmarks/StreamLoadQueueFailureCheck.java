@@ -16,6 +16,7 @@ import java.sql.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.zip.GZIPInputStream;
 
 /** Real managers, Tasks and HTTP clients; loopback simulator, not database or Engine. */
 public class StreamLoadQueueFailureCheck {
@@ -126,7 +127,8 @@ public class StreamLoadQueueFailureCheck {
             try (OutputStream output = connection.getOutputStream()) { output.write(body); }
             require(connection.getResponseCode() == 200, "Real Stream Load HTTP status " + connection.getResponseCode());
             ByteArrayOutputStream response = new ByteArrayOutputStream();
-            try (InputStream input = connection.getInputStream()) {
+            try (InputStream input = "gzip".equalsIgnoreCase(connection.getContentEncoding())
+                    ? new GZIPInputStream(connection.getInputStream()) : connection.getInputStream()) {
                 byte[] buffer = new byte[4096]; int count;
                 while ((count = input.read(buffer)) != -1) response.write(buffer, 0, count);
             }
