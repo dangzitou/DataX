@@ -100,6 +100,18 @@ def main():
         seconds = run(runtime, config, output, name)
         results.append({"case": name, "seconds": seconds, **validate("check_target", "SELECT * FROM type_source")})
 
+    for mode in ["replace", "update"]:
+        name = "native-write-mode-" + mode
+        sql("DROP TABLE IF EXISTS check_target; CREATE TABLE check_target LIKE source_data; "
+            "INSERT INTO check_target SELECT id,tenant,amount-999,created,'stale','stale' "
+            "FROM source_data WHERE id<=3;")
+        query = QUERY + " WHERE id<=6 ORDER BY id"
+        config = job(False, 1, "check_target", query)
+        writer = config["job"]["content"][0]["writer"]["parameter"]
+        writer.update(writeMode=mode, batchSize=2)
+        seconds = run(runtime, config, output, name)
+        results.append({"case": name, "seconds": seconds, **validate("check_target", query)})
+
     # 1024 * 100 parameters exceed MySQL's 65535 server-prepare limit. The
     # driver's existing client fallback must preserve every column and row.
     columns = ["id"] + ["c%d" % i for i in range(1, 100)]
