@@ -64,6 +64,58 @@ def main():
         check = validate("check_target", QUERY + " WHERE id<=5")
         results.append({"case": name, "seconds": seconds, **check})
 
+    for attempt in range(4):
+        name = "cached-partial-batch-%d" % (attempt + 1)
+        sql("DROP TABLE IF EXISTS check_target; CREATE TABLE check_target LIKE source_data; "
+            "ALTER TABLE check_target DROP PRIMARY KEY;")
+        query = ("SELECT id,tenant,amount,IF(id=2,'not-a-date',"
+                 "DATE_FORMAT(created,'%Y-%m-%d %H:%i:%s')) AS created,optional_text,payload "
+                 "FROM source_data WHERE id<=6 ORDER BY id")
+        config = job(False, 1, "check_target", query)
+        config["job"]["setting"]["errorLimit"]["record"] = 1
+        writer = config["job"]["content"][0]["writer"]["parameter"]
+        writer["batchSize"] = 3
+        writer["connection"][0]["jdbcUrl"] += "&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSqlLimit=65535"
+        seconds = run(runtime, config, output, name)
+        # No target PK: stale records must not be masked by duplicate-key fallback.
+        check = validate("check_target", QUERY + " WHERE id<=6 AND id<>2")
+        results.append({"case": name, "seconds": seconds, **check})
+
+    sql("""DROP TABLE IF EXISTS type_source; CREATE TABLE type_source LIKE source_data;
+        ALTER TABLE type_source MODIFY tenant BIT(1) NULL, MODIFY created TIMESTAMP(3) NULL,
+            MODIFY payload BLOB, MODIFY optional_text TEXT;
+        INSERT INTO type_source VALUES
+        (1,NULL,NULL,NULL,NULL,NULL),
+        (2,b'0',12.3400,'2024-02-29 12:34:56.123',
+            CONCAT('中文😀',CHAR(0),CHAR(10),CHAR(92),CHAR(39),CHAR(34)),UNHEX('0001275C0A0DFF')),
+        (3,b'1',-0.0001,'2024-01-01 00:00:01.987','',UNHEX('FF00'));""")
+    for native in [True, False]:
+        name = "types-native" if native else "types-client-override"
+        sql("DROP TABLE IF EXISTS check_target; CREATE TABLE check_target LIKE type_source;")
+        config = job(False, 1, "check_target", "SELECT * FROM type_source ORDER BY id")
+        writer = config["job"]["content"][0]["writer"]["parameter"]
+        writer["batchSize"] = 2
+        if not native:
+            writer["connection"][0]["jdbcUrl"] += "&useServerPrepStmts=false&cachePrepStmts=false"
+        seconds = run(runtime, config, output, name)
+        results.append({"case": name, "seconds": seconds, **validate("check_target", "SELECT * FROM type_source")})
+
+    # 1024 * 100 parameters exceed MySQL's 65535 server-prepare limit. The
+    # driver's existing client fallback must preserve every column and row.
+    columns = ["id"] + ["c%d" % i for i in range(1, 100)]
+    sql("DROP TABLE IF EXISTS wide_target; CREATE TABLE wide_target (" +
+        ",".join(c + " BIGINT" for c in columns) + ", PRIMARY KEY(id))")
+    query = "SELECT id," + ",".join("id+%d AS c%d" % (i, i) for i in range(1, 100)) + " FROM source_data WHERE id<=1024"
+    config = job(False, 1, "wide_target", query)
+    config["job"]["content"][0]["writer"]["parameter"]["column"] = columns
+    seconds = run(runtime, config, output, "wide-server-prepare-fallback")
+    actual = int(sql("SELECT COUNT(*) FROM wide_target"))
+    mismatched = int(sql("SELECT COUNT(*) FROM wide_target WHERE NOT (" +
+                        " AND ".join("c%d <=> id+%d" % (i, i) for i in range(1, 100)) + ")"))
+    assert actual == 1024 and mismatched == 0
+    results.append({"case": "wide-server-prepare-fallback", "seconds": seconds,
+                    "expected": 1024, "actual": actual, "mismatched_rows": mismatched})
+
     failures = [
         ("missing-table", "SELECT * FROM absent_datax_table", {}, "MYSQLErrCode-04"),
         ("missing-column", "SELECT nonexistent_column FROM source_data", {}, "MYSQLErrCode-06"),

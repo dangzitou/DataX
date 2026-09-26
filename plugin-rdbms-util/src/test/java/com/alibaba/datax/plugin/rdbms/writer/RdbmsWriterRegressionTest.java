@@ -2,6 +2,8 @@ package com.alibaba.datax.plugin.rdbms.writer;
 
 import com.alibaba.datax.common.element.LongColumn;
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.element.StringColumn;
+import com.alibaba.datax.common.element.BoolColumn;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
@@ -94,5 +96,45 @@ public class RdbmsWriterRegressionTest {
         } catch (DataXException expected) {
             verify(connection).close();
         }
+    }
+
+    @Test public void integerBindingPreservesSignedUnsignedNullAndStringInputs() throws Exception {
+        CommonRdbmsWriter.Task task = task();
+        PreparedStatement statement = mock(PreparedStatement.class);
+        task.fillPreparedStatementColumnType(statement, 0, Types.BIGINT, "BIGINT", new LongColumn(Long.MIN_VALUE));
+        task.fillPreparedStatementColumnType(statement, 1, Types.BIGINT, "BIGINT", new LongColumn(Long.MAX_VALUE));
+        task.fillPreparedStatementColumnType(statement, 2, Types.BIGINT, "BIGINT", new LongColumn());
+        task.fillPreparedStatementColumnType(statement, 3, Types.BIGINT, "BIGINT", new LongColumn("18446744073709551615"));
+        task.fillPreparedStatementColumnType(statement, 4, Types.INTEGER, "INT", new StringColumn("1.25"));
+        verify(statement).setLong(1, Long.MIN_VALUE);
+        verify(statement).setLong(2, Long.MAX_VALUE);
+        verify(statement).setNull(3, Types.BIGINT);
+        verify(statement).setString(4, "18446744073709551615");
+        verify(statement).setString(5, "1.25");
+    }
+
+    @Test public void booleanAndBitPreserveNullAndFalse() throws Exception {
+        CommonRdbmsWriter.Task task = task();
+        for (int type : new int[] {Types.BOOLEAN, Types.BIT}) {
+            PreparedStatement statement = mock(PreparedStatement.class);
+            task.fillPreparedStatementColumnType(statement, 0, type, "BIT", new BoolColumn());
+            task.fillPreparedStatementColumnType(statement, 1, type, "BIT", new BoolColumn(false));
+            verify(statement).setNull(1, type);
+            verify(statement).setBoolean(2, false);
+        }
+    }
+
+    @Test public void mysqlWriterDefaultsRespectExplicitDriverOptions() {
+        String url = "jdbc:mysql://localhost/test";
+        String defaults = DataBaseType.MySql.appendJDBCSuffixForWriter(url);
+        assertTrue(defaults.contains("useServerPrepStmts=true"));
+        assertTrue(defaults.contains("cachePrepStmts=true"));
+        assertTrue(defaults.contains("prepStmtCacheSqlLimit=65535"));
+        String explicit = DataBaseType.MySql.appendJDBCSuffixForWriter(url
+                + "?useServerPrepStmts=false&cachePrepStmts=false&prepStmtCacheSqlLimit=123");
+        assertFalse(explicit.contains("useServerPrepStmts=true"));
+        assertFalse(explicit.contains("cachePrepStmts=true"));
+        assertFalse(explicit.contains("prepStmtCacheSqlLimit=65535"));
+        assertFalse(DataBaseType.MySql.appendJDBCSuffixForReader(url).contains("useServerPrepStmts"));
     }
 }

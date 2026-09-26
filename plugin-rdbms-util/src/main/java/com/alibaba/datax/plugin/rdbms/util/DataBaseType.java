@@ -91,6 +91,12 @@ public enum DataBaseType {
         switch (this) {
             case MySql:
                 suffix = "yearIsDateType=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&tinyInt1isBit=false";
+                for (String setting : new String[] {"useServerPrepStmts=true", "cachePrepStmts=true", "prepStmtCacheSqlLimit=65535"}) {
+                    String key = setting.substring(0, setting.indexOf('=')) + "=";
+                    if (!jdbc.contains("?" + key) && !jdbc.contains("&" + key)) {
+                        suffix += "&" + setting;
+                    }
+                }
                 if (jdbc.contains("?")) {
                     result = jdbc + "&" + suffix;
                 } else {

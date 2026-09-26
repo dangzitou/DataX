@@ -349,6 +349,8 @@ public class CommonRdbmsWriter {
                     connection.setAutoCommit(false);
                 }
                 preparedStatement = connection.prepareStatement(this.writeRecordSql);
+                // A driver-cached statement can retain a batch aborted during binding.
+                preparedStatement.clearBatch();
 
                 for (Record record : buffer) {
                     preparedStatement = fillPreparedStatement(preparedStatement, record);
@@ -378,6 +380,7 @@ public class CommonRdbmsWriter {
                 connection.setAutoCommit(true);
                 preparedStatement = connection
                         .prepareStatement(this.writeRecordSql);
+                preparedStatement.clearBatch();
 
                 for (Record record : buffer) {
                     try {
@@ -435,6 +438,15 @@ public class CommonRdbmsWriter {
                 case Types.SMALLINT:
                 case Types.INTEGER:
                 case Types.BIGINT:
+                    // Avoid BigInteger -> quoted String -> database integer conversion.
+                    // Unsigned BIGINT and non-LongColumn inputs keep the original path.
+                    if (column.getType() == Column.Type.LONG && (column.getRawData() == null
+                            || column.asBigInteger().bitLength() <= 63)) {
+                        Long value = column.asLong();
+                        if (value == null) preparedStatement.setNull(columnIndex + 1, columnSqltype);
+                        else preparedStatement.setLong(columnIndex + 1, value);
+                        break;
+                    }
                 case Types.NUMERIC:
                 case Types.DECIMAL:
                 case Types.FLOAT:
@@ -526,14 +538,13 @@ public class CommonRdbmsWriter {
                     break;
 
                 case Types.BOOLEAN:
-                    preparedStatement.setBoolean(columnIndex + 1, column.asBoolean());
-                    break;
-
                 // warn: bit(1) -> Types.BIT 可使用setBoolean
                 // warn: bit(>1) -> Types.VARBINARY 可使用setBytes
                 case Types.BIT:
-                    if (this.dataBaseType == DataBaseType.MySql) {
-                        preparedStatement.setBoolean(columnIndex + 1, column.asBoolean());
+                    if (columnSqltype == Types.BOOLEAN || this.dataBaseType == DataBaseType.MySql) {
+                        Boolean value = column.asBoolean();
+                        if (value == null) preparedStatement.setNull(columnIndex + 1, columnSqltype);
+                        else preparedStatement.setBoolean(columnIndex + 1, value);
                     } else {
                         preparedStatement.setString(columnIndex + 1, column.asString());
                     }
