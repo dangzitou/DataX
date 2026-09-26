@@ -1,5 +1,6 @@
 package com.starrocks.connector.datax.plugin.writer.starrockswriter;
 
+import com.alibaba.datax.common.util.BinaryEncoding;
 import java.io.Serializable;
 
 import com.alibaba.datax.common.exception.DataXException;
@@ -79,6 +80,7 @@ public class StarRocksWriterOptions implements Serializable {
     }
 
     public void doPretreatment() {
+        getBinaryEncoding();
         validateRequired();
         validateStreamLoadUrl();
     }
@@ -132,6 +134,10 @@ public class StarRocksWriterOptions implements Serializable {
 
     public List<String> getPostSqlList() {
         return options.getList(KEY_POST_SQL, String.class);
+    }
+
+    public BinaryEncoding getBinaryEncoding() {
+        return BinaryEncoding.from(options.getString("binaryEncoding"));
     }
 
     public Map<String, Object> getLoadProps() {

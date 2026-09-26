@@ -35,6 +35,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -129,6 +132,7 @@ public class CommonRdbmsReader {
         private ResultSetMetaData cachedMetaData;
         private int[] columnTypes;
         private boolean[] yearColumns;
+        private Set<String> binaryColumns = Collections.emptySet();
 
         // 作为日志显示信息时，需要附带的通用信息。比如信息所对应的数据库连接等信息，针对哪个表做的操作
         private String basicMsg;
@@ -166,6 +170,17 @@ public class CommonRdbmsReader {
             }
 
             this.mandatoryEncoding = readerSliceConfig.getString(Key.MANDATORY_ENCODING, "");
+            this.cachedMetaData = null;
+            this.binaryColumns = Collections.emptySet();
+            List<String> configuredBinary = readerSliceConfig.getList(Key.BINARY_COLUMNS, String.class);
+            if (configuredBinary != null) {
+                binaryColumns = new HashSet<>();
+                for (String name : configuredBinary) {
+                    if (name == null || name.isEmpty() || !binaryColumns.add(name))
+                        throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                                "binaryColumns must contain distinct, nonempty result column labels");
+                }
+            }
 
             basicMsg = String.format("jdbcUrl:[%s]", this.jdbcUrl);
 
@@ -201,6 +216,7 @@ public class CommonRdbmsReader {
 
                 ResultSetMetaData metaData = rs.getMetaData();
                 columnNumber = metaData.getColumnCount();
+                cacheMetadata(metaData, columnNumber);
 
                 //这个统计干净的result_Next时间
                 PerfRecord allResultPerfRecord = new PerfRecord(taskGroupId, taskId, PerfRecord.PHASE.RESULT_NEXT_ALL);
@@ -244,21 +260,39 @@ public class CommonRdbmsReader {
             if (record != null) recordSender.sendToWriter(record);
             return record;
         }
+        protected void cacheMetadata(ResultSetMetaData metaData, int columnNumber) throws SQLException {
+            if (cachedMetaData != metaData) {
+                columnTypes = new int[columnNumber];
+                yearColumns = new boolean[columnNumber];
+                Set<String> remaining = new HashSet<>(binaryColumns);
+                for (int i = 0; i < columnNumber; i++) {
+                    columnTypes[i] = metaData.getColumnType(i + 1);
+                    yearColumns[i] = columnTypes[i] == Types.DATE
+                            && "year".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
+                    if (!binaryColumns.isEmpty() && binaryColumns.contains(metaData.getColumnLabel(i + 1))) {
+                        String label = metaData.getColumnLabel(i + 1);
+                        int type = columnTypes[i];
+                        if (!remaining.remove(label) || !(type == Types.CHAR || type == Types.NCHAR
+                                || type == Types.VARCHAR || type == Types.NVARCHAR || type == Types.LONGVARCHAR
+                                || type == Types.LONGNVARCHAR || type == Types.BINARY || type == Types.VARBINARY
+                                || type == Types.LONGVARBINARY || type == Types.BLOB))
+                            throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                                    "binaryColumns label is ambiguous or not a string/binary field: " + label);
+                        columnTypes[i] = Types.VARBINARY;
+                    }
+                }
+                if (!remaining.isEmpty()) throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                        "binaryColumns not found in query output: " + remaining);
+                cachedMetaData = metaData;
+            }
+        }
+
         protected Record buildRecord(RecordSender recordSender,ResultSet rs, ResultSetMetaData metaData, int columnNumber, String mandatoryEncoding,
         		TaskPluginCollector taskPluginCollector) {
         	Record record = recordSender.createRecord();
 
             try {
-                if (cachedMetaData != metaData) {
-                    columnTypes = new int[columnNumber];
-                    yearColumns = new boolean[columnNumber];
-                    for (int i = 0; i < columnNumber; i++) {
-                        columnTypes[i] = metaData.getColumnType(i + 1);
-                        yearColumns[i] = columnTypes[i] == Types.DATE
-                                && "year".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
-                    }
-                    cachedMetaData = metaData;
-                }
+                cacheMetadata(metaData, columnNumber);
                 for (int i = 1; i <= columnNumber; i++) {
                     switch (columnTypes[i - 1]) {
 

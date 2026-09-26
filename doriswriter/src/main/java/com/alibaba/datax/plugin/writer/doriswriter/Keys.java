@@ -1,5 +1,6 @@
 package com.alibaba.datax.plugin.writer.doriswriter;
 
+import com.alibaba.datax.common.util.BinaryEncoding;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
@@ -56,6 +57,7 @@ public class Keys implements Serializable {
     }
 
     public void doPretreatment() {
+        getBinaryEncoding();
         validateRequired();
         validateStreamLoadUrl();
     }
@@ -110,6 +112,10 @@ public class Keys implements Serializable {
 
     public List<String> getPostSqlList() {
         return options.getList(POST_SQL, String.class);
+    }
+
+    public BinaryEncoding getBinaryEncoding() {
+        return BinaryEncoding.from(options.getString("binaryEncoding"));
     }
 
     public Map<String, Object> getLoadProps() {

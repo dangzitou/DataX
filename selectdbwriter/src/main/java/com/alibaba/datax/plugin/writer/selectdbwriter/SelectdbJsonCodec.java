@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.writer.selectdbwriter;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.util.BinaryEncoding;
 import com.alibaba.fastjson2.JSON;
 
 import java.util.HashMap;
@@ -14,6 +15,11 @@ public class SelectdbJsonCodec extends SelectdbBaseCodec implements SelectdbCode
     private final List<String> fieldNames;
 
     public SelectdbJsonCodec ( List<String> fieldNames) {
+        this(fieldNames, BinaryEncoding.REJECT);
+    }
+
+    public SelectdbJsonCodec(List<String> fieldNames, BinaryEncoding binaryEncoding) {
+        super(binaryEncoding);
         this.fieldNames = fieldNames;
     }
 

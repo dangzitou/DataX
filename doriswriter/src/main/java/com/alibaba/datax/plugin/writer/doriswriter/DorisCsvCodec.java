@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.writer.doriswriter;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.util.BinaryEncoding;
 
 public class DorisCsvCodec extends DorisBaseCodec implements DorisCodec {
 
@@ -14,6 +15,11 @@ public class DorisCsvCodec extends DorisBaseCodec implements DorisCodec {
     }
 
     public DorisCsvCodec(String sp, String rowDelimiter) {
+        this(sp, rowDelimiter, BinaryEncoding.REJECT);
+    }
+
+    public DorisCsvCodec(String sp, String rowDelimiter, BinaryEncoding binaryEncoding) {
+        super(binaryEncoding);
         this.columnSeparator = DelimiterParser.parse(sp, "\t");
         this.rowDelimiter = DelimiterParser.parse(rowDelimiter, "\n");
     }

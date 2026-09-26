@@ -3,6 +3,7 @@ package com.alibaba.datax.plugin.rdbms.reader;
 import com.alibaba.datax.common.element.Column;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
@@ -106,5 +107,34 @@ public class RdbmsReaderRegressionTest {
         for (int i = 0; i < 100; i++) task.read(sender, rs, meta, "", new Collector());
         verify(meta, times(1)).getColumnType(1);
         assertEquals("9223372036854775808", sender.rows.get(0).getColumn(0).asString());
+    }
+
+    @Test public void explicitBinaryLabelsBypassLossyTextConversion() throws Exception {
+        Configuration config=Configuration.newDefault();
+        config.set(Key.JDBC_URL,"jdbc:mysql://test/db");
+        config.set(Key.BINARY_COLUMNS,Collections.singletonList("payload"));
+        Task task=new Task(); task.init(config);
+        ResultSetMetaData meta=metadata(Types.LONGVARCHAR);
+        when(meta.getColumnLabel(1)).thenReturn("payload");
+        ResultSet rs=mock(ResultSet.class);
+        byte[] binary=new byte[]{0,(byte)128,(byte)255};
+        when(rs.getBytes(1)).thenReturn(binary);
+        Sender sender=new Sender(); Collector collector=new Collector();
+        task.read(sender,rs,meta,"UTF-8",collector);
+        assertEquals(Column.Type.BYTES,sender.rows.get(0).getColumn(0).getType());
+        assertArrayEquals(binary,sender.rows.get(0).getColumn(0).asBytes());
+        verify(rs,never()).getString(1);
+        when(rs.getBytes(1)).thenReturn(null);
+        task.read(sender,rs,meta,"UTF-8",collector);
+        assertNull(sender.rows.get(1).getColumn(0).getRawData());
+        verify(meta,times(1)).getColumnType(1);
+        for (boolean missing:new boolean[]{true,false}) {
+            ResultSetMetaData invalid=metadata(missing ? Types.LONGVARCHAR : Types.BIGINT);
+            when(invalid.getColumnLabel(1)).thenReturn(missing ? "other" : "payload");
+            try { task.read(sender,rs,invalid,"",collector); fail("Invalid hint must fail"); }
+            catch (DataXException expected) { assertTrue(expected.getMessage().contains("binaryColumns")); }
+        }
+        assertEquals(0,collector.dirty);
+        assertEquals(2,sender.rows.size());
     }
 }

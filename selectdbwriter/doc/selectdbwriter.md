@@ -426,3 +426,30 @@ c.再次尝试编译。
     "file.strip_outer_array": true
 }
 ```
+## 二进制字段的显式传输
+
+`parameter.binaryEncoding` 默认 `reject`，遇到非 NULL 的 DataX BYTES 时明确失败；不再将任意字节折算成 long。
+可选 `hex` 或 `base64`，保留每个字节、前导零和长度，空字节串与 NULL 分开。该设置作用于所有 BYTES 字段，
+不改变普通字符串、整数或布尔字段。数值型 MySQL BIT 应在源 querySql 中显式 `CAST(bit_col AS UNSIGNED)`，
+并选择能容纳其范围的目标数值类型；不要把二进制内容和整数混用。
+
+编码是传输表示，必须和目标列/导入表达式相匹配。文本目标可用 STRING/VARCHAR 存储编码后的值；
+不能把 hex/base64 文本直接当作任意数值类型或任意版本的原生二进制类型。字段长度、loadProps 列映射、
+目标表达式仍需检查，成功行数相同并不能证明字段相同。请保持严格导入与零过滤，并逐字节对账。
+
+源/目标不支持原生二进制存储时，编码文本是明确的替代表示，不是声称目标具有 bytea/VARBINARY 类型。
+这也不提供整任务原子提交：错误前已提交的批次仍可能存在。
+
+对 JDBC 将二进制列误报为文本的 reader，可配置 `binaryColumns: ["payload"]`。按查询结果列标签精确匹配，
+以 `ResultSet.getBytes` 构造 BytesColumn；未列出的字段保留原有转换。重名、缺失、重复配置或非字符串/二进制类型会拒绝。
+该选项不是自动类型推断；已知案例是 StarRocks 4.1.4 VARBINARY 被 JDBC 报成 TEXT。
+
+读取编码文本并恢复二进制时，可在源 querySql 使用
+`CASE WHEN payload='' THEN '' ELSE FROM_BASE64(payload) END AS payload`（hex 用 `UNHEX`），
+同时设置 reader `binaryColumns: ["payload"]`。显式处理空串避免解码函数把空二进制变成 NULL；需按目标版本验证。
+
+本 fork 的真实数据库检查见 [olap_binary_checks.py](../../benchmarks/olap_binary_checks.py)，
+工厂/编码器检查见 [binary_codec_checks.py](../../benchmarks/binary_codec_checks.py)。
+
+SelectDB 的检查目前只覆盖编码器、配置工厂与编译，没有真实 SelectDB 服务验收。
+CSV 使用 `file.column_separator` 与 `file.line_delimiter` 检查碰撞；有分隔字符或字面 \N 的字符串需要 JSON。

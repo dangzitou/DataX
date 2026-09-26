@@ -1,6 +1,7 @@
 package com.starrocks.connector.datax.plugin.writer.starrockswriter.row;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.util.BinaryEncoding;
 
 
 public class StarRocksCsvSerializer extends StarRocksBaseSerializer implements StarRocksISerializer {
@@ -15,6 +16,11 @@ public class StarRocksCsvSerializer extends StarRocksBaseSerializer implements S
     }
 
     public StarRocksCsvSerializer(String sp, String rowDelimiter) {
+        this(sp, rowDelimiter, BinaryEncoding.REJECT);
+    }
+
+    public StarRocksCsvSerializer(String sp, String rowDelimiter, BinaryEncoding binaryEncoding) {
+        super(binaryEncoding);
         this.columnSeparator = StarRocksDelimiterParser.parse(sp, "\t");
         this.rowDelimiter = StarRocksDelimiterParser.parse(rowDelimiter, "\n");
     }

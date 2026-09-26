@@ -1,6 +1,9 @@
 package com.starrocks.connector.datax.plugin.writer.starrockswriter.row;
 
 import com.alibaba.datax.common.element.StringColumn;
+import com.alibaba.datax.common.element.BytesColumn;
+import com.alibaba.datax.common.element.Column;
+import com.alibaba.datax.common.util.BinaryEncoding;
 import com.alibaba.datax.common.element.Record;
 import java.lang.reflect.Proxy;
 import com.alibaba.fastjson2.JSON;
@@ -9,11 +12,13 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 public class StarRocksCsvSerializerTest {
-    private Record row(String value) {
+    private Record row(String value) { return columnRow(new StringColumn(value)); }
+
+    private Record columnRow(Column value) {
         return (Record) Proxy.newProxyInstance(Record.class.getClassLoader(),
                 new Class<?>[] {Record.class}, (proxy, method, args) -> {
                     if (method.getName().equals("getColumnNumber")) return 1;
-                    if (method.getName().equals("getColumn")) return new StringColumn(value);
+                    if (method.getName().equals("getColumn")) return value;
                     throw new UnsupportedOperationException(method.getName());
                 });
     }
@@ -58,5 +63,21 @@ public class StarRocksCsvSerializerTest {
             String value = new String(Character.toChars(cp));
             assertEquals(value, JSON.parseObject(json.serializeBytes(row(value))).getString("txt"));
         }
+    }
+
+    @Test public void binaryFieldsAreExplicitAndReversible() {
+        byte[] binary = new byte[]{0,0,1,2,3,4,5,6,7,8,(byte)255};
+        Record row = columnRow(new BytesColumn(binary));
+        for (BinaryEncoding encoding : new BinaryEncoding[]{BinaryEncoding.HEX, BinaryEncoding.BASE64}) {
+            String expected = encoding.encode(binary);
+            assertEquals(expected, new StarRocksCsvSerializer(null, null, encoding).serialize(row));
+            assertEquals(expected, JSON.parseObject(new StarRocksJsonSerializer(Collections.singletonList("payload"), encoding).serialize(row)).getString("payload"));
+        }
+        try { new StarRocksCsvSerializer(null).serialize(row); fail("Raw bytes must not become an integer"); }
+        catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("binaryEncoding")); }
+        try { new StarRocksJsonSerializer(Collections.singletonList("payload")).serialize(row); fail("Raw bytes must not become an integer"); }
+        catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("binaryEncoding")); }
+        try { new StarRocksCsvSerializer("0", null, BinaryEncoding.HEX).serialize(row); fail("Encoding must not bypass delimiter guards"); }
+        catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("Unsafe CSV")); }
     }
 }

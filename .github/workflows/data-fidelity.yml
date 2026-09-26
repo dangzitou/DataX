@@ -19,13 +19,15 @@ jobs:
           java-version: '8'
           cache: maven
       - name: Unit tests including both CSV codecs
-        run: mvn -B -pl core,plugin-rdbms-util,postgresqlreader,postgresqlwriter,starrocksreader,starrockswriter,dorisreader,doriswriter,streamwriter -am test
+        run: mvn -B -pl core,plugin-rdbms-util,postgresqlreader,postgresqlwriter,starrocksreader,starrockswriter,dorisreader,doriswriter,selectdbwriter,streamwriter -am test
       - name: Build untouched baseline then candidate
         run: |
           git fetch --depth 1 origin 80ec23d5c5328eb90ca364d2749e92dfaf44541e
           git worktree add --detach /tmp/datax-baseline-src 80ec23d5c5328eb90ca364d2749e92dfaf44541e
           python3 benchmarks/build.py /tmp/datax-baseline-src /tmp/datax-baseline --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter
-          python3 benchmarks/build.py . /tmp/datax-candidate --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter
+          python3 benchmarks/build.py . /tmp/datax-candidate --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter selectdbwriter
+      - name: Binary codec and factory checks (SelectDB codec only)
+        run: python3 benchmarks/binary_codec_checks.py /tmp/datax-candidate /tmp/binary-codecs
       - name: Stream Load status fault injection (HTTP simulator)
         run: |
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete
@@ -81,6 +83,10 @@ jobs:
           docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to StarRocks and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-checks
+      - name: PostgreSQL binary values through StarRocks
+        run: |
+          python3 benchmarks/olap_binary_checks.py /tmp/datax-baseline /tmp/sr-binary-baseline --expect-legacy
+          python3 benchmarks/olap_binary_checks.py /tmp/datax-candidate /tmp/sr-binary-candidate
       - name: StarRocks rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-row-checks
       - name: Start disposable Doris
@@ -98,5 +104,9 @@ jobs:
           docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to Doris and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-checks --backend doris
+      - name: PostgreSQL binary values through Doris
+        run: |
+          python3 benchmarks/olap_binary_checks.py /tmp/datax-baseline /tmp/doris-binary-baseline --backend doris --expect-legacy
+          python3 benchmarks/olap_binary_checks.py /tmp/datax-candidate /tmp/doris-binary-candidate --backend doris
       - name: Doris rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-row-checks --backend doris

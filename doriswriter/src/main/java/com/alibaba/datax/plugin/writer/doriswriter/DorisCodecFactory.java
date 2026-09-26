@@ -10,10 +10,10 @@ public class DorisCodecFactory {
         if ( Keys.StreamLoadFormat.CSV.equals(writerOptions.getStreamLoadFormat())) {
             Map<String, Object> props = writerOptions.getLoadProps();
             return new DorisCsvCodec (null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")),
-                    null == props || !props.containsKey("row_delimiter") ? null : String.valueOf(props.get("row_delimiter")));
+                    null == props || !props.containsKey("line_delimiter") ? null : String.valueOf(props.get("line_delimiter")), writerOptions.getBinaryEncoding());
         }
         if ( Keys.StreamLoadFormat.JSON.equals(writerOptions.getStreamLoadFormat())) {
-            return new DorisJsonCodec (writerOptions.getColumns());
+            return new DorisJsonCodec (writerOptions.getColumns(), writerOptions.getBinaryEncoding());
         }
         throw new RuntimeException("Failed to create row serializer, unsupported `format` from stream load properties.");
     }

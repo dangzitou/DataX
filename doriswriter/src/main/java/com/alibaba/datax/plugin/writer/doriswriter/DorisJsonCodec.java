@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.writer.doriswriter;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.util.BinaryEncoding;
 import com.alibaba.fastjson2.JSON;
 
 import java.util.HashMap;
@@ -14,6 +15,11 @@ public class DorisJsonCodec extends DorisBaseCodec implements DorisCodec {
     private final List<String> fieldNames;
 
     public DorisJsonCodec ( List<String> fieldNames) {
+        this(fieldNames, BinaryEncoding.REJECT);
+    }
+
+    public DorisJsonCodec(List<String> fieldNames, BinaryEncoding binaryEncoding) {
+        super(binaryEncoding);
         this.fieldNames = fieldNames;
     }
 

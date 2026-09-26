@@ -12,10 +12,10 @@ public class StarRocksSerializerFactory {
         if (StarRocksWriterOptions.StreamLoadFormat.CSV.equals(writerOptions.getStreamLoadFormat())) {
             Map<String, Object> props = writerOptions.getLoadProps();
             return new StarRocksCsvSerializer(null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")),
-                    null == props || !props.containsKey("row_delimiter") ? null : String.valueOf(props.get("row_delimiter")));
+                    null == props || !props.containsKey("row_delimiter") ? null : String.valueOf(props.get("row_delimiter")), writerOptions.getBinaryEncoding());
         }
         if (StarRocksWriterOptions.StreamLoadFormat.JSON.equals(writerOptions.getStreamLoadFormat())) {
-            return new StarRocksJsonSerializer(writerOptions.getColumns());
+            return new StarRocksJsonSerializer(writerOptions.getColumns(), writerOptions.getBinaryEncoding());
         }
         throw new RuntimeException("Failed to create row serializer, unsupported `format` from stream load properties.");
     }

@@ -13,6 +13,7 @@ public final class Key {
     public final static String TABLE = "table";
     
     public final static String MANDATORY_ENCODING = "mandatoryEncoding";
+    public final static String BINARY_COLUMNS = "binaryColumns";
 
     // 是数组配置
     public final static String COLUMN = "column";

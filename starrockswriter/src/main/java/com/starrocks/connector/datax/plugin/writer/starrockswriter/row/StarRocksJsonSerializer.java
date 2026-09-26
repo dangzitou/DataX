@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.util.BinaryEncoding;
 import com.alibaba.fastjson2.JSON;
 
 public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements StarRocksISerializer {
@@ -14,6 +15,11 @@ public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements 
     private final List<String> fieldNames;
 
     public StarRocksJsonSerializer(List<String> fieldNames) {
+        this(fieldNames, BinaryEncoding.REJECT);
+    }
+
+    public StarRocksJsonSerializer(List<String> fieldNames, BinaryEncoding binaryEncoding) {
+        super(binaryEncoding);
         this.fieldNames = fieldNames;
     }
 

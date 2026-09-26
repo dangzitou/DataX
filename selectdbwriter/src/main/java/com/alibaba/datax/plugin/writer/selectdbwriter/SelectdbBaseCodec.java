@@ -1,8 +1,14 @@
 package com.alibaba.datax.plugin.writer.selectdbwriter;
 
 import com.alibaba.datax.common.element.Column;
+import com.alibaba.datax.common.util.BinaryEncoding;
 
 public class SelectdbBaseCodec {
+    private final BinaryEncoding binaryEncoding;
+
+    protected SelectdbBaseCodec() { this(BinaryEncoding.REJECT); }
+    protected SelectdbBaseCodec(BinaryEncoding binaryEncoding) { this.binaryEncoding = binaryEncoding; }
+
     protected String convertionField( Column col) {
         if (null == col.getRawData() || Column.Type.NULL == col.getType()) {
             return null;
@@ -11,12 +17,7 @@ public class SelectdbBaseCodec {
             return String.valueOf(col.asLong());
         }
         if ( Column.Type.BYTES == col.getType()) {
-            byte[] bts = (byte[])col.getRawData();
-            long value = 0;
-            for (int i = 0; i < bts.length; i++) {
-                value += (bts[bts.length - i - 1] & 0xffL) << (8 * i);
-            }
-            return String.valueOf(value);
+            return binaryEncoding.encode(col.asBytes());
         }
         return col.asString();
     }
