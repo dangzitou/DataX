@@ -2,6 +2,8 @@
 """Small real-Engine integer reads: exact values and multiplicities, text/binary requests."""
 import argparse
 import json
+import os
+import subprocess
 from pathlib import Path
 from mysql_querysql import run
 from postgresql_checks import job, sql
@@ -35,6 +37,21 @@ def main():
                        'java.util.logging.ConsoleHandler.level=FINEST\norg.postgresql.level=FINEST\n')
     report = {'scope': __doc__, 'build': json.loads((runtime / 'build-metadata.json').read_text()),
               'postgres': sql('SELECT version()'), 'results': []}
+    java = Path(os.environ['JAVA_HOME']) / 'bin'
+    classes = output / 'classes'
+    classes.mkdir()
+    classpath = os.pathsep.join([str(runtime / 'lib/*'), str(runtime / 'plugin/reader/postgresqlreader/*')])
+    with (output / 'probe-compile.log').open('w') as log:
+        subprocess.run([str(java / 'javac'), '-encoding', 'UTF-8', '-cp', classpath, '-d', str(classes),
+                        str(Path(__file__).with_name('PostgresqlIntegerReadCheck.java'))],
+                       stdout=log, stderr=subprocess.STDOUT, check=True)
+    with (output / 'probe.log').open('w') as log:
+        subprocess.run([str(java / 'java'), '-cp', str(classes) + os.pathsep + classpath,
+                        'PostgresqlIntegerReadCheck'], stdout=log, stderr=subprocess.STDOUT,
+                       timeout=60, check=True)
+    report['jdbc_reader_checks'] = [json.loads(line[7:]) for line in (output / 'probe.log').read_text().splitlines()
+                                    if line.startswith('RESULT ')]
+    assert len(report['jdbc_reader_checks']) == 8
     for wire in ['text', 'binary-requested']:
         for reader_mode in ['query', 'table']:
             for attempt in range(1, 5):
