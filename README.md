@@ -9,6 +9,7 @@
 > [非 querySql 补测与字符集勘误](benchmarks/REPORT-scenarios.zh-CN.md)：普通表单路/四路分别 +9.49%/+4.78%，文件输出约持平，生成数据写入 MySQL +7.83%。旧样本文本并非预期中文，说明已更正；PostgreSQL 亿级回灌的正确性和性能尚未验收。
 > [PostgreSQL 百万行实测](benchmarks/REPORT-pg.zh-CN.md)：六组中位吞吐变化为 -1.40% 到 +26.32%，全部未达到逐轮 +50%。新增 COPY 默认关闭，不提供整作业原子性或幂等重跑。
 > [字段保真与回灌风险](benchmarks/REPORT-fidelity.zh-CN.md) · [真实 Doris 读写检查](benchmarks/REPORT-doris.zh-CN.md)：部分静默失真已修复，但无唯一键重跑重复、失败留下已提交批次和源共享快照问题仍未解决。全场景 +50% 与亿级零差错均未验收。
+> [StarRocks / Doris 百万行性能与磁盘约束](benchmarks/REPORT-olap.zh-CN.md)：十组完整对照均未达到逐轮 +50%；另有一组因服务器内存不足未完成。成功的 131 次百万行传输均完成数据校验，失败记录保留。
 
 [![Leaderboard](https://img.shields.io/badge/DataX-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=datax)
 

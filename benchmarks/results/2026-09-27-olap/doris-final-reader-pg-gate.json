@@ -1,0 +1,16 @@
+{
+  "passed": false,
+  "error": "Candidate job failed in round 5; comparison incomplete",
+  "failure": {
+    "case": "5-candidate",
+    "kind": "database_resource_error",
+    "marker": "MEM_LIMIT_EXCEEDED",
+    "datax_job_failed": true,
+    "target_rows_after_failure": 0,
+    "be_process_limit_gib": 2,
+    "container_limit_gib": 5,
+    "completed_validated_runs": 11,
+    "log_sha256": "50adc497b005b9f95e282e369961210bf08894f20ed997cd7a4d8d4948fd7c7a",
+    "scope": "Query failed before producing rows in this run; not a guarantee that failed jobs roll back earlier batches."
+  }
+}

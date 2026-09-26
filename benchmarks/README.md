@@ -28,6 +28,11 @@ checks using both doriswriter and dorisreader, including the upstream CSV
 corruption and candidate rejection. These small fixtures are not performance
 or production-recovery validation.
 
+[StarRocks / Doris million-row performance and storage (中文)](REPORT-olap.zh-CN.md)
+records ten completed comparisons, one incomplete comparison with a server
+memory failure, and 131 validated successful transfers. Every +50% gate failed.
+Raw failures, memory controls and bounded-storage execution records are retained.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

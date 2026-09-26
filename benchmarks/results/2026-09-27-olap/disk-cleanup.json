@@ -1,0 +1,29 @@
+{
+  "retired_runtime_bytes": 1217799585,
+  "removed_builds": {
+    "baseline": 64229734,
+    "candidate": 64260752,
+    "candidate-all": 186346307,
+    "candidate-fidelity": 186024371,
+    "candidate-guard": 63466730,
+    "candidate-native": 64597999,
+    "candidate-pg-copy": 84512881,
+    "candidate-pg-copy-all": 185900751,
+    "candidate-pg-copy-bytes": 84506428,
+    "candidate-pg-copy-final": 85406090,
+    "candidate-pg-copy-strict": 84789366,
+    "candidate-v2": 63758176
+  },
+  "preserved": [
+    "baseline-all",
+    "candidate-olap-bytes"
+  ],
+  "removed_generated_mysql_volume": "a17a4074b046591a67a8b1c6b0293af8ccf5fd3e3640f033115b675e6bcba542",
+  "mysql_volume_reported_gb_before": 76.56,
+  "starrocks_container_writable_reported_gb_before": 9.13,
+  "host_available_gib_before": 182,
+  "host_available_gib_after": 263,
+  "remaining_temp_mib_after": 693,
+  "storage_guard": "Between-run 6 GiB database-storage budget, with 1 GiB reserve and 8 GiB host free-space check; not a filesystem quota",
+  "guard_rejection_verified": true
+}
