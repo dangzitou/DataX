@@ -2,6 +2,10 @@
 
 # DataX
 
+> 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
+> 100 万行真实 MySQL 同步五轮实测：吞吐中位数提升 **50.79%**；该提升主要来自自动分片，不代表所有任务普遍提速。
+> [完整实测报告与对照数据](benchmarks/REPORT.zh-CN.md) · [构建、配置及复现指南](benchmarks/README.md)
+
 [![Leaderboard](https://img.shields.io/badge/DataX-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=datax)
 
 DataX 是阿里云 [DataWorks数据集成](https://www.aliyun.com/product/bigdata/ide) 的开源版本，在阿里巴巴集团内被广泛使用的离线数据同步工具/平台。DataX 实现了包括 MySQL、Oracle、OceanBase、SqlServer、Postgre、HDFS、Hive、ADS、HBase、TableStore(OTS)、MaxCompute(ODPS)、Hologres、DRDS, databend 等各种异构数据源之间高效的数据同步功能。
@@ -198,6 +202,5 @@ This software is free to use under the Apache License [Apache license](https://g
 用户咨询支持：
 
 钉钉群目前暂时受到了一些管控策略影响，建议大家有问题优先在这里提交问题 Issue，DataX研发和社区会定期回答Issue中的问题，知识库丰富后也能帮助到后来的使用者。
-
 
 

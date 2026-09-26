@@ -1,0 +1,9 @@
+{
+  "run": "https://github.com/dangzitou/DataX/actions/runs/36235637589",
+  "code_commit": "456a29b655ce5560b49c0d5d4349158c0a236dc1",
+  "conclusion": "success",
+  "runner": "ubuntu-latest",
+  "jdk": "Temurin 8",
+  "unit_tests": 23,
+  "real_mysql_checks": 28
+}

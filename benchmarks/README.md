@@ -64,7 +64,15 @@ python3 benchmarks/regressions.py /tmp/datax-benchmark/baseline \
 python3 benchmarks/regressions.py /tmp/datax-benchmark/candidate \
   /tmp/datax-benchmark/candidate-regressions --repeat 4
 mvn -B -pl core,plugin-rdbms-util,rdbmsreader,mysqlreader,mysqlwriter,streamreader,streamwriter -am test
+python3 benchmarks/channel_benchmark.py /tmp/datax-benchmark/baseline \
+  /tmp/datax-benchmark/candidate /tmp/datax-benchmark/channel
 ```
+
+The separate channel microbenchmark warms 1,048,576 rows per JVM, then moves
+67,108,864 reused records through the real MemoryChannel with FIFO/count checks.
+It includes synchronization and termination, but excludes record creation,
+JDBC, serialization and disk. Its result must not be presented as database or
+whole-job throughput.
 
 Run variants sequentially on an otherwise idle machine. The benchmark warms
 each variant once, excludes warmups, then alternates AB/BA. It saves each job

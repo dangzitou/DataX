@@ -1,0 +1,81 @@
+{
+  "scope": "Isolated bounded queue; reused records; no database or storage. Not end-to-end.",
+  "warmup_rows_per_process": 1048576,
+  "runs": [
+    {
+      "rows": 67108864,
+      "seconds": 3.34291975,
+      "rows_per_second": 20074925.220684703,
+      "round": 1,
+      "variant": "baseline"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 2.288388125,
+      "rows_per_second": 29325822.51535674,
+      "round": 1,
+      "variant": "candidate"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 2.410166583,
+      "rows_per_second": 27844077.033242974,
+      "round": 2,
+      "variant": "candidate"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 3.605724708,
+      "rows_per_second": 18611754.760729782,
+      "round": 2,
+      "variant": "baseline"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 3.008342833,
+      "rows_per_second": 22307585.18073462,
+      "round": 3,
+      "variant": "baseline"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 2.02791775,
+      "rows_per_second": 33092497.957572494,
+      "round": 3,
+      "variant": "candidate"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 1.992388834,
+      "rows_per_second": 33682613.98316991,
+      "round": 4,
+      "variant": "candidate"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 3.23013225,
+      "rows_per_second": 20775887.426900245,
+      "round": 4,
+      "variant": "baseline"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 3.14047575,
+      "rows_per_second": 21369012.003993347,
+      "round": 5,
+      "variant": "baseline"
+    },
+    {
+      "rows": 67108864,
+      "seconds": 2.072325292,
+      "rows_per_second": 32383363.875867806,
+      "round": 5,
+      "variant": "candidate"
+    }
+  ],
+  "median_seconds": {
+    "baseline": 3.23013225,
+    "candidate": 2.072325292
+  },
+  "throughput_gain_percent": 55.869942931720004
+}

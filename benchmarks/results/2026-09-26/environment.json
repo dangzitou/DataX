@@ -1,0 +1,49 @@
+{
+  "upstream": "https://github.com/alibaba/DataX",
+  "baseline_commit": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+  "candidate_code_commit": "456a29b655ce5560b49c0d5d4349158c0a236dc1",
+  "os": "macOS-27.0-arm64-arm-64bit",
+  "cpu": "Apple M5",
+  "logical_cpus": 10,
+  "host_memory_bytes": 17179869184,
+  "mysql_version": "8.0.46",
+  "mysql_image": "mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b",
+  "mysql_container": {
+    "runtime": "OrbStack",
+    "cpu_limit": 6,
+    "memory_bytes": 4294967296,
+    "architecture": "arm64",
+    "port": "127.0.0.1:23306"
+  },
+  "database_variables": {
+    "innodb_flush_log_at_trx_commit": 1,
+    "sync_binlog": 1,
+    "innodb_buffer_pool_size": 1073741824
+  },
+  "data": {
+    "rows": 1000000,
+    "columns": 6,
+    "payload_bytes_per_row": 256,
+    "nullable_text_rows": 58823,
+    "generated": true
+  },
+  "jvm": {
+    "heap": "-Xms1g -Xmx1g",
+    "driver": "mysql-connector-java:5.1.47"
+  },
+  "measurement": {
+    "warmup_runs_per_variant": 1,
+    "measured_runs_per_variant": 5,
+    "ordering": "AB/BA alternating",
+    "writer_batch_size": 1024,
+    "channel_limit": 4,
+    "job_poll_interval_ms": 200
+  },
+  "query_plan": "First partition: SIMPLE source_data, type=range, key=PRIMARY, Using where. Observed via MySQL EXPLAIN.",
+  "limitations": [
+    "Local generated workload, not production traffic.",
+    "Host and database resources are shared; no hardware isolation or randomized trials.",
+    "Parallel MySQL queries do not share a transaction snapshot.",
+    "Results do not cover every DataX plugin or promise universal acceleration."
+  ]
+}
