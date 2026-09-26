@@ -37,6 +37,11 @@ Raw failures, memory controls and bounded-storage execution records are retained
 documents rejection of unknown/null/empty results and interrupted label polling.
 The 48 Engine checks use a loopback HTTP simulator, separately from real-server tests.
 
+[PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
+real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
+corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers
+and other target plugins require compatibility checks.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

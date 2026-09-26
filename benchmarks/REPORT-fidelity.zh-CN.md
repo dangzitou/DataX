@@ -4,6 +4,8 @@
 
 2026-09-27 补充：[真实 Doris 检查](REPORT-doris.zh-CN.md)已覆盖下表当时尚未运行的服务器验证；[PG 百万行报告](REPORT-pg.zh-CN.md)记录新增 COPY 路径及六组未达 +50% 的性能结果。下文保留 9 月 26 日的证据范围。
 
+后续补充：[Stream Load 状态检测](REPORT-stream-status.zh-CN.md)修复未知状态和中断误报成功；[PG TIME/TIMETZ 往返](REPORT-pg-time.zh-CN.md)修复微秒、偏移和 24:00 失真，并记录内部类型兼容性变化。这些修复未解决下面列出的整作业重复、部分提交及共享快照问题。
+
 ## 已复现与修复
 
 | 检查 | 未修改原版 `80ec23d` | 本轮修复版 | 证据范围 |
