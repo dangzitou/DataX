@@ -1,0 +1,48 @@
+{
+  "started": "2026-09-26T21:23:49.766211+00:00",
+  "rounds": 5,
+  "rows": 1000000,
+  "runs": [
+    {
+      "name": "integer-perf-pg-integer-file-previous",
+      "scenario": "pg-integer-file",
+      "reference": "candidate-binary"
+    },
+    {
+      "name": "integer-perf-pg-integer-file-upstream",
+      "scenario": "pg-integer-file",
+      "reference": "baseline-all"
+    },
+    {
+      "name": "integer-perf-pg-to-file-previous",
+      "scenario": "pg-to-file",
+      "reference": "candidate-binary"
+    },
+    {
+      "name": "integer-perf-pg-to-file-upstream",
+      "scenario": "pg-to-file",
+      "reference": "baseline-all"
+    },
+    {
+      "name": "integer-perf-table-single-previous",
+      "scenario": "table-single",
+      "reference": "candidate-binary"
+    },
+    {
+      "name": "integer-perf-table-single-upstream",
+      "scenario": "table-single",
+      "reference": "baseline-all"
+    },
+    {
+      "name": "integer-perf-table-parallel-previous",
+      "scenario": "table-parallel",
+      "reference": "candidate-binary"
+    },
+    {
+      "name": "integer-perf-table-parallel-upstream",
+      "scenario": "table-parallel",
+      "reference": "baseline-all"
+    }
+  ],
+  "note": "Fixed plan; no concurrent local builds, tests or evidence compression during timing."
+}

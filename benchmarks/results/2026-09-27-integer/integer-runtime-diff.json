@@ -1,0 +1,33 @@
+{
+  "old": "5b81262f85aa9698792890abbf213306e7825eda",
+  "new": "1ea6ae73fdf307df012578dc33e44cf050315820",
+  "changed_classes": [
+    "lib/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "lib/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/dorisreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/dorisreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/mysqlreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/mysqlreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/postgresqlreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/postgresqlreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/rdbmsreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/rdbmsreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/starrocksreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/starrocksreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/reader/streamreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/reader/streamreader/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/doriswriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/doriswriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/mysqlwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/mysqlwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/postgresqlwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/postgresqlwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/selectdbwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/selectdbwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/starrockswriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/starrockswriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class",
+    "plugin/writer/streamwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/LongColumn.class",
+    "plugin/writer/streamwriter/datax-common-0.0.1-SNAPSHOT.jar:com/alibaba/datax/common/element/OverFlowUtil.class"
+  ],
+  "total_class_entries": 78421
+}

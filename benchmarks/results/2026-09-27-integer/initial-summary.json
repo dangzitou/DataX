@@ -1,0 +1,114 @@
+[
+  {
+    "name": "integer-perf-pg-integer-file-previous",
+    "medians": {
+      "baseline": 1.9941368749999988,
+      "candidate": 2.002621874999999
+    },
+    "median_gain": -0.42369456290894947,
+    "worst_gain": -9.920721441387936,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 2.29,
+      "candidate": 1.87
+    }
+  },
+  {
+    "name": "integer-perf-pg-integer-file-upstream",
+    "medians": {
+      "baseline": 2.193880042,
+      "candidate": 2.0139785000000003
+    },
+    "median_gain": 8.932644613634144,
+    "worst_gain": -8.79140294878481,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 2.46,
+      "candidate": 1.86
+    }
+  },
+  {
+    "name": "integer-perf-pg-to-file-previous",
+    "medians": {
+      "baseline": 2.3792427500000004,
+      "candidate": 2.6098500000000016
+    },
+    "median_gain": -8.836034638006051,
+    "worst_gain": -20.3541440414171,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 2.48,
+      "candidate": 2.37
+    }
+  },
+  {
+    "name": "integer-perf-pg-to-file-upstream",
+    "medians": {
+      "baseline": 2.864400708,
+      "candidate": 2.3806964589999957
+    },
+    "median_gain": 20.317762357792656,
+    "worst_gain": 11.143306556444287,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 3.0,
+      "candidate": 2.36
+    }
+  },
+  {
+    "name": "integer-perf-table-single-previous",
+    "medians": {
+      "baseline": 10.106807834000001,
+      "candidate": 10.106105542000002
+    },
+    "median_gain": 0.006949185292803861,
+    "worst_gain": -1.1873798474654862,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 4.48,
+      "candidate": 4.6
+    }
+  },
+  {
+    "name": "integer-perf-table-single-upstream",
+    "medians": {
+      "baseline": 8.495713584,
+      "candidate": 10.111237291999998
+    },
+    "median_gain": -15.977507612032793,
+    "worst_gain": -24.27769150705896,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 4.8,
+      "candidate": 4.51
+    }
+  },
+  {
+    "name": "integer-perf-table-parallel-previous",
+    "medians": {
+      "baseline": 6.525467958,
+      "candidate": 6.4373043749999965
+    },
+    "median_gain": 1.3695730054710031,
+    "worst_gain": -8.264927054842552,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 7.63,
+      "candidate": 7.67
+    }
+  },
+  {
+    "name": "integer-perf-table-parallel-upstream",
+    "medians": {
+      "baseline": 6.353215000000006,
+      "candidate": 7.392192999999999
+    },
+    "median_gain": -14.05507134351055,
+    "worst_gain": -21.41216462326244,
+    "passed_25": false,
+    "cpu_medians": {
+      "baseline": 6.59,
+      "candidate": 8.87
+    }
+  }
+]

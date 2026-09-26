@@ -1,0 +1,17 @@
+{
+  "old_revision": "1ea6ae73fdf307df012578dc33e44cf050315820",
+  "new_revision": "3a0d252e8d18388b5aed9c04f15b873d110db46c",
+  "changed_classes": [
+    "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar:com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class"
+  ],
+  "total_class_entries": 78421
+}

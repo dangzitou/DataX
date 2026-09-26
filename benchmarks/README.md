@@ -96,6 +96,15 @@ need that explicit configuration. Real PG/StarRocks/Doris checks compare every
 byte, including NULL and empty values; SelectDB has codec checks only. This adds
 no throughput, whole-job recovery or hundred-million-row guarantee.
 
+[Integer conversion and nullable JDBC parameter types (中文)](REPORT-integer.zh-CN.md)
+records a fork-induced PostgreSQL regression: integer values and NULL used
+different parameter types, repeatedly invalidating prepared queries. The fix
+uses bounded setShort/setInt calls while preserving out-of-range and unsigned
+values for database validation. Four repeated real traces reduced 128 Parse
+messages to one without changing data. Final million-row ordinary-table medians
+improved 8.08% / 7.78% over upstream for one/four channels, still below the gate;
+all twelve initial/final comparisons and their regressions remain published.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

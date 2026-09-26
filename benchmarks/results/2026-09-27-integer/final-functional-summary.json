@@ -1,0 +1,43 @@
+{
+  "junit": 54,
+  "codecs": 105,
+  "suites": [
+    {
+      "suite": "pg-bind-final",
+      "results": 20,
+      "engines": 20
+    },
+    {
+      "suite": "binding-mysql-checks",
+      "results": 46,
+      "engines": 45
+    },
+    {
+      "suite": "binding-pg-fidelity",
+      "results": 14,
+      "engines": 14
+    },
+    {
+      "suite": "binding-pg-driver",
+      "results": 26,
+      "engines": 26
+    },
+    {
+      "suite": "binding-pg-copy",
+      "results": 25,
+      "engines": 25
+    },
+    {
+      "suite": "binding-pg-atomic",
+      "results": 85,
+      "engines": 93
+    },
+    {
+      "suite": "binding-codec-checks",
+      "results": 0,
+      "engines": 0
+    }
+  ],
+  "engine_runs": 223,
+  "note": "Includes deliberate rejection, known legacy hazards and injected failures; not all successful migrations."
+}

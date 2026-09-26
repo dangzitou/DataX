@@ -1,0 +1,28 @@
+{
+  "started": "2026-09-26T21:41:30.446542+00:00",
+  "rounds": 5,
+  "rows": 1000000,
+  "runs": [
+    {
+      "name": "binding-perf-table-single-before",
+      "scenario": "table-single",
+      "reference": "candidate-integer"
+    },
+    {
+      "name": "binding-perf-table-single-upstream",
+      "scenario": "table-single",
+      "reference": "baseline-all"
+    },
+    {
+      "name": "binding-perf-table-parallel-before",
+      "scenario": "table-parallel",
+      "reference": "candidate-integer"
+    },
+    {
+      "name": "binding-perf-table-parallel-upstream",
+      "scenario": "table-parallel",
+      "reference": "baseline-all"
+    }
+  ],
+  "reason": "Follow-up after four repeated real driver traces confirmed inconsistent integer/null parameter OIDs; isolate the binding fix and compare full fork with upstream. Previous eight groups retained."
+}

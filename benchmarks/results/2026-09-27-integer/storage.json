@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-09-26T21:50:37.686567+00:00",
+  "host_free_bytes_before_cleanup": 283234000896,
+  "pg_data_bytes_before_cleanup": 1853775872,
+  "pg_cleanup": "DROP TABLE\nstaging|0\nclient_connections|0\n",
+  "removed_runtimes": [
+    {
+      "runtime": "candidate-binary",
+      "bytes": 149508274,
+      "metadata_matches_archive": true
+    },
+    {
+      "runtime": "candidate-integer",
+      "bytes": 148124895,
+      "metadata_matches_archive": true
+    }
+  ],
+  "removed_sample_json_bytes": 22813045,
+  "max_sampled_pg_before_performance_run_bytes": 1854660608,
+  "largest_file_output_bytes": 315659578,
+  "pg_data_bytes_after_cleanup": 1473536000,
+  "tmp_root_kib_after_cleanup": 809788,
+  "host_free_bytes_after_cleanup": 283557548032,
+  "scope": "Reused 1,000,000-row PG source, created no new large source. At most one reference/output file at a time. MySQL disposable containers/volumes removed after each functional suite. Cached images, Maven and unrelated workspaces excluded from fixture sampling; not a hard quota or absolute peak."
+}

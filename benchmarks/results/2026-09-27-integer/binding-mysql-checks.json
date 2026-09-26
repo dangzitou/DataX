@@ -1,0 +1,294 @@
+[
+  {
+    "case": "mysql-client-utf8",
+    "passed": true
+  },
+  {
+    "case": "nullable-duplicate-extreme-key",
+    "seconds": 0.794587667,
+    "expected": 7,
+    "actual": 7,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "unsigned-bigint",
+    "seconds": 0.6937968749999999,
+    "expected": 7,
+    "actual": 7,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "empty",
+    "seconds": 0.7234057090000001,
+    "expected": 0,
+    "actual": 0,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "all-null-key",
+    "seconds": 0.744327416,
+    "expected": 2,
+    "actual": 2,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "constant-key",
+    "seconds": 0.7614627920000001,
+    "expected": 2,
+    "actual": 2,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "trailing-semicolon",
+    "seconds": 0.7042346660000005,
+    "expected": 7,
+    "actual": 7,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "trailing-comment",
+    "seconds": 0.7005417920000001,
+    "expected": 7,
+    "actual": 7,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "join-filter-expression",
+    "seconds": 0.961706833,
+    "expected": 5000,
+    "actual": 5000,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "ordered-limit",
+    "seconds": 0.7387560830000002,
+    "expected": 101,
+    "actual": 101,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "union-all",
+    "seconds": 0.7556967500000003,
+    "expected": 101,
+    "actual": 101,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "writer-batch-fallback-1",
+    "seconds": 0.7141158329999993,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "writer-batch-fallback-2",
+    "seconds": 0.6520008750000006,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "writer-batch-fallback-3",
+    "seconds": 0.6962189169999995,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "writer-batch-fallback-4",
+    "seconds": 0.7014494169999992,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "cached-partial-batch-1",
+    "seconds": 0.6745745000000003,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "cached-partial-batch-2",
+    "seconds": 0.6864515000000004,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "cached-partial-batch-3",
+    "seconds": 0.6844974579999992,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "cached-partial-batch-4",
+    "seconds": 0.7000461249999983,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "types-native",
+    "seconds": 0.6952670000000012,
+    "expected": 3,
+    "actual": 3,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "types-client-override",
+    "seconds": 0.693039541000001,
+    "expected": 3,
+    "actual": 3,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "native-write-mode-replace",
+    "seconds": 0.6782547090000008,
+    "expected": 6,
+    "actual": 6,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "native-write-mode-update",
+    "seconds": 0.7033989160000012,
+    "expected": 6,
+    "actual": 6,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "wide-server-prepare-fallback",
+    "seconds": 0.9382775829999979,
+    "expected": 1024,
+    "actual": 1024,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "narrow-unsigned-integers-1",
+    "seconds": 0.6951712499999978,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "narrow-unsigned-integers-2",
+    "seconds": 0.6901255830000004,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "narrow-unsigned-integers-3",
+    "seconds": 0.6741546669999998,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "narrow-unsigned-integers-4",
+    "seconds": 0.6918849579999993,
+    "expected": 5,
+    "actual": 5,
+    "mismatched_rows": 0
+  },
+  {
+    "case": "missing-table",
+    "seconds": 0.647215334000002,
+    "expected_error": "MYSQLErrCode-04",
+    "passed": true
+  },
+  {
+    "case": "missing-column",
+    "seconds": 0.6243432090000027,
+    "expected_error": "MYSQLErrCode-06",
+    "passed": true
+  },
+  {
+    "case": "invalid-syntax",
+    "seconds": 0.5774617080000013,
+    "expected_error": "MYSQLErrCode-05",
+    "passed": true
+  },
+  {
+    "case": "query-timeout",
+    "seconds": 1.6843751250000025,
+    "expected_error": "DBUtilErrorCode-22",
+    "passed": true
+  },
+  {
+    "case": "invalid-split-key",
+    "seconds": 0.2570603329999983,
+    "expected_error": "DBUtilErrorCode-02",
+    "passed": true
+  },
+  {
+    "case": "missing-split-key",
+    "seconds": 0.473872250000003,
+    "expected_error": "MYSQLErrCode-06",
+    "passed": true
+  },
+  {
+    "case": "noninteger-split-key",
+    "seconds": 0.4575061249999983,
+    "expected_error": "DBUtilErrorCode-04",
+    "passed": true
+  },
+  {
+    "case": "negative-timeout",
+    "seconds": 0.2843858749999981,
+    "expected_error": "DBUtilErrorCode-02",
+    "passed": true
+  },
+  {
+    "case": "multiple-statements",
+    "seconds": 0.42419695799999957,
+    "expected_error": "DBUtilErrorCode-02",
+    "passed": true
+  },
+  {
+    "case": "dryrun-valid",
+    "seconds": 0.4049047909999999,
+    "passed": true
+  },
+  {
+    "case": "dryrun-second-query-missing-column",
+    "seconds": 0.4198381249999983,
+    "passed": true
+  },
+  {
+    "case": "dryrun-split-key-id",
+    "seconds": 0.4092260830000001,
+    "passed": true
+  },
+  {
+    "case": "dryrun-split-key-missing_key",
+    "seconds": 0.41740170799999987,
+    "passed": true
+  },
+  {
+    "case": "dryrun-split-key-payload",
+    "seconds": 0.40434050000000354,
+    "passed": true
+  },
+  {
+    "case": "connection-killed-1",
+    "seconds": 0.6321212089999975,
+    "passed": true
+  },
+  {
+    "case": "connection-killed-2",
+    "seconds": 0.8089667499999962,
+    "passed": true
+  },
+  {
+    "case": "connection-killed-3",
+    "seconds": 0.835649042,
+    "passed": true
+  },
+  {
+    "case": "connection-killed-4",
+    "seconds": 0.8029975409999963,
+    "passed": true
+  }
+]

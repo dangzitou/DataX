@@ -1,0 +1,255 @@
+{
+  "inspect": {
+    "Id": "88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d",
+    "Created": "2026-09-26T21:20:04.54432551Z",
+    "Path": "docker-entrypoint.sh",
+    "Args": [
+      "--default-authentication-plugin=mysql_native_password",
+      "--innodb-buffer-pool-size=256M",
+      "--innodb-redo-log-capacity=64M"
+    ],
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 466268,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-09-26T21:20:04.604546723Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "Image": "sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b",
+    "ResolvConfPath": "/var/lib/docker/containers/88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d/resolv.conf",
+    "HostnamePath": "/var/lib/docker/containers/88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d/hostname",
+    "HostsPath": "/var/lib/docker/containers/88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d/hosts",
+    "LogPath": "/var/lib/docker/containers/88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d/88067c48298c7fb7456a3191290a8c31b7809425db42372cba74e16b575e0e8d-json.log",
+    "Name": "/datax-perf-mysql",
+    "RestartCount": 0,
+    "Driver": "overlayfs",
+    "Platform": "linux",
+    "MountLabel": "",
+    "ProcessLabel": "",
+    "AppArmorProfile": "",
+    "ExecIDs": null,
+    "HostConfig": {
+      "Binds": null,
+      "ContainerIDFile": "",
+      "LogConfig": {
+        "Type": "json-file",
+        "Config": {
+          "max-file": "5",
+          "max-size": "20m"
+        }
+      },
+      "NetworkMode": "bridge",
+      "PortBindings": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "23306"
+          }
+        ]
+      },
+      "RestartPolicy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "AutoRemove": false,
+      "VolumeDriver": "",
+      "VolumesFrom": null,
+      "ConsoleSize": [
+        0,
+        0
+      ],
+      "CapAdd": null,
+      "CapDrop": null,
+      "CgroupnsMode": "private",
+      "Dns": null,
+      "DnsOptions": [],
+      "DnsSearch": [],
+      "ExtraHosts": null,
+      "GroupAdd": null,
+      "IpcMode": "private",
+      "Cgroup": "",
+      "Links": null,
+      "OomScoreAdj": 0,
+      "PidMode": "",
+      "Privileged": false,
+      "PublishAllPorts": false,
+      "ReadonlyRootfs": false,
+      "SecurityOpt": null,
+      "UTSMode": "",
+      "UsernsMode": "",
+      "ShmSize": 4196401152,
+      "Runtime": "runc",
+      "Isolation": "",
+      "CpuShares": 0,
+      "Memory": 2147483648,
+      "NanoCpus": 4000000000,
+      "CgroupParent": "",
+      "BlkioWeight": 0,
+      "BlkioWeightDevice": [],
+      "BlkioDeviceReadBps": [],
+      "BlkioDeviceWriteBps": [],
+      "BlkioDeviceReadIOps": [],
+      "BlkioDeviceWriteIOps": [],
+      "CpuPeriod": 0,
+      "CpuQuota": 0,
+      "CpuRealtimePeriod": 0,
+      "CpuRealtimeRuntime": 0,
+      "CpusetCpus": "",
+      "CpusetMems": "",
+      "Devices": [],
+      "DeviceCgroupRules": null,
+      "DeviceRequests": null,
+      "MemoryReservation": 0,
+      "MemorySwap": 4294967296,
+      "MemorySwappiness": null,
+      "OomKillDisable": null,
+      "PidsLimit": null,
+      "Ulimits": [],
+      "CpuCount": 0,
+      "CpuPercent": 0,
+      "IOMaximumIOps": 0,
+      "IOMaximumBandwidth": 0,
+      "MaskedPaths": [
+        "/proc/acpi",
+        "/proc/asound",
+        "/proc/interrupts",
+        "/proc/kcore",
+        "/proc/keys",
+        "/proc/latency_stats",
+        "/proc/sched_debug",
+        "/proc/scsi",
+        "/proc/timer_list",
+        "/proc/timer_stats",
+        "/sys/devices/virtual/powercap",
+        "/sys/firmware"
+      ],
+      "ReadonlyPaths": [
+        "/proc/bus",
+        "/proc/fs",
+        "/proc/irq",
+        "/proc/sys",
+        "/proc/sysrq-trigger"
+      ]
+    },
+    "Storage": {
+      "RootFS": {
+        "Snapshot": {
+          "Name": "overlayfs"
+        }
+      }
+    },
+    "SizeRw": 16384,
+    "SizeRootFs": 844103680,
+    "Mounts": [
+      {
+        "Type": "volume",
+        "Name": "1fa73058cb56fc85a4547a5ca14dd9d589800e67f156409611282fdf8bc8d9a1",
+        "Source": "/var/lib/docker/volumes/1fa73058cb56fc85a4547a5ca14dd9d589800e67f156409611282fdf8bc8d9a1/_data",
+        "Destination": "/var/lib/mysql",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+      }
+    ],
+    "Config": {
+      "Hostname": "88067c48298c",
+      "Domainname": "",
+      "User": "",
+      "AttachStdin": false,
+      "AttachStdout": false,
+      "AttachStderr": false,
+      "ExposedPorts": {
+        "3306/tcp": {},
+        "33060/tcp": {}
+      },
+      "Tty": false,
+      "OpenStdin": false,
+      "StdinOnce": false,
+      "Env": [
+        "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
+        "MYSQL_DATABASE=datax_bench",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "GOSU_VERSION=1.19",
+        "MYSQL_MAJOR=8.0",
+        "MYSQL_VERSION=8.0.46-1.el9",
+        "MYSQL_SHELL_VERSION=8.0.46-1.el9"
+      ],
+      "Cmd": [
+        "--default-authentication-plugin=mysql_native_password",
+        "--innodb-buffer-pool-size=256M",
+        "--innodb-redo-log-capacity=64M"
+      ],
+      "Image": "mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b",
+      "Volumes": {
+        "/var/lib/mysql": {}
+      },
+      "WorkingDir": "/",
+      "Entrypoint": [
+        "docker-entrypoint.sh"
+      ],
+      "Labels": {}
+    },
+    "NetworkSettings": {
+      "SandboxID": "72b44f8d06aab444f0f2269f9f6e80a7f237de2135883210fcc42730c7f0b55f",
+      "SandboxKey": "/var/run/docker/netns/72b44f8d06aa",
+      "Ports": {
+        "3306/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "23306"
+          }
+        ],
+        "33060/tcp": null
+      },
+      "Networks": {
+        "bridge": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0ea3571be46ca8ac7797487a8a4a186c897513039b1f986383e5836cbe7e7592",
+          "EndpointID": "6d677063523d49abfae149b2ace8d7c27d4ec5a0cd9ed614087e7ffac083cdd9",
+          "Gateway": "192.168.215.1",
+          "IPAddress": "192.168.215.4",
+          "MacAddress": "36:c3:7b:b9:a6:61",
+          "IPPrefixLen": 24,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:213bbfaf699693a40a20a12bb4342d2589a15a3dc7153db698eaed252a92458e",
+      "size": 3047,
+      "annotations": {
+        "com.docker.official-images.bashbrew.arch": "arm64v8",
+        "org.opencontainers.image.base.digest": "sha256:ca7b8f0fd27b0d16acdce410faef1d517ee3a2919b0ee958b77083602e98cb11",
+        "org.opencontainers.image.base.name": "oraclelinux:9-slim",
+        "org.opencontainers.image.created": "2026-05-04T21:08:52Z",
+        "org.opencontainers.image.revision": "7cf11d5360282effadb347353d5f82339506b106",
+        "org.opencontainers.image.source": "https://github.com/docker-library/mysql.git#7cf11d5360282effadb347353d5f82339506b106:8.0",
+        "org.opencontainers.image.url": "https://hub.docker.com/_/mysql",
+        "org.opencontainers.image.version": "8.0.46"
+      },
+      "platform": {
+        "architecture": "arm64",
+        "os": "linux",
+        "variant": "v8"
+      }
+    }
+  },
+  "version": "8.0.46\n1\t1\n",
+  "data_bytes": 198782976,
+  "removed": true
+}

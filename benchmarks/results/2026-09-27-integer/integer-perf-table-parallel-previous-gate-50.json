@@ -1,0 +1,34 @@
+{
+  "metric": "throughput",
+  "required_gain_percent": 50,
+  "rounds": [
+    {
+      "round": 1,
+      "gain_percent": -8.264927054842552,
+      "passed": false
+    },
+    {
+      "round": 2,
+      "gain_percent": 5.371619437869035,
+      "passed": false
+    },
+    {
+      "round": 3,
+      "gain_percent": -3.402380016873341,
+      "passed": false
+    },
+    {
+      "round": 4,
+      "gain_percent": 16.49417566961029,
+      "passed": false
+    },
+    {
+      "round": 5,
+      "gain_percent": -2.6450795117787695,
+      "passed": false
+    }
+  ],
+  "minimum_gain_percent": -8.264927054842552,
+  "passed": false,
+  "scope": "Measured workload and rounds only; not a universal or future guarantee."
+}
