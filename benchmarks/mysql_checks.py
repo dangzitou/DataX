@@ -16,6 +16,9 @@ def main():
     runtime, output = args.runtime.resolve(), args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     results = []
+    # Catch fixture/validation corruption before testing DataX's Unicode path.
+    assert sql("SELECT HEX('中文😀')") == "E4B8ADE69687F09F9880"
+    results.append({"case": "mysql-client-utf8", "passed": True})
     sql("""DROP TABLE IF EXISTS edge_data;
         CREATE TABLE edge_data LIKE source_data;
         ALTER TABLE edge_data MODIFY id BIGINT UNSIGNED, MODIFY tenant BIGINT NULL;

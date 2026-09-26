@@ -5,6 +5,13 @@ seven paired million-row transfers each exceeded +50% throughput, with a
 minimum of +62.86% and a ratio-of-medians gain of +72.66%. Same-task-count
 controls gained +4.80% and +3.72%; the result is workload-specific.
 
+[Non-querySql follow-up and charset correction (中文)](REPORT-scenarios.zh-CN.md)
+adds ordinary-table, actual-file and isolated-writer results. Historical seed
+SQL used a latin1 MySQL CLI connection, so its stored non-ASCII text was not the
+intended Chinese. Both compared variants used that same fixture. The helper now
+explicitly uses utf8mb4, with a Unicode precondition and 42 real MySQL checks.
+These measurements do not validate PostgreSQL production backfills.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
@@ -113,6 +120,39 @@ synthetic self-check is included in CI, separate from real database tests.
 After retaining desired evidence, stop the disposable database with
 `docker stop datax-perf-mysql`. Remove it with `docker rm datax-perf-mysql` only
 when its generated data is no longer needed.
+
+## Additional non-querySql scenarios
+
+The following cases use `table`/`column` configuration or `streamreader`, with
+identical configuration for both variants. They do not use `querySqlSplitPk`:
+
+- `table-single`: ordinary MySQL table to MySQL, one channel, no split key.
+- `table-parallel`: ordinary table with the existing `splitPk=id`, four channels
+  and the unchanged upstream default split factor on both sides.
+- `mysql-to-file`: one reader/channel, with the existing streamwriter writing
+  a real UTF-8 TSV file. This is not a test of txtfilewriter, HDFS, or OSS. Its
+  complete bytes, SHA-256 and row count are compared to a direct MySQL export.
+- `stream-to-mysql`: four generated constant-record streams into a real MySQL
+  table without a primary key. Every target field and row count is checked.
+  This isolates writer costs; it does not represent a varied production source.
+
+Reuse the same isolated container and million-row fixture created above. Use
+the recorded timezone for date-to-text conversion, and run cases sequentially:
+
+```sh
+for scenario in table-single table-parallel mysql-to-file stream-to-mysql; do
+  TZ=Asia/Shanghai python3 benchmarks/mysql_scenarios.py \
+    /tmp/datax-benchmark/baseline /tmp/datax-benchmark/candidate \
+    /tmp/datax-benchmark/non-querysql/$scenario \
+    --scenario "$scenario" --rows 1000000 --rounds 5
+done
+```
+
+Each case warms both variants once, then measures five alternating pairs.
+Outputs preserve every configuration and process log. Temporary TSV contents
+are removed after successful verification; their fingerprints are retained.
+`gate.json` records whether every pair reached +50%; a completed experiment
+does not by itself mean that performance threshold passed.
 
 ## MySQL writer defaults
 

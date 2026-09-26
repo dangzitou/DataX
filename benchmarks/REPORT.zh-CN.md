@@ -1,5 +1,7 @@
 # DataX MySQL / querySql 优化与实测报告
 
+> 字符集勘误：旧 CLI 按 latin1 解释 UTF-8 造数语句，实际文本是非预期字符，不能视为中文/emoji 保真验证。两版同源耗时和相等校验记录保留；修复后的 42 项检查及影响范围见[补测报告](REPORT-scenarios.zh-CN.md#必须更正的字符集描述)。
+
 > 历史结果：本文件保留第一轮原始结果；当前交付版本及逐轮验收见[最终报告](REPORT-final.zh-CN.md)。第一轮中位数达标，但并非每轮都达到 +50%，不能作为最终逐轮验收结果。
 
 测试日期：2026-09-26。性能代码提交：[`456a29b`](https://github.com/dangzitou/DataX/commit/456a29b655ce5560b49c0d5d4349158c0a236dc1)。

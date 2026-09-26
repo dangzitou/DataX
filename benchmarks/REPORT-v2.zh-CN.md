@@ -1,5 +1,7 @@
 # 第二轮：querySql 性能逐轮验收
 
+> 字符集勘误：旧 CLI 按 latin1 解释 UTF-8 造数语句，实际文本是非预期字符，不能视为中文/emoji 保真验证。两版同源耗时和相等校验记录保留；修复后的 42 项检查及影响范围见[补测报告](REPORT-scenarios.zh-CN.md#必须更正的字符集描述)。
+
 > 历史实验记录：本轮应用层语句缓存随后因对照回退被删除；本报告数字不代表当前代码。当前交付版本见[最终报告](REPORT-final.zh-CN.md)。
 
 2026-09-26，代码版本 [`34096bf`](https://github.com/dangzitou/DataX/commit/34096bf1ceb06b724ab66d0256363d6a714d089d)，

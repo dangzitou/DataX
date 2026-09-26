@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-26T23:17:42.348161+08:00",
+  "production_changed": false,
+  "baseline": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+  "candidate": "6c93d16ff8ced39c821f8483b2c9729e03adc3dc",
+  "same_resources_as": "../2026-09-26-final/environment.json",
+  "successful_million_row_transfers": 48,
+  "formal_pairs_per_scenario": 5,
+  "old_mysql_client_probe": "latin1\tE4B8ADE69687F09F9880",
+  "fixed_mysql_client_probe": "utf8mb4\tE4B8ADE69687F09F9880",
+  "source_id_1_optional_text_hex": "C3A4C2B8C2ADC3A6E28093E280A12D31",
+  "fixture_note": "First three scenarios retain the historical fixture whose UTF-8 seed literals were interpreted as latin1. Both variants read exactly the same stored non-ASCII values. No data was reseeded during these measurements. The corrected stream case uses actual Unicode; the current seed helper now uses explicit utf8mb4.",
+  "excluded_preflight_failures": [
+    "Unsupported NULL constant in StreamReader (no records processed).",
+    "One completed candidate warmup rejected by the old latin1 validation literal; DataX stored correct UTF-8. Full paired writer experiment restarted after fixing the CLI charset."
+  ],
+  "mysql_functional_checks_after_charset_fix": 42
+}

@@ -22,7 +22,8 @@ QUERY = "SELECT id, tenant, amount, created, optional_text, payload FROM source_
 
 def sql(statement):
     return subprocess.check_output(
-        ["docker", "exec", "-i", CONTAINER, "mysql", "-uroot", "-N", "-B", "datax_bench"],
+        ["docker", "exec", "-i", CONTAINER, "mysql", "-uroot", "-N", "-B",
+         "--default-character-set=utf8mb4", "datax_bench"],
         input=statement, text=True).strip()
 
 
