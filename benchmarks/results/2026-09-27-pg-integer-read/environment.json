@@ -1,0 +1,11 @@
+{
+  "host": "macOS-27.0-arm64-arm-64bit",
+  "jdk": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (Zulu 8.96.0.205-CA-macos-aarch64) (build 1.8.0_504-b01)\nOpenJDK 64-Bit Server VM (Zulu 8.96.0.205-CA-macos-aarch64) (build 25.504-b01, mixed mode)\n",
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "fsync": "on",
+  "synchronous_commit": "on",
+  "full_page_writes": "on",
+  "image": "postgres:17-alpine",
+  "container_memory_bytes": 2147483648,
+  "container_nano_cpus": 4000000000
+}

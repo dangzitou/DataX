@@ -1,0 +1,24 @@
+{
+  "scope": "Owned test data cleanup only; cached images, Maven and workspaces excluded from database fixture budget.",
+  "before_cleanup": {
+    "postgres_bytes": 1853702144,
+    "output_bytes": 970289975,
+    "host_free_bytes": 283193643008
+  },
+  "after_cleanup": {
+    "postgres_bytes": 1473585152,
+    "output_bytes": 821280316,
+    "host_free_bytes": 283343937536
+  },
+  "max_sampled_pg_bytes": 1854873600,
+  "removed_runtime": "/tmp/datax-perf/candidate-binding",
+  "removed_runtime_bytes": 149009659,
+  "removed_table": "pg_perf_target",
+  "remaining_stages": 0,
+  "other_pg_client_connections": 0,
+  "temporary_root_kib": 826460,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-native-read"
+  ]
+}

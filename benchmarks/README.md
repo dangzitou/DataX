@@ -105,6 +105,13 @@ messages to one without changing data. Final million-row ordinary-table medians
 improved 8.08% / 7.78% over upstream for one/four channels, still below the gate;
 all twelve initial/final comparisons and their regressions remain published.
 
+[Native PostgreSQL integer reads (中文)](REPORT-pg-integer-read.zh-CN.md)
+uses getLong for PG integral columns while retaining BigInteger values, NULLs,
+and decimal byte accounting. Real text/binary driver checks compare every value
+and byte count. Eight million-row comparisons still fail the per-pair +25% gate;
+file medians improve, while ordinary-table results against the preceding fork
+are flat or slightly slower. All adverse pairs and fault regressions are retained.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

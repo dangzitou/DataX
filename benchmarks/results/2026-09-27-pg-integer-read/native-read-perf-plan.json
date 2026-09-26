@@ -1,0 +1,76 @@
+{
+  "source_revision": "2d2eab0",
+  "before_revision": "3a0d252",
+  "upstream_revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+  "scenarios": [
+    "pg-integer-file",
+    "pg-to-file",
+    "table-single",
+    "table-parallel"
+  ],
+  "rows_per_job": 1000000,
+  "warmups_per_variant": 1,
+  "measured_pairs": 5,
+  "order": "candidate first warmup; alternate AB/BA measured pairs",
+  "metric": "complete JVM elapsed time; no driver traces; no concurrent local builds or test suites",
+  "validation": "every row/all fields for tables; complete SHA256/bytes/line count for files",
+  "config": "same JDBC settings and concurrency for both variants; no COPY/rewrite/auto-query-split",
+  "comparisons": [
+    {
+      "scenario": "pg-integer-file",
+      "reference": "before",
+      "baseline": "/tmp/datax-perf/candidate-binding",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-pg-integer-file-before"
+    },
+    {
+      "scenario": "pg-integer-file",
+      "reference": "upstream",
+      "baseline": "/tmp/datax-perf/baseline-all",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-pg-integer-file-upstream"
+    },
+    {
+      "scenario": "pg-to-file",
+      "reference": "before",
+      "baseline": "/tmp/datax-perf/candidate-binding",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-pg-to-file-before"
+    },
+    {
+      "scenario": "pg-to-file",
+      "reference": "upstream",
+      "baseline": "/tmp/datax-perf/baseline-all",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-pg-to-file-upstream"
+    },
+    {
+      "scenario": "table-single",
+      "reference": "before",
+      "baseline": "/tmp/datax-perf/candidate-binding",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-table-single-before"
+    },
+    {
+      "scenario": "table-single",
+      "reference": "upstream",
+      "baseline": "/tmp/datax-perf/baseline-all",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-table-single-upstream"
+    },
+    {
+      "scenario": "table-parallel",
+      "reference": "before",
+      "baseline": "/tmp/datax-perf/candidate-binding",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-table-parallel-before"
+    },
+    {
+      "scenario": "table-parallel",
+      "reference": "upstream",
+      "baseline": "/tmp/datax-perf/baseline-all",
+      "candidate": "/tmp/datax-perf/candidate-native-read",
+      "output": "/tmp/datax-perf/native-read-perf-table-parallel-upstream"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+[
+  {
+    "scenario": "pg-integer-file",
+    "reference": "before",
+    "baseline": "/tmp/datax-perf/candidate-binding",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-pg-integer-file-before",
+    "median_seconds": {
+      "baseline": 1.9820029999999988,
+      "candidate": 1.7910843750000005
+    },
+    "gain_percent": 10.659387556769806,
+    "minimum_gain_percent": -12.69830115236087,
+    "cpu_user_seconds": {
+      "baseline": 1.86,
+      "candidate": 1.78
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "pg-integer-file",
+    "reference": "upstream",
+    "baseline": "/tmp/datax-perf/baseline-all",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-pg-integer-file-upstream",
+    "median_seconds": {
+      "baseline": 2.1670787500000017,
+      "candidate": 1.8165508329999973
+    },
+    "gain_percent": 19.29634506407478,
+    "minimum_gain_percent": -1.4377185411591054,
+    "cpu_user_seconds": {
+      "baseline": 2.5,
+      "candidate": 1.79
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "pg-to-file",
+    "reference": "before",
+    "baseline": "/tmp/datax-perf/candidate-binding",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-pg-to-file-before",
+    "median_seconds": {
+      "baseline": 2.6436902920000005,
+      "candidate": 2.4035090829999994
+    },
+    "gain_percent": 9.992939519089017,
+    "minimum_gain_percent": -7.084390036399091,
+    "cpu_user_seconds": {
+      "baseline": 2.38,
+      "candidate": 2.42
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "pg-to-file",
+    "reference": "upstream",
+    "baseline": "/tmp/datax-perf/baseline-all",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-pg-to-file-upstream",
+    "median_seconds": {
+      "baseline": 2.8322910410000004,
+      "candidate": 2.407294957999998
+    },
+    "gain_percent": 17.654508085419373,
+    "minimum_gain_percent": 1.282405296298439,
+    "cpu_user_seconds": {
+      "baseline": 2.93,
+      "candidate": 2.47
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "table-single",
+    "reference": "before",
+    "baseline": "/tmp/datax-perf/candidate-binding",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-table-single-before",
+    "median_seconds": {
+      "baseline": 7.935951708000005,
+      "candidate": 8.078534332999993
+    },
+    "gain_percent": -1.7649566013175577,
+    "minimum_gain_percent": -3.208803482348066,
+    "cpu_user_seconds": {
+      "baseline": 4.25,
+      "candidate": 4.25
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "table-single",
+    "reference": "upstream",
+    "baseline": "/tmp/datax-perf/baseline-all",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-table-single-upstream",
+    "median_seconds": {
+      "baseline": 9.079852250000002,
+      "candidate": 8.300330166999998
+    },
+    "gain_percent": 9.39145874099303,
+    "minimum_gain_percent": 7.007054915490762,
+    "cpu_user_seconds": {
+      "baseline": 4.87,
+      "candidate": 4.28
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "table-parallel",
+    "reference": "before",
+    "baseline": "/tmp/datax-perf/candidate-binding",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-table-parallel-before",
+    "median_seconds": {
+      "baseline": 6.087242791000008,
+      "candidate": 6.093872375000004
+    },
+    "gain_percent": -0.10879098858704861,
+    "minimum_gain_percent": -4.540416257652868,
+    "cpu_user_seconds": {
+      "baseline": 7.77,
+      "candidate": 7.78
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  },
+  {
+    "scenario": "table-parallel",
+    "reference": "upstream",
+    "baseline": "/tmp/datax-perf/baseline-all",
+    "candidate": "/tmp/datax-perf/candidate-native-read",
+    "output": "/tmp/datax-perf/native-read-perf-table-parallel-upstream",
+    "median_seconds": {
+      "baseline": 6.403040790999999,
+      "candidate": 6.307929959000003
+    },
+    "gain_percent": 1.5077978452232799,
+    "minimum_gain_percent": -28.82926457766889,
+    "cpu_user_seconds": {
+      "baseline": 6.51,
+      "candidate": 8.32
+    },
+    "gate_25_passed": false,
+    "gate_50_passed": false
+  }
+]

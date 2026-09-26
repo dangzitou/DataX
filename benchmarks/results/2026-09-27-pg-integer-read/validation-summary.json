@@ -1,0 +1,13 @@
+{
+  "junit": 55,
+  "junit_failures": 0,
+  "junit_errors": 0,
+  "junit_skipped": 0,
+  "final_regression_engines": 158,
+  "of_those_upstream_control_engines": 4,
+  "additional_previous_fork_integer_engines": 16,
+  "earlier_no_probe_engines": 32,
+  "final_jdbc_reader_integration_probes": 16,
+  "performance_engines": 96,
+  "note": "Engine runs include expected rejection, deliberately injected failures and known old hazards; not all successful migrations. JDBC probes are separate."
+}

@@ -10,6 +10,8 @@
 > 最新[二进制字段实测](benchmarks/REPORT-binary.zh-CN.md)：修复 StarRocks/Doris/SelectDB writer 将 BYTES 折算成 long 的静默失真，默认拒绝未指定编码的 BYTES；已测 PG↔StarRocks/Doris 的显式编码往返。StarRocks 原生二进制 reader 仍须配置 `binaryColumns`，SelectDB 仅测编码器，未实测服务端。
 > [整数路径与 PG 参数类型修复](benchmarks/REPORT-integer.zh-CN.md)：消除本 fork 可空整数反复准备语句的性能回退；最终百万行普通表相对原版单路中位 +8.08%、四路 +7.78%，仍未达到每轮 +25%。完整回退结果与修复前后对照均保留。
 
+> [PG 原生整数读取](benchmarks/REPORT-pg-integer-read.zh-CN.md)：减少字符串中转，保留 NULL、整数值及字节统计；百万行整数/混合字段导出相对原版中位 +19.30% / +17.65%，普通表单路/四路 +9.39% / +1.51%。8 组每轮 +25% 均未通过，变慢配对及全部原始结果保留。
+
 > 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
 > 100 万行真实 MySQL 同步，单条 querySql 开启自动四路并行：七轮吞吐提升均超过 50%，最低 **62.86%**，按耗时中位数计算提升 **72.66%**，逐字段校验零差异。
 > 该结果限于已测负载；不开分片、原版已手工并行的对照分别为 +4.80%、+3.72%，不代表所有任务普遍提升 50%。
