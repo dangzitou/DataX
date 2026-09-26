@@ -156,16 +156,18 @@ public class StreamWriter extends Writer {
                     writeToFile(recordReceiver,path, fileName, recordNumBeforSleep, sleepTime);
                 } else {
                     try {
-                        BufferedOutputStream writer = new BufferedOutputStream(System.out, BUFFER_SIZE);
+                        OutputStream writer = System.out;
 
                         Record record;
                         while ((record = recordReceiver.getFromReader()) != null) {
                             if (this.print) {
-                                writer.write(recordToBytes(record));
+                                appendRecord(record);
+                                if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer);
                             } else {
                         /* do nothing */
                             }
                         }
+                        flushRecords(writer);
                         writer.flush();
 
                     } catch (Exception e) {
@@ -180,17 +182,16 @@ public class StreamWriter extends Writer {
             LOG.info("begin do write...");
             String fileFullPath = buildFilePath(path, fileName);
             LOG.info(String.format("write to file : [%s]", fileFullPath));
-            try (BufferedOutputStream writer = new BufferedOutputStream(
-                    new FileOutputStream(fileFullPath, true) {
+            try (OutputStream writer = new FileOutputStream(fileFullPath, true) {
                         @Override
-                        public void write(byte[] bytes, int offset, int length) throws IOException {
+                        public void write(byte[] bytes) throws IOException {
                             // ponytail: one JVM-wide file-write lock; use per-file locks if unrelated files contend.
                             // Buffers contain whole UTF-8 records, including records larger than the buffer.
                             synchronized (Task.class) {
-                                super.write(bytes, offset, length);
+                                super.write(bytes);
                             }
                         }
-                    }, BUFFER_SIZE)) {
+                    }) {
                 Record record;
                 long count = 0;
                 while ((record = recordReceiver.getFromReader()) != null) {
@@ -198,9 +199,11 @@ public class StreamWriter extends Writer {
                         LOG.info("StreamWriter start to sleep ... recordNumBeforSleep={},sleepTime={}",recordNumBeforSleep,sleepTime);
                         TimeUnit.SECONDS.sleep(sleepTime);
                     }
-                   writer.write(recordToBytes(record));
+                   appendRecord(record);
+                   if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer);
                    count++;
                 }
+                flushRecords(writer);
                 writer.flush();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -218,19 +221,22 @@ public class StreamWriter extends Writer {
         public void destroy() {
         }
 
-        private byte[] recordToBytes(Record record) {
+        private void appendRecord(Record record) {
             int recordLength = record.getColumnNumber();
-            // Do not retain an unusually large row for the remainder of the task.
-            if (rowBuffer.capacity() > BUFFER_SIZE) rowBuffer = new StringBuilder(256);
-            rowBuffer.setLength(0);
             for (int i = 0; i < recordLength; i++) {
                 if (i > 0) rowBuffer.append(fieldDelimiter);
                 Column column = record.getColumn(i);
                 rowBuffer.append(column.asString());
             }
             rowBuffer.append(NEWLINE_FLAG);
+        }
 
-            return rowBuffer.toString().getBytes(StandardCharsets.UTF_8);
+        private void flushRecords(OutputStream writer) throws IOException {
+            if (rowBuffer.length() == 0) return;
+            writer.write(rowBuffer.toString().getBytes(StandardCharsets.UTF_8));
+            // Bound retained memory after a wide row; batching avoids per-row byte arrays.
+            if (rowBuffer.capacity() > 2 * BUFFER_SIZE) rowBuffer = new StringBuilder(256);
+            rowBuffer.setLength(0);
         }
     }
 
