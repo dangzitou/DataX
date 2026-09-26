@@ -154,7 +154,9 @@ public class DorisWriter extends Writer {
         }
 
         @Override
-        public void destroy() {}
+        public void destroy() {
+            if (writerManager != null) writerManager.abort();
+        }
 
         @Override
         public boolean supportFailOver(){

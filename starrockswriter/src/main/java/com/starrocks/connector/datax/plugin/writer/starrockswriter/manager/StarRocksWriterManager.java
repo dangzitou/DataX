@@ -10,9 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -32,42 +31,45 @@ public class StarRocksWriterManager {
     private volatile boolean closed = false;
     private volatile Exception flushException;
     private final LinkedBlockingDeque<StarRocksFlushTuple> flushQueue;
-    private ScheduledExecutorService scheduler;
+    private final ScheduledThreadPoolExecutor scheduler;
+    private Thread flushThread;
+    private volatile boolean stopped;
     private ScheduledFuture<?> scheduledFuture;
 
     public StarRocksWriterManager(StarRocksWriterOptions writerOptions) {
         this.writerOptions = writerOptions;
         this.starrocksStreamLoadVisitor = new StarRocksStreamLoadVisitor(writerOptions);
         flushQueue = new LinkedBlockingDeque<>(writerOptions.getFlushQueueLength()); 
+        this.scheduler = new ScheduledThreadPoolExecutor(1, new BasicThreadFactory.Builder()
+                .namingPattern("starrocks-interval-flush").daemon(true).build());
+        this.scheduler.setRemoveOnCancelPolicy(true);
         this.startScheduler();
         this.startAsyncFlushing();
     }
 
     public void startScheduler() {
-        stopScheduler();
-        this.scheduler = Executors.newScheduledThreadPool(1, new BasicThreadFactory.Builder().namingPattern("starrocks-interval-flush").daemon(true).build());
-        this.scheduledFuture = this.scheduler.schedule(() -> {
-            synchronized (StarRocksWriterManager.this) {
-                if (!closed) {
-                    try {
-                        String label = createBatchLabel();
-                        LOG.info(String.format("StarRocks interval Sinking triggered: label[%s].", label));
-                        if (batchCount == 0) {
-                            startScheduler();
+        synchronized (scheduler) {
+            stopScheduler();
+            if (closed || flushException != null) return;
+            scheduledFuture = scheduler.schedule(() -> {
+                synchronized (StarRocksWriterManager.this) {
+                    if (!closed) {
+                        try {
+                            if (batchCount == 0) startScheduler();
+                            else flush(createBatchLabel(), false);
+                        } catch (Exception e) {
+                            if (flushException == null) flushException = e;
+                            abort();
                         }
-                        flush(label, false);
-                    } catch (Exception e) {
-                        flushException = e;
                     }
                 }
-            }
-        }, writerOptions.getFlushInterval(), TimeUnit.MILLISECONDS);
+            }, writerOptions.getFlushInterval(), TimeUnit.MILLISECONDS);
+        }
     }
 
     public void stopScheduler() {
-        if (this.scheduledFuture != null) {
-            scheduledFuture.cancel(false);
-            this.scheduler.shutdown();
+        synchronized (scheduler) {
+            if (scheduledFuture != null) scheduledFuture.cancel(false);
         }
     }
 
@@ -77,6 +79,7 @@ public class StarRocksWriterManager {
 
     public final synchronized void writeRecord(byte[] bts) throws IOException {
         checkFlushException();
+        if (closed) throw new IOException("Writer is closed");
         try {
             buffer.add(bts);
             batchCount++;
@@ -101,7 +104,7 @@ public class StarRocksWriterManager {
             }
             return;
         }
-        flushQueue.put(new StarRocksFlushTuple(label, batchSize,  new ArrayList<>(buffer)));
+        enqueue(new StarRocksFlushTuple(label, batchSize,  new ArrayList<>(buffer)));
         if (waitUtilDone) {
             // wait the last flush
             waitAsyncFlushingDone();
@@ -112,21 +115,40 @@ public class StarRocksWriterManager {
     }
     
     public synchronized void close() {
-        if (!closed) {
-            closed = true;            
-            try {
-                String label = createBatchLabel();
-                if (batchCount > 0) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(String.format("StarRocks Sink is about to close: label[%s].", label));
-                    }
-                }
-                flush(label, true);
-            } catch (Exception e) {
-                throw new RuntimeException("Writing records to StarRocks failed.", e);
+        try {
+            if (!closed) {
+                closed = true;
+                flush(createBatchLabel(), true);
             }
+            checkFlushException();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Closing StarRocks writer was interrupted", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Writing records to StarRocks failed", e);
+        } finally {
+            abort();
         }
+    }
+
+    /** Stop pending work after task failure; an already sent load may have committed. */
+    public void abort() {
+        if (!closed && flushException == null) flushException = new IOException("Writer aborted");
+        closed = true;
+        stopped = true;
+        stopScheduler();
+        scheduler.shutdownNow();
+        flushThread.interrupt();
+        flushQueue.clear();
+    }
+
+    private void enqueue(StarRocksFlushTuple tuple) throws Exception {
+        do {
+            checkFlushException();
+            if (stopped) throw new IOException("Writer is stopped");
+        } while (!flushQueue.offer(tuple, 100, TimeUnit.MILLISECONDS));
         checkFlushException();
+        if (stopped) throw new IOException("Writer is stopped");
     }
 
     public String createBatchLabel() {
@@ -140,13 +162,14 @@ public class StarRocksWriterManager {
 
     private void startAsyncFlushing() {
         // start flush thread
-        Thread flushThread = new Thread(new Runnable(){
+        flushThread = new Thread(new Runnable(){
             public void run() {
-                while(true) {
+                while (!stopped) {
                     try {
                         asyncFlush();
                     } catch (Exception e) {
-                        flushException = e;
+                        if (!stopped && flushException == null) flushException = e;
+                        abort();
                     }
                 }
             }   
@@ -155,17 +178,17 @@ public class StarRocksWriterManager {
         flushThread.start();
     }
 
-    private void waitAsyncFlushingDone() throws InterruptedException {
+    private void waitAsyncFlushingDone() throws Exception {
         // wait previous flushings
         for (int i = 0; i <= writerOptions.getFlushQueueLength(); i++) {
-            flushQueue.put(new StarRocksFlushTuple("", 0l, null));
+            enqueue(new StarRocksFlushTuple("", 0l, null));
         }
         checkFlushException();
     }
 
     private void asyncFlush() throws Exception {
         StarRocksFlushTuple flushData = flushQueue.take();
-        if (Strings.isNullOrEmpty(flushData.getLabel())) {
+        if (stopped || flushException != null || Strings.isNullOrEmpty(flushData.getLabel())) {
             return;
         }
         stopScheduler();
@@ -173,6 +196,7 @@ public class StarRocksWriterManager {
             LOG.debug(String.format("Async stream load: rows[%d] bytes[%d] label[%s].", flushData.getRows().size(), flushData.getBytes(), flushData.getLabel()));
         }
         for (int i = 0; i <= writerOptions.getMaxRetries(); i++) {
+            if (stopped) throw new IOException("Writer is stopped");
             try {
                 // flush to StarRocks with stream load
                 starrocksStreamLoadVisitor.doStreamLoad(flushData);
