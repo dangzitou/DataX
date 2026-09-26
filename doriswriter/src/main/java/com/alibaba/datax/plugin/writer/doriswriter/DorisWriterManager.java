@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,6 +169,10 @@ public class DorisWriterManager {
                 startScheduler();
                 break;
             } catch (Exception e) {
+                // A committed partial load must not turn into success via Label Already Exists.
+                if (e instanceof ProtocolException) {
+                    throw e;
+                }
                 LOG.warn("Failed to flush batch data to Doris, retry times = {}", i, e);
                 if (i >= options.getMaxRetries()) {
                     throw new IOException(e);

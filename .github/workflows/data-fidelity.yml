@@ -27,7 +27,7 @@ jobs:
           python3 benchmarks/build.py . /tmp/datax-candidate --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter
       - name: Stream Load status fault injection (HTTP simulator)
         run: |
-          python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe
+          python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate
       - name: Start disposable PostgreSQL
         run: |
@@ -66,6 +66,8 @@ jobs:
           docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to StarRocks and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-checks
+      - name: StarRocks rejects incomplete successful loads
+        run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-row-checks
       - name: Start disposable Doris
         run: |
           docker stop datax-perf-starrocks
@@ -81,3 +83,5 @@ jobs:
           docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to Doris and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-checks --backend doris
+      - name: Doris rejects incomplete successful loads
+        run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-row-checks --backend doris

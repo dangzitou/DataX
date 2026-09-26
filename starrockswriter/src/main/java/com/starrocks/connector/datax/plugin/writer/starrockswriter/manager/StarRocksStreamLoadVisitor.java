@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.datax.common.util.StreamLoadResponseValidator;
 import com.starrocks.connector.datax.plugin.writer.starrockswriter.StarRocksWriterOptions;
 import com.starrocks.connector.datax.plugin.writer.starrockswriter.row.StarRocksDelimiterParser;
 
@@ -100,6 +101,9 @@ public class StarRocksStreamLoadVisitor {
         } else if (!"Success".equals(loadResult.get(keyStatus))
                 && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
             throw new IOException("Unable to flush data to StarRocks: unknown result status. " + loadResult);
+        }
+        if ("Success".equals(loadResult.get(keyStatus))) {
+            StreamLoadResponseValidator.validate(loadResult, flushData.getRows().size(), flushData.getLabel());
         }
     }
 

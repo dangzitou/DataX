@@ -6,6 +6,16 @@ DorisWriter支持将大批量数据写入Doris中。
 ## 2 实现原理
 DorisWriter 通过Doris原生支持Stream load方式导入数据， DorisWriter会将`reader`读取的数据进行缓存在内存中，拼接成Json文本，然后批量导入至Doris。
 
+本 fork 对 `Status=Success` 的每批响应强制检查行数：`NumberTotalRows`、`NumberLoadedRows`
+都必须等于发送行数，`NumberFilteredRows`、`NumberUnselectedRows` 必须为 0；缺失或格式错误的
+计数也会使作业失败。此类错误不会自动重试，避免已提交的不完整批次经 `Label Already Exists`
+被重新判成成功。配置 `where` 丢弃行或允许过滤坏数据的作业因此可能从成功变为明确失败。
+
+这是提交后的检测，不能回滚已写入的行。应同时设置 `loadProps.strict_mode=true`、
+`loadProps.max_filter_ratio=0`，避免服务端容忍坏数据；这些参数也不能替代字段校验。
+`Publish Timeout` 和通过标签确认的网络重试仍沿用原有恢复行为，不能据此证明逐行完整性。
+目标表的主键合并、字段转换、跨作业重跑及整作业原子发布均不由这项计数检查保证。
+
 ## 3 功能说明
 
 ### 3.1 配置样例

@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.writer.doriswriter;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.datax.common.util.StreamLoadResponseValidator;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -78,6 +79,9 @@ public class DorisStreamLoadObserver {
         } else if (!"Success".equals(loadResult.get(keyStatus))
                 && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
             throw new IOException("Unable to flush data to Doris: unknown result status. " + loadResult);
+        }
+        if ("Success".equals(loadResult.get(keyStatus))) {
+            StreamLoadResponseValidator.validate(loadResult, data.getRows().size(), data.getLabel());
         }
     }
 
