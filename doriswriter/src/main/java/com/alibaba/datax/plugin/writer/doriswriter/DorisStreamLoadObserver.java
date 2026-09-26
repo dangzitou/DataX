@@ -80,9 +80,8 @@ public class DorisStreamLoadObserver {
                 && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
             throw new IOException("Unable to flush data to Doris: unknown result status. " + loadResult);
         }
-        if ("Success".equals(loadResult.get(keyStatus))) {
-            StreamLoadResponseValidator.validate(loadResult, data.getRows().size(), data.getLabel());
-        }
+        // Publication delay or a committed label does not prove that every row loaded.
+        StreamLoadResponseValidator.validate(loadResult, data.getRows().size(), data.getLabel());
     }
 
     private void checkStreamLoadState(String host, String label) throws IOException {

@@ -34,7 +34,7 @@ jobs:
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/queue-candidate --backends starrocks,doris,selectdb
       - name: Stream Load status fault injection (HTTP simulator)
         run: |
-          python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete
+          python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete --expect-unverified
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate
       - name: File record integrity and delimiters
         run: |
@@ -101,6 +101,8 @@ jobs:
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/starrocks-queue-after --backends starrocks --real-database
       - name: StarRocks rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-row-checks
+      - name: StarRocks committed response loss and timeout status
+        run: python3 benchmarks/stream_load_recovery_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-recovery-checks
       - name: Start disposable Doris
         run: |
           docker stop datax-perf-starrocks
@@ -126,3 +128,5 @@ jobs:
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/doris-queue-after --backends doris --real-database
       - name: Doris rejects incomplete successful loads
         run: python3 benchmarks/stream_load_row_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-row-checks --backend doris
+      - name: Doris committed response loss and timeout status
+        run: python3 benchmarks/stream_load_recovery_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-recovery-checks --backend doris

@@ -9,6 +9,11 @@ public final class StreamLoadResponseValidator {
 
     public static void validate(Map<String, Object> response, int expectedRows, String label)
             throws ProtocolException {
+        if ("Label Already Exists".equals(response.get("Status"))) {
+            throw new ProtocolException("Unverified Stream Load: label=" + label
+                    + ". The existing batch is committed, but its original row counters are unavailable."
+                    + " Reconcile the target before restarting; automatic retry is disabled.");
+        }
         requireCount(response, "NumberTotalRows", expectedRows, label);
         requireCount(response, "NumberLoadedRows", expectedRows, label);
         requireCount(response, "NumberFilteredRows", 0, label);

@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import socket
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -17,7 +18,9 @@ def main():
                         help='Reproduce historical acceptance of unknown/null/empty status')
     parser.add_argument('--expect-incomplete', action='store_true',
                         help='Reproduce historical acceptance of incomplete Success responses')
-    parser.add_argument('--suite', choices=['all', 'status', 'rows'], default='all')
+    parser.add_argument('--expect-unverified', action='store_true',
+                        help='Reproduce unchecked Publish Timeout and existing-label recovery')
+    parser.add_argument('--suite', choices=['all', 'status', 'rows', 'recovery'], default='all')
     args = parser.parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -48,6 +51,10 @@ def main():
             body = self.rfile.read(int(self.headers['Content-Length']))
             requests.append({'label': self.headers.get('label'), 'bytes': len(body),
                              'sha256': hashlib.sha256(body).hexdigest()})
+            if case.startswith('recovery-ack-lost') and len(requests) == 1:
+                self.close_connection = True
+                self.connection.shutdown(socket.SHUT_RDWR)
+                return
             # A retry after a committed partial load can return a visible label.
             # The client must keep the original count failure, not recover to success.
             self.reply({'Status': 'Label Already Exists'}
@@ -59,6 +66,7 @@ def main():
     results = []
     report = {'scope': __doc__, 'expect_unsafe': args.expect_unsafe,
               'expect_incomplete': args.expect_incomplete, 'suite': args.suite,
+              'expect_unverified': args.expect_unverified,
               'build': json.loads((args.runtime / 'build-metadata.json').read_text()),
               'results': results}
     cases = [('unknown-%d' % i, {'Status': 'UnexpectedFailure'}, False, True)
@@ -68,13 +76,10 @@ def main():
               ('missing', {}, False, False),
               ('fail', {'Status': 'Fail', 'Message': 'Injected rejection'}, False, False),
               ('success', {'Status': 'Success', 'NumberTotalRows': 3, 'NumberLoadedRows': 3,
-                           'NumberFilteredRows': 0, 'NumberUnselectedRows': 0}, True, False),
-              ('publish-timeout', {'Status': 'Publish Timeout'}, True, False),
-              ('visible', {'Status': 'Label Already Exists'}, True, False),
-              ('committed', {'Status': 'Label Already Exists'}, True, False)]
-    if args.suite == 'rows':
+                           'NumberFilteredRows': 0, 'NumberUnselectedRows': 0}, True, False)]
+    if args.suite in ('rows', 'recovery'):
         cases = []
-    if args.suite != 'status':
+    if args.suite in ('all', 'rows'):
         complete = {'Status': 'Success', 'NumberTotalRows': 3, 'NumberLoadedRows': 3,
                     'NumberFilteredRows': 0, 'NumberUnselectedRows': 0}
         changes = [('filtered-%d' % i, {'NumberLoadedRows': 2, 'NumberFilteredRows': 1})
@@ -96,10 +101,23 @@ def main():
             cases.append(('rows-' + name, result, False, True))
         cases += [('rows-complete', complete, True, False),
                   ('rows-numeric-strings', {k: str(v) for k, v in complete.items()}, True, False)]
+    if args.suite in ('all', 'status', 'recovery'):
+        complete = {'Status': 'Publish Timeout', 'NumberTotalRows': 3, 'NumberLoadedRows': 3,
+                    'NumberFilteredRows': 0, 'NumberUnselectedRows': 0}
+        for attempt in range(1, 5):
+            for name, result, success in [
+                ('timeout-complete', complete, True),
+                ('timeout-filtered', dict(complete, NumberLoadedRows=2, NumberFilteredRows=1), False),
+                ('timeout-missing', {'Status': 'Publish Timeout'}, False),
+                ('visible', {'Status': 'Label Already Exists'}, False),
+                ('committed', {'Status': 'Label Already Exists'}, False),
+                ('ack-lost', {'Status': 'Label Already Exists'}, False),
+            ]:
+                cases.append(('recovery-%s-%d' % (name, attempt), result, success, not success))
     try:
         for backend in ['starrocks', 'doris']:
             for case, response, success, historically_unsafe in cases:
-                state = 'COMMITTED' if case == 'committed' else 'VISIBLE'
+                state = 'COMMITTED' if case.startswith('recovery-committed') else 'VISIBLE'
                 requests.clear()
                 polls.clear()
                 name = backend + '-' + case
@@ -114,21 +132,26 @@ def main():
                                           'connection': [{'selectedDatabase': 'test', 'table': ['target']}]
                                       }}}]}}
                 row_case = case.startswith('rows-')
-                expect_unsafe = args.expect_incomplete if row_case else args.expect_unsafe
+                recovery_case = case.startswith('recovery-')
+                expect_unsafe = (args.expect_unverified if recovery_case else
+                                 args.expect_incomplete if row_case else args.expect_unsafe)
                 expected_success = success or (expect_unsafe and historically_unsafe)
                 seconds = run(args.runtime.resolve(), config, output, name, expected_success)
                 assert requests and len({r['sha256'] for r in requests}) == 1, requests
                 assert requests[0]['sha256'] == hashlib.sha256(('1\t中文😀\n' * 3).encode()).hexdigest()
                 # Recovery must reuse a label; Publish Timeout must never replay the batch.
                 assert len({r['label'] for r in requests}) == 1, requests
+                expected_requests = 2 if case.startswith('recovery-ack-lost') else 1
                 if expected_success:
-                    assert len(requests) == 1, requests
+                    assert len(requests) == expected_requests, requests
                 elif historically_unsafe:
-                    diagnostic = 'Incomplete Stream Load' if row_case else 'unknown result status'
+                    diagnostic = ('Unverified Stream Load' if recovery_case and 'timeout' not in case else
+                                  'Incomplete Stream Load' if row_case or recovery_case else
+                                  'unknown result status')
                     assert diagnostic in (output / (name + '.log')).read_text()
-                    if row_case:
-                        assert len(requests) == 1, requests
-                assert len(polls) == (1 if case in ('visible', 'committed') else 0), polls
+                    if row_case or recovery_case:
+                        assert len(requests) == expected_requests, requests
+                assert len(polls) == (1 if recovery_case and 'timeout' not in case else 0), polls
                 results.append({'case': name, 'response': response, 'seconds': seconds,
                                 'expected_success': expected_success, 'requests': list(requests),
                                 'state_polls': list(polls),

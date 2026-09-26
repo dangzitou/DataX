@@ -102,9 +102,8 @@ public class StarRocksStreamLoadVisitor {
                 && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
             throw new IOException("Unable to flush data to StarRocks: unknown result status. " + loadResult);
         }
-        if ("Success".equals(loadResult.get(keyStatus))) {
-            StreamLoadResponseValidator.validate(loadResult, flushData.getRows().size(), flushData.getLabel());
-        }
+        // Publication delay or a committed label does not prove that every row loaded.
+        StreamLoadResponseValidator.validate(loadResult, flushData.getRows().size(), flushData.getLabel());
     }
 
     private String getAvailableHost() {

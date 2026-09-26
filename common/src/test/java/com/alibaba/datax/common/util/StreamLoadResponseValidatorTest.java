@@ -41,4 +41,23 @@ public class StreamLoadResponseValidatorTest {
             assertTrue(expected.getMessage().contains("automatic retry is disabled"));
         }
     }
+
+    @Test
+    public void requiresOriginalCountersEvenAfterLabelCommit() throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("Status", "Publish Timeout");
+        response.put("NumberTotalRows", 3);
+        response.put("NumberLoadedRows", 3);
+        response.put("NumberFilteredRows", 0);
+        response.put("NumberUnselectedRows", 0);
+        StreamLoadResponseValidator.validate(response, 3, "test-label");
+        response.put("NumberLoadedRows", 2);
+        assertRejected(response, "NumberLoadedRows");
+        response.put("NumberLoadedRows", 3);
+        response.put("Status", "Label Already Exists");
+        assertRejected(response, "Unverified Stream Load");
+        response.clear();
+        response.put("Status", "Label Already Exists");
+        assertRejected(response, "Unverified Stream Load");
+    }
 }
