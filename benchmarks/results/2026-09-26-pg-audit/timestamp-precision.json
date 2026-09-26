@@ -1,0 +1,10 @@
+{
+  "scope": "Shared Java DateColumn -> java.util.Date -> Timestamp conversion probe; not a PostgreSQL integration test. Production code unchanged.",
+  "input": "2024-01-01 12:34:56.123456",
+  "output": "2024-01-01 12:34:56.123",
+  "baseline_commit": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+  "candidate_build_commit": "6c93d16ff8ced39c821f8483b2c9729e03adc3dc",
+  "baseline_independent_runs": 4,
+  "candidate_independent_runs": 4,
+  "precision_lost_in_every_run": true
+}
