@@ -47,11 +47,12 @@ jobs:
           docker run -d --name datax-perf-starrocks --memory 4g \
             -p 127.0.0.1:29030:9030 -p 127.0.0.1:28030:8030 -p 127.0.0.1:28040:8040 \
             starrocks/allin1-ubuntu@sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b
+          probe='CREATE DATABASE IF NOT EXISTS datax_bench; CREATE TABLE IF NOT EXISTS datax_bench.ci_readiness (id BIGINT) DUPLICATE KEY(id) DISTRIBUTED BY HASH(id) BUCKETS 1 PROPERTIES("replication_num"="1");'
           for i in $(seq 1 120); do
-            if docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e 'SHOW BACKENDS' | grep -q true; then break; fi
+            if docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e "$probe"; then break; fi
             sleep 2
           done
-          docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e 'SHOW BACKENDS' | grep -q true
+          docker exec datax-perf-starrocks mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to StarRocks and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/sr-checks
       - name: Start disposable Doris
@@ -61,10 +62,11 @@ jobs:
             -e FE_HEAP=1024m -e BE_HEAP=512m \
             -p 127.0.0.1:29031:9030 -p 127.0.0.1:28031:8030 -p 127.0.0.1:28041:8040 \
             apache/doris@sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609
+          probe='CREATE DATABASE IF NOT EXISTS datax_bench; CREATE TABLE IF NOT EXISTS datax_bench.ci_readiness (id BIGINT) DUPLICATE KEY(id) DISTRIBUTED BY HASH(id) BUCKETS 1 PROPERTIES("replication_num"="1");'
           for i in $(seq 1 120); do
-            if docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e 'SHOW BACKENDS' | grep -q true; then break; fi
+            if docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e "$probe"; then break; fi
             sleep 2
           done
-          docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e 'SHOW BACKENDS' | grep -q true
+          docker exec datax-perf-doris mysql -uroot -h127.0.0.1 -P9030 -e "$probe"
       - name: PostgreSQL to Doris and back
         run: python3 benchmarks/starrocks_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/doris-checks --backend doris
