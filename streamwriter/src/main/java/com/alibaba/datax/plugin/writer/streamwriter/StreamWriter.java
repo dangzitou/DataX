@@ -14,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class StreamWriter extends Writer {
     public static class Job extends Writer.Job {
@@ -105,6 +107,8 @@ public class StreamWriter extends Writer {
                 .getLogger(Task.class);
 
         private static final String NEWLINE_FLAG = System.getProperty("line.separator", "\n");
+        private static final int BUFFER_SIZE = 64 * 1024;
+        private StringBuilder rowBuffer = new StringBuilder(256);
 
         private Configuration writerSliceConfig;
 
@@ -152,13 +156,12 @@ public class StreamWriter extends Writer {
                     writeToFile(recordReceiver,path, fileName, recordNumBeforSleep, sleepTime);
                 } else {
                     try {
-                        BufferedWriter writer = new BufferedWriter(
-                                new OutputStreamWriter(System.out, "UTF-8"));
+                        BufferedOutputStream writer = new BufferedOutputStream(System.out, BUFFER_SIZE);
 
                         Record record;
                         while ((record = recordReceiver.getFromReader()) != null) {
                             if (this.print) {
-                                writer.write(recordToString(record));
+                                writer.write(recordToBytes(record));
                             } else {
                         /* do nothing */
                             }
@@ -177,32 +180,33 @@ public class StreamWriter extends Writer {
             LOG.info("begin do write...");
             String fileFullPath = buildFilePath(path, fileName);
             LOG.info(String.format("write to file : [%s]", fileFullPath));
-            BufferedWriter writer = null;
-            try {
-                File newFile = new File(fileFullPath);
-                newFile.createNewFile();
-
-                writer = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(newFile, true), "UTF-8"));
-
+            try (BufferedOutputStream writer = new BufferedOutputStream(
+                    new FileOutputStream(fileFullPath, true) {
+                        @Override
+                        public void write(byte[] bytes, int offset, int length) throws IOException {
+                            // ponytail: one JVM-wide file-write lock; use per-file locks if unrelated files contend.
+                            // Buffers contain whole UTF-8 records, including records larger than the buffer.
+                            synchronized (Task.class) {
+                                super.write(bytes, offset, length);
+                            }
+                        }
+                    }, BUFFER_SIZE)) {
                 Record record;
-                int count =0;
+                long count = 0;
                 while ((record = recordReceiver.getFromReader()) != null) {
                     if(recordNumBeforSleep > 0 && sleepTime >0 &&count == recordNumBeforSleep) {
                         LOG.info("StreamWriter start to sleep ... recordNumBeforSleep={},sleepTime={}",recordNumBeforSleep,sleepTime);
-                        try {
-                            Thread.sleep(sleepTime * 1000l);
-                        } catch (InterruptedException e) {
-                        }
+                        TimeUnit.SECONDS.sleep(sleepTime);
                     }
-                   writer.write(recordToString(record));
+                   writer.write(recordToBytes(record));
                    count++;
                 }
                 writer.flush();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw DataXException.asDataXException(StreamWriterErrorCode.RUNTIME_EXCEPTION, e);
             } catch (Exception e) {
                 throw DataXException.asDataXException(StreamWriterErrorCode.RUNTIME_EXCEPTION, e);
-            } finally {
-                IOUtils.closeQuietly(writer);
             }
         }
 
@@ -214,22 +218,19 @@ public class StreamWriter extends Writer {
         public void destroy() {
         }
 
-        private String recordToString(Record record) {
+        private byte[] recordToBytes(Record record) {
             int recordLength = record.getColumnNumber();
-            if (0 == recordLength) {
-                return NEWLINE_FLAG;
-            }
-
-            Column column;
-            StringBuilder sb = new StringBuilder();
+            // Do not retain an unusually large row for the remainder of the task.
+            if (rowBuffer.capacity() > BUFFER_SIZE) rowBuffer = new StringBuilder(256);
+            rowBuffer.setLength(0);
             for (int i = 0; i < recordLength; i++) {
-                column = record.getColumn(i);
-                sb.append(column.asString()).append(fieldDelimiter);
+                if (i > 0) rowBuffer.append(fieldDelimiter);
+                Column column = record.getColumn(i);
+                rowBuffer.append(column.asString());
             }
-            sb.setLength(sb.length() - 1);
-            sb.append(NEWLINE_FLAG);
+            rowBuffer.append(NEWLINE_FLAG);
 
-            return sb.toString();
+            return rowBuffer.toString().getBytes(StandardCharsets.UTF_8);
         }
     }
 

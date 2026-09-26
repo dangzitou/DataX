@@ -13,6 +13,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.alibaba.datax</groupId>
 			<artifactId>datax-common</artifactId>
 			<version>${datax-project-version}</version>

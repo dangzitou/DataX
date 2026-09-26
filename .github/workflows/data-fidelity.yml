@@ -18,7 +18,7 @@ jobs:
           java-version: '8'
           cache: maven
       - name: Unit tests including both CSV codecs
-        run: mvn -B -pl core,plugin-rdbms-util,postgresqlreader,postgresqlwriter,starrocksreader,starrockswriter,dorisreader,doriswriter -am test
+        run: mvn -B -pl core,plugin-rdbms-util,postgresqlreader,postgresqlwriter,starrocksreader,starrockswriter,dorisreader,doriswriter,streamwriter -am test
       - name: Build untouched baseline then candidate
         run: |
           git fetch --depth 1 origin 80ec23d5c5328eb90ca364d2749e92dfaf44541e
@@ -29,6 +29,10 @@ jobs:
         run: |
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate
+      - name: File record integrity and delimiters
+        run: |
+          python3 benchmarks/streamwriter_checks.py /tmp/datax-baseline /tmp/file-baseline --expect-legacy
+          python3 benchmarks/streamwriter_checks.py /tmp/datax-candidate /tmp/file-candidate
       - name: Start disposable PostgreSQL
         run: |
           docker run -d --name datax-perf-postgres --memory 1g -p 127.0.0.1:25432:5432 \
