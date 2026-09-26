@@ -7,6 +7,8 @@
 > 该结果限于已测负载；不开分片、原版已手工并行的对照分别为 +4.80%、+3.72%，不代表所有任务普遍提升 50%。
 > [最终实测报告与完整对照数据](benchmarks/REPORT-final.zh-CN.md) · [构建、配置及复现指南](benchmarks/README.md)（使用本 fork 的改进请按此构建，下面的上游下载包不包含改动）
 > [非 querySql 补测与字符集勘误](benchmarks/REPORT-scenarios.zh-CN.md)：普通表单路/四路分别 +9.49%/+4.78%，文件输出约持平，生成数据写入 MySQL +7.83%。旧样本文本并非预期中文，说明已更正；PostgreSQL 亿级回灌的正确性和性能尚未验收。
+> [PostgreSQL 百万行实测](benchmarks/REPORT-pg.zh-CN.md)：六组中位吞吐变化为 -1.40% 到 +26.32%，全部未达到逐轮 +50%。新增 COPY 默认关闭，不提供整作业原子性或幂等重跑。
+> [字段保真与回灌风险](benchmarks/REPORT-fidelity.zh-CN.md) · [真实 Doris 读写检查](benchmarks/REPORT-doris.zh-CN.md)：部分静默失真已修复，但无唯一键重跑重复、失败留下已提交批次和源共享快照问题仍未解决。全场景 +50% 与亿级零差错均未验收。
 
 [![Leaderboard](https://img.shields.io/badge/DataX-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=datax)
 
@@ -72,7 +74,7 @@ DataX目前已经有了比较全面的插件体系，主流的RDBMS数据库、N
 |                    | MongoDB                         |     √      |     √      |                                   [读](https://github.com/alibaba/DataX/blob/master/mongodbreader/doc/mongodbreader.md) 、[写](https://github.com/alibaba/DataX/blob/master/mongodbwriter/doc/mongodbwriter.md)                                   |
 |                    | Cassandra                       |     √      |     √      |                               [读](https://github.com/alibaba/DataX/blob/master/cassandrareader/doc/cassandrareader.md) 、[写](https://github.com/alibaba/DataX/blob/master/cassandrawriter/doc/cassandrawriter.md)                               |
 | 数仓数据存储       | StarRocks                       |     √      |     √      |                                                                          读 、[写](https://github.com/alibaba/DataX/blob/master/starrockswriter/doc/starrockswriter.md)                                                                           |
-|                    | ApacheDoris                     |            |     √      |                                                                                [写](https://github.com/alibaba/DataX/blob/master/doriswriter/doc/doriswriter.md)                                                                                |
+|                    | ApacheDoris                     |     √      |     √      | [读](dorisreader/doc/dorisreader.md)、[写](doriswriter/doc/doriswriter.md) |
 |                    | ClickHouse                      |     √      |     √      |                              [读](https://github.com/alibaba/DataX/blob/master/clickhousereader/doc/clickhousereader.md) 、[写](https://github.com/alibaba/DataX/blob/master/clickhousewriter/doc/clickhousewriter.md)                               |
 |                    | Databend                        |            |     √      |                                                                             [写](https://github.com/alibaba/DataX/blob/master/databendwriter/doc/databendwriter.md)                                                                             |
 |                    | Hive                            |     √      |     √      |                                         [读](https://github.com/alibaba/DataX/blob/master/hdfsreader/doc/hdfsreader.md) 、[写](https://github.com/alibaba/DataX/blob/master/hdfswriter/doc/hdfswriter.md)                                         |

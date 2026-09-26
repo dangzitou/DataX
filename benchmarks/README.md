@@ -37,6 +37,23 @@ stale driver batches before use. Batch commit boundaries and per-row error
 fallback are retained. MySQL writing uses the driver's server prepare cache.
 Existing jobs keep their original querySql task count.
 
+## Local disk budget
+
+`olap_scenarios.py` caps local fixtures at one million rows. Before creating
+fixtures or starting each measured JVM it checks the active OLAP container's
+writable layer plus the PostgreSQL test data directory against a 6 GiB budget,
+reserving 1 GiB for the next run, and requires 8 GiB free on the host. This is a
+between-run check, not a filesystem quota. A lower limit can be supplied with
+`--max-generated-gib`; exceeding it stops the suite and preserves its evidence.
+
+Run one database performance suite at a time. Recreate only the disposable
+OLAP container between scenarios: repeated TRUNCATE operations can retain old
+tablets. Remove generated test containers and their dedicated data volumes
+when finished, including old MySQL test volumes that may retain binary logs.
+Keep only the current baseline/candidate runtimes, build fingerprints and
+compressed reports; exported comparison files are deleted after validation.
+Do not use a global Docker prune or remove unrelated containers/volumes.
+
 The measurements use **a real MySQL server, real DataX Engine processes and
 real MySQL target tables**. Data is generated, not a production workload.
 Every successful run checks row count and every output field with MySQL's

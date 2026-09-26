@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import shutil
 import statistics
 import subprocess
 from mysql_querysql import run, process_metrics
@@ -26,13 +27,28 @@ def main():
     p.add_argument('--rows', type=int, default=1000000)
     p.add_argument('--rounds', type=int, default=5)
     p.add_argument('--seed', action='store_true')
+    p.add_argument('--max-generated-gib', type=float, default=6,
+                   help='Stop before another run when active test database storage reaches this limit')
     args = p.parse_args()
-    assert args.rows > 0 and args.rounds > 0
+    assert 0 < args.rows <= 1000000 and args.rounds > 0, 'Local fixtures are capped at one million rows'
+    assert 0 < args.max_generated_gib <= 6, 'Keep the local test storage limit at or below 6 GiB'
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     assert not (output / 'results.json').exists(), 'Use a fresh evidence directory'
     backend, scenario = args.backend, args.scenario
     jdbc_port, load_port = (29030, 28040) if backend == 'starrocks' else (29031, 28041)
+    def storage():
+        container = json.loads(subprocess.check_output(
+            ['docker', 'inspect', '--size', 'datax-perf-' + backend]))[0]
+        pg_bytes = int(subprocess.check_output(['docker', 'exec', 'datax-perf-postgres',
+            'du', '-sk', '/var/lib/postgresql/data'], text=True).split()[0]) * 1024
+        used = container['SizeRw'] + pg_bytes
+        # Reserve a full input/output batch of fixtures before starting a JVM.
+        # This is a between-run guard, not a filesystem quota or production setting.
+        assert used + 1024**3 <= args.max_generated_gib * 1024**3, (
+            'Generated test storage limit reached; recreate only the disposable OLAP container', used)
+        assert shutil.disk_usage(output).free >= 8 * 1024**3, 'Less than 8 GiB host disk headroom'
+        return used
     def execute(query):
         return sr(query, 'datax-perf-' + backend)
     def create(table):
@@ -73,6 +89,7 @@ def main():
                           **({'strip_outer_array': True} if format_name == 'json' else {})}}}
         return config
 
+    initial_storage = storage()
     if args.seed:
         seed(args.rows)
     assert int(sql('SELECT count(*) FROM pg_perf_source')) == args.rows
@@ -109,6 +126,8 @@ def main():
         'builds': {v: json.loads((getattr(args, v).resolve() / 'build-metadata.json').read_text())
                    for v in ['baseline', 'candidate']},
         'metric': 'Whole JVM elapsed time, excluding seed/reset/validation; static synthetic source.'}
+    report['storage_limit_gib'] = args.max_generated_gib
+    report['initial_database_storage_bytes'] = initial_storage
     if scenario == 'reader-file':
         reference = output / 'reference.tsv'
         query = "COPY (SELECT id,coalesce(tenant::text,'null'),coalesce(amount::text,'null')," \
@@ -122,6 +141,7 @@ def main():
     for number in range(args.rounds + 1):
         for variant in (['candidate', 'baseline'] if number % 2 == 0 else ['baseline', 'candidate']):
             name = ('warmup' if number == 0 else str(number)) + '-' + variant
+            storage_before = storage()
             if scenario.startswith('writer-'):
                 execute('TRUNCATE TABLE datax_bench.olap_perf_target;')
             elif scenario == 'reader-pg':
@@ -138,6 +158,7 @@ def main():
                 (output / 'actual.tsv').unlink()
             entry = {'round': number, 'variant': variant, 'seconds': seconds,
                      'rows_per_second': args.rows / seconds, **check,
+                     'database_storage_before_bytes': storage_before,
                      **process_metrics(output / (name + '.log'))}
             report['runs'].append(entry)
             (output / 'results.json').write_text(json.dumps(report, indent=2))
