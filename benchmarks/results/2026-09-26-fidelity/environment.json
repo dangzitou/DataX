@@ -1,0 +1,29 @@
+{
+  "hardware": "Apple M5, 10 logical CPUs, 16 GiB RAM",
+  "date": "2026-09-26",
+  "baseline_revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+  "candidate_revision": "9d9699c8d737fd3c2bcce24869f8ab1211e5e8a8",
+  "postgres": {
+    "version": "17.11",
+    "arch": "aarch64",
+    "image": "postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73",
+    "cpu_limit": 4,
+    "memory_gib": 2
+  },
+  "starrocks": {
+    "version": "4.1.4-4a9848e",
+    "arch": "arm64",
+    "image": "starrocks/allin1-ubuntu@sha256:ee96cdee08524e8b67c45d269c74aecc2bd2696757bb880e368f8576ac5f7da5",
+    "cpu_limit": 4,
+    "memory_gib": 5
+  },
+  "mysql_runtime": "candidate-all-build.json: same production changes, built before commit; tracked diff hash retained",
+  "scope": "Small generated correctness fixtures on real local database servers. Not a performance comparison or billion-row production acceptance.",
+  "known_unresolved": [
+    "append rerun duplicates",
+    "committed batches remain after job failure",
+    "no coordinated source snapshot",
+    "not all field types validated",
+    "all-scenario +50% not achieved"
+  ]
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "com.alibaba.datax.common.element.DateColumnRegressionTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.114"
+  },
+  {
+    "name": "com.alibaba.datax.common.element.LongColumnRegressionTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.0"
+  },
+  {
+    "name": "com.alibaba.datax.core.transport.channel.memory.MemoryChannelRegressionTest",
+    "tests": "6",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.108"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.JdbcErrorsRegressionTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.01"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.RdbmsReaderRegressionTest",
+    "tests": "5",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.099"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.reader.util.QuerySqlSplitTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.112"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.rdbms.writer.RdbmsWriterRegressionTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.013"
+  },
+  {
+    "name": "com.starrocks.connector.datax.plugin.writer.starrockswriter.row.StarRocksCsvSerializerTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.078"
+  },
+  {
+    "name": "com.alibaba.datax.plugin.writer.doriswriter.DorisCsvCodecTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.071"
+  }
+]
