@@ -1,0 +1,6 @@
+{
+  "com/alibaba/datax/plugin/rdbms/reader/util/QuerySqlSplitUtil.class": "99d04fc1f083cbbedb9242b81eac661112676a137b36adbc4ba194945240a126",
+  "com/alibaba/datax/plugin/rdbms/reader/util/PreCheckTask.class": "fb3ff0751fde703e8232a299cc4ecfb759eab18c10f245682471b0baaca328ed",
+  "com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader$Job.class": "2623047aeed82fe583b2b15876a406de628829e210cf59db6ab39355be558f4b",
+  "com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader$Task.class": "da7e47fc9b51940ed0982e49cf0d3d9aaded214360527b594ce228b83fb14f6e"
+}

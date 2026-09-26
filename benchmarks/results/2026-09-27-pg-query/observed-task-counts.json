@@ -1,0 +1,18 @@
+{
+  "pg-query-million": {
+    "baseline": [
+      1
+    ],
+    "candidate": [
+      4
+    ]
+  },
+  "pg-query-manual-control": {
+    "baseline": [
+      4
+    ],
+    "candidate": [
+      4
+    ]
+  }
+}

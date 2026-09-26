@@ -1,4 +1,10 @@
-# MySQL / querySql performance and reliability validation
+# DataX performance and data-fidelity validation
+
+The current minimum target is +25% throughput in every scenario, with +50% still
+an optimization target. [Re-evaluated measured evidence (中文)](REPORT-25pct.zh-CN.md)
+shows that the full target remains unmet; neither exactly-once backfill nor
+billion-row production correctness has been established. Historical +50% reports
+below retain their original thresholds and workload limits.
 
 [Final measured results and complete controls (中文)](REPORT-final.zh-CN.md):
 seven paired million-row transfers each exceeded +50% throughput, with a
