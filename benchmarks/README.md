@@ -42,6 +42,12 @@ real-PG round trips for microseconds, offsets and 24:00, plus repeated historica
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers
 and other target plugins require compatibility checks.
 
+[PG shared snapshots under source changes (中文)](REPORT-pg-snapshot.zh-CN.md)
+adds opt-in `consistentSnapshot`, native range/task snapshot sharing, and
+explicit failure when the exported snapshot expires. Real eight-row tests
+cover concurrent key movement, deletion and insertion. Reruns and previously
+committed target batches still require a separate recovery/publication strategy.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
