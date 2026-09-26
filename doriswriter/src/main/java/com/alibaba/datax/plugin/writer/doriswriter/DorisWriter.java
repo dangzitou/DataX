@@ -137,7 +137,7 @@ public class DorisWriter extends Writer {
                                                 record.getColumnNumber(),
                                                 options.getColumns().size()));
                     }
-                    writerManager.writeRecord(rowCodec.codec(record));
+                    writerManager.writeRecord(rowCodec.codecBytes(record));
                 }
             } catch (Exception e) {
                 throw DataXException.asDataXException(DBUtilErrorCode.WRITE_DATA_ERROR, e);

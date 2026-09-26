@@ -40,4 +40,23 @@ public class StarRocksCsvSerializerTest {
             fail("Configured row delimiter must be checked");
         } catch (IllegalArgumentException expected) { }
     }
+
+    @Test public void utf8BytesPreserveJsonTextAndNull() throws Exception {
+        StarRocksJsonSerializer json = new StarRocksJsonSerializer(Collections.singletonList("txt"));
+        StringBuilder longText = new StringBuilder();
+        for (int i = 0; i < 10000; i++) longText.append("中文😀\n\t\"\\");
+        for (String value : new String[] {null, "", "\\N", "a\r\nb", longText.toString()}) {
+            byte[] bytes = json.serializeBytes(row(value));
+            String decoded = java.nio.charset.StandardCharsets.UTF_8.newDecoder()
+                    .decode(java.nio.ByteBuffer.wrap(bytes)).toString();
+            assertEquals(value, JSON.parseObject(decoded).getString("txt"));
+            assertArrayEquals(json.serialize(row(value)).getBytes(java.nio.charset.StandardCharsets.UTF_8), bytes);
+        }
+        // Sample every Unicode plane, excluding unpaired UTF-16 surrogate code points.
+        for (int cp = 0; cp <= Character.MAX_CODE_POINT; cp += 257) {
+            if (cp >= Character.MIN_SURROGATE && cp <= Character.MAX_SURROGATE) continue;
+            String value = new String(Character.toChars(cp));
+            assertEquals(value, JSON.parseObject(json.serializeBytes(row(value))).getString("txt"));
+        }
+    }
 }

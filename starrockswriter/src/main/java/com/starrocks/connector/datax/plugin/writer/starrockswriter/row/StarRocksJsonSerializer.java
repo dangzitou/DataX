@@ -22,13 +22,22 @@ public class StarRocksJsonSerializer extends StarRocksBaseSerializer implements 
         if (null == fieldNames) {
             return "";
         }
+        return JSON.toJSONString(rowMap(row));
+    }
+
+    @Override
+    public byte[] serializeBytes(Record row) {
+        return fieldNames == null ? new byte[0] : JSON.toJSONBytes(rowMap(row));
+    }
+
+    private Map<String, Object> rowMap(Record row) {
         Map<String, Object> rowMap = new HashMap<>(fieldNames.size());
         int idx = 0;
         for (String fieldName : fieldNames) {
             rowMap.put(fieldName, fieldConvertion(row.getColumn(idx)));
             idx++;
         }
-        return JSON.toJSONString(rowMap);
+        return rowMap;
     }
     
 }

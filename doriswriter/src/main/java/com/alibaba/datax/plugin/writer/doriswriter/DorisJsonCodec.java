@@ -22,12 +22,21 @@ public class DorisJsonCodec extends DorisBaseCodec implements DorisCodec {
         if (null == fieldNames) {
             return "";
         }
+        return JSON.toJSONString(rowMap(row));
+    }
+
+    @Override
+    public byte[] codecBytes(Record row) {
+        return fieldNames == null ? new byte[0] : JSON.toJSONBytes(rowMap(row));
+    }
+
+    private Map<String, Object> rowMap(Record row) {
         Map<String, Object> rowMap = new HashMap<> (fieldNames.size());
         int idx = 0;
         for (String fieldName : fieldNames) {
             rowMap.put(fieldName, convertionField(row.getColumn(idx)));
             idx++;
         }
-        return JSON.toJSONString(rowMap);
+        return rowMap;
     }
 }

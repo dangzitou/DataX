@@ -124,7 +124,7 @@ public class StarRocksWriter extends Writer {
                                                 record.getColumnNumber(),
                                                 options.getColumns().size()));
                     }
-                    writerManager.writeRecord(rowSerializer.serialize(record));
+                    writerManager.writeRecord(rowSerializer.serializeBytes(record));
                 }
             } catch (Exception e) {
                 throw DataXException.asDataXException(DBUtilErrorCode.WRITE_DATA_ERROR, e);

@@ -70,10 +70,13 @@ public class StarRocksWriterManager {
         }
     }
 
-    public final synchronized void writeRecord(String record) throws IOException {
+    public final void writeRecord(String record) throws IOException {
+        writeRecord(record.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public final synchronized void writeRecord(byte[] bts) throws IOException {
         checkFlushException();
         try {
-            byte[] bts = record.getBytes(StandardCharsets.UTF_8);
             buffer.add(bts);
             batchCount++;
             batchSize += bts.length;
