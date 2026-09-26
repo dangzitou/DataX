@@ -715,7 +715,13 @@ public final class DBUtil {
         switch (databaseType) {
             case PostgreSQL:
                 String snapshot = config.getString(com.alibaba.datax.plugin.rdbms.reader.Key.POSTGRESQL_SNAPSHOT);
-                if (snapshot == null) break;
+                if (snapshot == null) {
+                    if (config.getBool(com.alibaba.datax.plugin.rdbms.reader.Key.CONSISTENT_SNAPSHOT, false)) {
+                        throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,
+                                "Missing PostgreSQL snapshot; refusing an inconsistent read");
+                    }
+                    break;
+                }
                 // SET TRANSACTION SNAPSHOT accepts a literal, not a JDBC parameter.
                 if (!snapshot.matches("[0-9A-Fa-f]+-[0-9A-Fa-f]+-[0-9]+")) {
                     throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,

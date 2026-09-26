@@ -34,6 +34,7 @@ public final class Key {
     public final static String QUERY_SQL_SPLIT_PK = "querySqlSplitPk";
 
     public final static String POSTGRESQL_SNAPSHOT = "__postgresqlSnapshot";
+    public final static String CONSISTENT_SNAPSHOT = "consistentSnapshot";
 
     public final static String QUERY_TIMEOUT = "queryTimeout";
 

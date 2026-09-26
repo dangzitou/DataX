@@ -51,7 +51,7 @@ public class PostgresqlReader extends Reader {
 
         @Override
         public void prepare() {
-            if (!originalConfig.getBool("consistentSnapshot", false)) return;
+            if (!originalConfig.getBool(Key.CONSISTENT_SNAPSHOT, false)) return;
             if (originalConfig.getList("connection", Object.class).size() != 1) {
                 throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
                         "consistentSnapshot requires one PostgreSQL connection entry");
@@ -72,7 +72,9 @@ public class PostgresqlReader extends Reader {
                             com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
                     try (ResultSet result = statement.executeQuery("SELECT pg_export_snapshot()")) {
                         if (!result.next()) throw new SQLException("PostgreSQL did not export a snapshot");
-                        originalConfig.set(Key.POSTGRESQL_SNAPSHOT, result.getString(1));
+                        String snapshot = result.getString(1);
+                        if (snapshot == null) throw new SQLException("PostgreSQL returned a null snapshot");
+                        originalConfig.set(Key.POSTGRESQL_SNAPSHOT, snapshot);
                     }
                 }
             } catch (SQLException e) {

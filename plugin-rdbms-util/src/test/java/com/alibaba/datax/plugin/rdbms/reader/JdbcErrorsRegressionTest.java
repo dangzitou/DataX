@@ -73,4 +73,27 @@ public class JdbcErrorsRegressionTest {
         catch (DataXException expected) { assertEquals(DBUtilErrorCode.SET_SESSION_ERROR, expected.getErrorCode()); }
         verify(stmt).close();
     }
+
+    @Test public void snapshotImportCannotSilentlyFallBack() throws Exception {
+        for (String snapshot : new String[] {null, "", "bad' snapshot"}) {
+            Connection conn = mock(Connection.class);
+            Configuration config = Configuration.newDefault();
+            config.set(Key.CONSISTENT_SNAPSHOT, true);
+            if (snapshot != null) config.set(Key.POSTGRESQL_SNAPSHOT, snapshot);
+            try { DBUtil.dealWithSessionConfig(conn, config, DataBaseType.PostgreSQL, "test"); fail(); }
+            catch (DataXException expected) { assertEquals(DBUtilErrorCode.SET_SESSION_ERROR, expected.getErrorCode()); }
+            verifyZeroInteractions(conn);
+        }
+        Connection conn = mock(Connection.class);
+        Statement stmt = mock(Statement.class);
+        when(conn.createStatement()).thenReturn(stmt);
+        SQLException cause = new SQLException("invalid snapshot identifier", "22023");
+        when(stmt.execute("SET TRANSACTION SNAPSHOT '00000001-00000001-1'")).thenThrow(cause);
+        Configuration config = Configuration.newDefault();
+        config.set(Key.CONSISTENT_SNAPSHOT, true);
+        config.set(Key.POSTGRESQL_SNAPSHOT, "00000001-00000001-1");
+        try { DBUtil.dealWithSessionConfig(conn, config, DataBaseType.PostgreSQL, "test"); fail(); }
+        catch (DataXException expected) { assertSame(cause, expected.getCause()); }
+        verify(stmt).close();
+    }
 }

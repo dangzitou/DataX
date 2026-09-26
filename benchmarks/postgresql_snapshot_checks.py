@@ -68,7 +68,8 @@ def main():
                 reader['connection'] = [{'jdbcUrl': [url], 'querySql': [
                     'SELECT id,shard,payload FROM pg_snapshot_source '
                     'WHERE shard<50 AND pg_advisory_xact_lock(%d) IS NOT NULL ORDER BY id' % lock,
-                    'SELECT id,shard,payload FROM pg_snapshot_source WHERE shard>=50 ORDER BY id']}]
+                    'SELECT id,shard,payload FROM pg_snapshot_source '
+                    'WHERE shard>=50 AND pg_advisory_xact_lock(%d) IS NOT NULL ORDER BY id' % lock]}]
                 holder = subprocess.Popen(['docker', 'exec', '-i', 'datax-perf-postgres',
                     'psql', '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', 'datax_bench'],
                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -93,10 +94,17 @@ def main():
                                          "WHERE application_name='%s' AND query='SELECT pg_export_snapshot()'" % app)
                             assert killed == 't', killed
                         else:
+                            # DataX shuffles task order. Move a row from the first partition
+                            # into the not-yet-started one, whichever partition ran first.
+                            active_query = sql("SELECT query FROM pg_stat_activity WHERE application_name='%s' "
+                                               "AND wait_event='advisory'" % app)
+                            move_id, shard, delete_id, new_shard = ((2,70,6,90) if 'shard<50' in active_query
+                                                                  else (6,20,2,10))
                             sql("""BEGIN; UPDATE pg_snapshot_source SET payload='after-'||id;
-                                UPDATE pg_snapshot_source SET shard=70 WHERE id=2;
-                                DELETE FROM pg_snapshot_source WHERE id=6;
-                                INSERT INTO pg_snapshot_source VALUES (9,90,'after-9'); COMMIT;""")
+                                UPDATE pg_snapshot_source SET shard=%d WHERE id=%d;
+                                DELETE FROM pg_snapshot_source WHERE id=%d;
+                                INSERT INTO pg_snapshot_source VALUES (9,%d,'after-9'); COMMIT;"""
+                                % (shard, move_id, delete_id, new_shard))
                     finally:
                         holder.stdin.close()
                         holder.wait(timeout=10)
@@ -116,6 +124,30 @@ def main():
                 assert result['differences'] > 0, entry
             else:
                 assert result == {'rows': 8, 'distinct_ids': 8, 'differences': 0}, entry
+
+    if not args.expect_inconsistent:
+        for case, diagnostic in [('multiple-connections', 'requires one PostgreSQL connection entry'),
+                                 ('multiple-hosts', 'requires a single PostgreSQL server'),
+                                 ('reserved-snapshot', 'is reserved')]:
+            seed()
+            config = job(destination='pg_snapshot_target', query='SELECT * FROM pg_snapshot_source')
+            reader = config['job']['content'][0]['reader']['parameter']
+            reader.update(username='datax_snapshot_reader', consistentSnapshot=True)
+            config['job']['content'][0]['writer']['parameter']['column'] = ['id', 'shard', 'payload']
+            if case == 'multiple-connections':
+                reader['connection'].append(json.loads(json.dumps(reader['connection'][0])))
+            elif case == 'multiple-hosts':
+                reader['connection'][0]['jdbcUrl'] = [
+                    'jdbc:postgresql://127.0.0.1:25432,127.0.0.1:25432/datax_bench']
+            else:
+                reader['__postgresqlSnapshot'] = "untrusted' snapshot"
+            seconds = run(args.runtime.resolve(), config, output, case, expect_success=False)
+            assert diagnostic in (output/(case+'.log')).read_text()
+            assert sql('SELECT count(*) FROM pg_snapshot_target') == '0'
+            report['results'].append({'case': case, 'seconds': seconds, 'expected_job_failure': True,
+                                      'diagnostic': diagnostic, 'target_empty': True})
+            (output/'results.json').write_text(json.dumps(report, indent=2))
+            print(json.dumps(report['results'][-1]), flush=True)
 
 
 if __name__ == '__main__':
