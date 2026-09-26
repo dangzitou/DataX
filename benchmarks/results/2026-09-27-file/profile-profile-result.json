@@ -1,0 +1,13 @@
+{
+  "seconds": 7.453382458,
+  "file": {
+    "rows": 1000000,
+    "bytes": 315659578,
+    "sha256": "360d92105dcce61a0bb7bb58604bb8f4e1a19d709d81506784851ddd7fe592e9"
+  },
+  "storage": {
+    "postgres_bytes": 1472286720,
+    "output_bytes": 0,
+    "host_free_bytes": 282917367808
+  }
+}

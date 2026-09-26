@@ -64,6 +64,13 @@ extends automatic integer-range splitting to PG with a mandatory shared snapshot
 adds read-only query prechecks, and compares automatic splitting with both an
 untouched single-query baseline and manually partitioned upstream queries.
 
+[File record integrity and million-row controls (中文)](REPORT-file.zh-CN.md)
+fixes interleaved parallel file records, delimiter truncation and swallowed
+cancellation. All 24 final Engine checks match exact output bytes. The final
+million-row PG-to-file comparison gains 9.47% median throughput over upstream,
+with a -6.71% worst pair; the +25% gate still fails. Text output is not a
+lossless interchange format for arbitrary fields or an atomic publication path.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

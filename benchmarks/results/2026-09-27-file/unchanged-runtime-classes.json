@@ -1,0 +1,16 @@
+{
+  "scope": "All runtime classes outside streamwriter module JAR; compares actual prior/final packaged binaries, not timestamps.",
+  "builds": [
+    "candidate-pg-query-final",
+    "candidate-file-batch"
+  ],
+  "class_counts": [
+    71047,
+    71047
+  ],
+  "changed_classes": [],
+  "aggregate_class_sha256": {
+    "candidate-pg-query-final": "13be10e24f6ec56dba94463f1e448bf20a74c27eb0fe4ea00fd0ef4ebb40f5ee",
+    "candidate-file-batch": "13be10e24f6ec56dba94463f1e448bf20a74c27eb0fe4ea00fd0ef4ebb40f5ee"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "retired_runtimes": [
+    {
+      "runtime": "/tmp/datax-perf/candidate-pg-query-final",
+      "bytes": 132228329,
+      "revision": "cf5f1642933320a01b4f25ac3086ef3baceee9d0",
+      "build_evidence": "candidate-pg-query-final-build.json"
+    },
+    {
+      "runtime": "/tmp/datax-perf/candidate-file-records",
+      "bytes": 132390742,
+      "revision": "71c09ae4b3b74d82f0df579a23d3c47ed2a4434d",
+      "build_evidence": "candidate-file-records-build.json"
+    }
+  ],
+  "retained": [
+    "baseline-all",
+    "candidate-file-batch"
+  ],
+  "postgres_bytes": 1472286720,
+  "temporary_tree_bytes": 755116797,
+  "host_free_bytes": 282747973632,
+  "note": "Only owned retired runtime directories removed after archiving build metadata; no source fixture expansion or unrelated container cleanup."
+}
