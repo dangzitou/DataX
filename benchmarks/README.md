@@ -3,7 +3,11 @@
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
-error classification. Existing jobs keep their original querySql task count.
+error classification. The JDBC writer avoids redundant autocommit settings,
+binds signed integers directly, preserves nullable boolean values, and clears
+stale driver batches before use. Batch commit boundaries and per-row error
+fallback are retained. MySQL writing uses the driver's server prepare cache.
+Existing jobs keep their original querySql task count.
 
 The measurements use **a real MySQL server, real DataX Engine processes and
 real MySQL target tables**. Data is generated, not a production workload.
@@ -51,7 +55,7 @@ docker exec datax-perf-mysql mysql -uroot -e "CREATE USER 'datax'@'%' IDENTIFIED
 
 python3 benchmarks/mysql_querysql.py /tmp/datax-benchmark/baseline \
   /tmp/datax-benchmark/candidate /tmp/datax-benchmark/parallel \
-  --seed --rows 1000000 --rounds 5 --channels 4
+  --seed --rows 1000000 --rounds 7 --channels 4
 python3 benchmarks/mysql_querysql.py /tmp/datax-benchmark/baseline \
   /tmp/datax-benchmark/candidate /tmp/datax-benchmark/same-config \
   --rows 1000000 --rounds 5 --channels 4 --candidate-no-split
@@ -81,9 +85,51 @@ RSS and user/system CPU time. Throughput gain is `baseline_time / new_time - 1`;
 elapsed-time reduction is `1 - new_time / baseline_time`. These are different
 percentages. A 50% throughput gain is not a 50% reduction in elapsed time.
 
+### Strict acceptance of measured runs
+
+```sh
+python3 benchmarks/test_performance_gate.py
+python3 benchmarks/performance_gate.py /tmp/datax-benchmark/parallel/results.json \
+  --metric throughput --threshold 50 --minimum-rounds 7
+```
+
+The gate exits with status 1 if **any measured pair** gains less than 50%, if a
+row-count/field comparison fails, or if evidence is incomplete. It does not use
+the median to hide a failing round. Pass multiple report paths to require every
+workload to pass. Use `--metric elapsed --threshold 50` if the requirement is
+instead to halve elapsed time (equivalent to doubling throughput).
+
+A passing result accepts only those measured rounds. It is not a guarantee for
+future runs, arbitrary SQL, small jobs, constrained targets, other hardware, or
+an already parallel upstream job. Production acceptance requires the actual
+job, dataset and resource limits; this script does not infer them. The gate's
+synthetic self-check is included in CI, separate from real database tests.
+
 After retaining desired evidence, stop the disposable database with
 `docker stop datax-perf-mysql`. Remove it with `docker rm datax-perf-mysql` only
 when its generated data is no longer needed.
+
+## MySQL writer defaults
+
+The writer adds `useServerPrepStmts=true`, `cachePrepStmts=true`, and
+`prepStmtCacheSqlLimit=65535` when those properties are absent. Explicit URL
+values are preserved, and reader URL defaults are unchanged. The cache SQL
+limit counts SQL text characters; it is separate from MySQL's parameter limit.
+The existing driver can fall back to client prepares when a statement cannot
+be prepared on the server. Tests cover a 1024-row, 100-column batch exceeding
+the server's 65535-parameter limit.
+
+To retain client prepares, set `useServerPrepStmts=false` in the writer JDBC
+URL; `cachePrepStmts=false` also disables the driver's prepare cache. These
+settings affect performance and must be kept fixed when accepting a workload.
+Connection options are documented in the [Connector/J guide](https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-performance-extensions.html).
+
+Before borrowing a prepared statement, the writer clears any pending batch.
+This matters after a type conversion fails before `executeBatch`: older driver
+caches can otherwise replay the partial batch later. The real-database checks
+include a target without a primary key so duplicate rows cannot be hidden by
+a duplicate-key error. Both client and server modes are checked with nullable
+BIT, arbitrary binary data, Unicode/control characters and millisecond timestamps.
 
 ## Use parallel querySql
 
