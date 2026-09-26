@@ -49,18 +49,18 @@ public class RdbmsWriterRegressionTest {
         return receiver;
     }
 
-    @Test public void reusesStatementButCommitsEveryBatchAndCloses() throws Exception {
+    @Test public void avoidsRedundantAutocommitButCommitsEveryBatchAndCloses() throws Exception {
         Connection connection = connection();
         PreparedStatement statement = mock(PreparedStatement.class);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
         when(connection.getAutoCommit()).thenReturn(true, false, false);
         task().startWriteWithConnection(records(), mock(TaskPluginCollector.class), connection);
-        verify(connection, times(1)).prepareStatement(anyString());
+        verify(connection, times(3)).prepareStatement(anyString());
         verify(connection, times(1)).setAutoCommit(false);
         verify(connection, times(3)).commit();
         verify(statement, times(5)).addBatch();
         verify(statement, times(3)).executeBatch();
-        verify(statement).close();
+        verify(statement, times(3)).close();
         verify(connection).close();
     }
 
@@ -81,7 +81,7 @@ public class RdbmsWriterRegressionTest {
         verify(connection, times(2)).commit();
         verify(failed).close();
         verify(single).close();
-        verify(next).close();
+        verify(next, times(2)).close();
         verify(connection).close();
     }
 
