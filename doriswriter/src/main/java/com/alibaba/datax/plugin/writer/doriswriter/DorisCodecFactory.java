@@ -9,7 +9,8 @@ public class DorisCodecFactory {
     public static DorisCodec createCodec( Keys writerOptions) {
         if ( Keys.StreamLoadFormat.CSV.equals(writerOptions.getStreamLoadFormat())) {
             Map<String, Object> props = writerOptions.getLoadProps();
-            return new DorisCsvCodec (null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")));
+            return new DorisCsvCodec (null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")),
+                    null == props || !props.containsKey("row_delimiter") ? null : String.valueOf(props.get("row_delimiter")));
         }
         if ( Keys.StreamLoadFormat.JSON.equals(writerOptions.getStreamLoadFormat())) {
             return new DorisJsonCodec (writerOptions.getColumns());

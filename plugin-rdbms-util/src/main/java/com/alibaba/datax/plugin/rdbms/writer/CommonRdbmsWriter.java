@@ -523,8 +523,9 @@ public class CommonRdbmsWriter {
                     }
 
                     if (null != utilDate) {
-                        sqlTimestamp = new java.sql.Timestamp(
-                                utilDate.getTime());
+                        sqlTimestamp = utilDate instanceof java.sql.Timestamp
+                                ? (java.sql.Timestamp) utilDate
+                                : new java.sql.Timestamp(utilDate.getTime());
                     }
                     preparedStatement.setTimestamp(columnIndex + 1, sqlTimestamp);
                     break;

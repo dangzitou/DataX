@@ -11,15 +11,23 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import zipfile
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("runtime", type=Path)
+    parser.add_argument("--extra-modules", nargs="*", default=[],
+                        help="Additional existing reader/writer modules to build and package")
     args = parser.parse_args()
     source, runtime = args.source.resolve(), args.runtime.resolve()
     modules = ["core", "mysqlreader", "mysqlwriter", "rdbmsreader", "streamreader", "streamwriter"]
+    for module in args.extra_modules:
+        if not (source / module / "pom.xml").is_file():
+            parser.error("Module not found: " + module)
+        if module not in modules:
+            modules.append(module)
     runtime.mkdir(parents=True, exist_ok=True)
     with (runtime / "build.log").open("w") as log:
         def maven(*arguments):
@@ -34,8 +42,16 @@ def main():
             dest.mkdir(parents=True, exist_ok=True)
             for jar in dest.glob("*.jar"):
                 jar.unlink()
-            for jar in (source / module / "target").glob("*-0.0.1-SNAPSHOT.jar"):
-                shutil.copy2(jar, dest)
+            # Plugins can have their own version (e.g. starrockswriter 1.1.0).
+            jars = [jar for jar in (source / module / "target").glob("*.jar")
+                    if not jar.name.startswith("original-")
+                    and not jar.name.endswith(("-sources.jar", "-javadoc.jar", "-tests.jar"))]
+            if len(jars) != 1:
+                raise RuntimeError("Expected one module JAR for %s: %s" % (module, jars))
+            with zipfile.ZipFile(jars[0]) as archive:
+                if not any(name.endswith(".class") for name in archive.namelist()):
+                    raise RuntimeError("Module JAR contains no classes: " + str(jars[0]))
+            shutil.copy2(jars[0], dest)
             if module != "core":
                 for resource in (source / module / "src/main/resources").glob("*.json"):
                     shutil.copy2(resource, dest)

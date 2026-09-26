@@ -172,20 +172,31 @@ class DateCast {
 	}
 
 	static String asString(final DateColumn column) {
-		if (null == column.asDate()) {
+		Date value = column.asDate();
+		if (null == value) {
 			return null;
 		}
 
 		switch (column.getSubType()) {
 		case DATE:
-			return DateFormatUtils.format(column.asDate(), DateCast.dateFormat,
+			return DateFormatUtils.format(value, DateCast.dateFormat,
 					DateCast.timeZoner);
 		case TIME:
-			return DateFormatUtils.format(column.asDate(), DateCast.timeFormat,
+			return DateFormatUtils.format(value, DateCast.timeFormat,
 					DateCast.timeZoner);
 		case DATETIME:
-			return DateFormatUtils.format(column.asDate(),
+			String formatted = DateFormatUtils.format(value,
 					DateCast.datetimeFormat, DateCast.timeZoner);
+			// Preserve JDBC timestamp fractions in the default text representation.
+			// A non-default format still controls the requested output.
+			if (value instanceof java.sql.Timestamp && column.getNanos() != 0
+					&& "yyyy-MM-dd HH:mm:ss".equals(DateCast.datetimeFormat)) {
+				String fraction = Long.toString(1000000000L + column.getNanos()).substring(1);
+				int end = fraction.length();
+				while (fraction.charAt(end - 1) == '0') end--;
+				return formatted + "." + fraction.substring(0, end);
+			}
+			return formatted;
 		default:
 			throw DataXException
 					.asDataXException(CommonErrorCode.CONVERT_NOT_SUPPORT,

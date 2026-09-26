@@ -75,6 +75,10 @@ public class DateColumn extends Column {
 	 * */
 	public DateColumn(final Date date) {
 		this(date == null ? null : date.getTime());
+		if (date instanceof java.sql.Timestamp) {
+			this.nanos = ((java.sql.Timestamp) date).getNanos();
+			this.precision = 9;
+		}
 	}
 
 	/**
@@ -97,8 +101,7 @@ public class DateColumn extends Column {
 	 * 构建值为ts(java.sql.Timestamp)的DateColumn，使用Date子类型为DATETIME
 	 * */
 	public DateColumn(final java.sql.Timestamp ts) {
-		this(ts == null ? null : ts.getTime());
-		this.setSubType(DateType.DATETIME);
+		this((Date) ts);
 	}
 
 	@Override
@@ -124,6 +127,11 @@ public class DateColumn extends Column {
 			return null;
 		}
 
+		if (subType == DateType.DATETIME && precision >= 0) {
+			java.sql.Timestamp timestamp = new java.sql.Timestamp((Long) getRawData());
+			timestamp.setNanos(nanos);
+			return timestamp;
+		}
 		return new Date((Long)this.getRawData());
 	}
 	

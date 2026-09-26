@@ -4,6 +4,7 @@ import com.alibaba.datax.common.element.LongColumn;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.element.StringColumn;
 import com.alibaba.datax.common.element.BoolColumn;
+import com.alibaba.datax.common.element.DateColumn;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
@@ -136,5 +137,17 @@ public class RdbmsWriterRegressionTest {
         assertFalse(explicit.contains("cachePrepStmts=true"));
         assertFalse(explicit.contains("prepStmtCacheSqlLimit=65535"));
         assertFalse(DataBaseType.MySql.appendJDBCSuffixForReader(url).contains("useServerPrepStmts"));
+    }
+
+    @Test public void timestampBindingPreservesFractionAndNull() throws Exception {
+        PreparedStatement statement = mock(PreparedStatement.class);
+        CommonRdbmsWriter.Task task = task();
+        Timestamp timestamp = Timestamp.valueOf("1969-12-31 23:59:59.123456789");
+        task.fillPreparedStatementColumnType(statement, 0, Types.TIMESTAMP, "timestamp", new DateColumn(timestamp));
+        task.fillPreparedStatementColumnType(statement, 1, Types.TIMESTAMP, "timestamp", new DateColumn(123L));
+        task.fillPreparedStatementColumnType(statement, 2, Types.TIMESTAMP, "timestamp", new DateColumn());
+        verify(statement).setTimestamp(1, timestamp);
+        verify(statement).setTimestamp(2, new Timestamp(123L));
+        verify(statement).setTimestamp(3, null);
     }
 }

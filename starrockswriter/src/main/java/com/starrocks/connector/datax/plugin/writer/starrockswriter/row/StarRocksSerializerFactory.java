@@ -11,7 +11,8 @@ public class StarRocksSerializerFactory {
     public static StarRocksISerializer createSerializer(StarRocksWriterOptions writerOptions) {
         if (StarRocksWriterOptions.StreamLoadFormat.CSV.equals(writerOptions.getStreamLoadFormat())) {
             Map<String, Object> props = writerOptions.getLoadProps();
-            return new StarRocksCsvSerializer(null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")));
+            return new StarRocksCsvSerializer(null == props || !props.containsKey("column_separator") ? null : String.valueOf(props.get("column_separator")),
+                    null == props || !props.containsKey("row_delimiter") ? null : String.valueOf(props.get("row_delimiter")));
         }
         if (StarRocksWriterOptions.StreamLoadFormat.JSON.equals(writerOptions.getStreamLoadFormat())) {
             return new StarRocksJsonSerializer(writerOptions.getColumns());
