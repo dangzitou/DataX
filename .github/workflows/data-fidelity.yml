@@ -46,6 +46,10 @@ jobs:
           docker exec datax-perf-postgres pg_isready -U postgres
       - name: PostgreSQL field fidelity and rerun hazards
         run: python3 benchmarks/postgresql_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/pg-checks
+      - name: JDBC commit acknowledgement fault injection with real PostgreSQL
+        run: |
+          python3 benchmarks/jdbc_commit_checks.py /tmp/datax-baseline /tmp/commit-baseline --expect-legacy
+          python3 benchmarks/jdbc_commit_checks.py /tmp/datax-candidate /tmp/commit-candidate
       - name: PostgreSQL shared snapshot and source changes
         run: |
           python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-baseline /tmp/snapshot-baseline --expect-inconsistent

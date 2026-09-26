@@ -357,16 +357,35 @@ public class CommonRdbmsWriter {
                     preparedStatement.addBatch();
                 }
                 preparedStatement.executeBatch();
-                connection.commit();
             } catch (SQLException e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollback) {
+                    if (rollback != e) e.addSuppressed(rollback);
+                    throw e;
+                }
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为:" + e.getMessage());
-                connection.rollback();
                 doOneInsert(connection, buffer);
+                return;
             } catch (Exception e) {
                 throw DataXException.asDataXException(
                         DBUtilErrorCode.WRITE_DATA_ERROR, e);
             } finally {
                 DBUtil.closeDBResources(preparedStatement, null);
+            }
+            // A failed commit acknowledgement does not prove that the server rolled back.
+            // Keep commit outside the statement-failure fallback: replay could duplicate rows.
+            try {
+                connection.commit();
+            } catch (SQLException commit) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollback) {
+                    if (rollback != commit) commit.addSuppressed(rollback);
+                }
+                throw DataXException.asDataXException(DBUtilErrorCode.WRITE_COMMIT_UNCERTAIN,
+                        "Batch commit outcome is uncertain; no automatic replay. Reconcile the target before retrying. "
+                                + "SQLState=" + commit.getSQLState() + ", vendorCode=" + commit.getErrorCode(), commit);
             }
         }
 

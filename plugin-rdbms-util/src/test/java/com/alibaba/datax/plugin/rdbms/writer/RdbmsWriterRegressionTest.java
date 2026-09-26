@@ -9,6 +9,7 @@ import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
+import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import org.junit.Test;
 import java.sql.*;
 import java.util.Arrays;
@@ -95,6 +96,54 @@ public class RdbmsWriterRegressionTest {
             task().startWriteWithConnection(records(), mock(TaskPluginCollector.class), connection);
             fail();
         } catch (DataXException expected) {
+            verify(connection).close();
+        }
+    }
+
+    @Test public void commitFailureNeverReplaysRegardlessOfSqlState() throws Exception {
+        for (String state : new String[] {"08006", "40003", "40001", null}) {
+            Connection connection = connection();
+            PreparedStatement statement = mock(PreparedStatement.class);
+            when(connection.prepareStatement(anyString())).thenReturn(statement);
+            SQLException failure = new SQLException("commit acknowledgement missing", state);
+            doThrow(failure).when(connection).commit();
+            TaskPluginCollector collector = mock(TaskPluginCollector.class);
+            try {
+                task().startWriteWithConnection(records(), collector, connection);
+                fail("Commit failure must not become successful row replay");
+            } catch (DataXException expected) {
+                assertEquals(DBUtilErrorCode.WRITE_COMMIT_UNCERTAIN, expected.getErrorCode());
+                assertSame(failure, expected.getCause());
+            }
+            verify(connection, times(1)).prepareStatement(anyString());
+            verify(statement, times(1)).executeBatch();
+            verify(statement, never()).execute();
+            verify(connection, never()).setAutoCommit(true);
+            verify(connection).rollback();
+            verify(connection).close();
+            verifyZeroInteractions(collector);
+        }
+    }
+
+    @Test public void failedRollbackPreservesTheOriginalFailureAndStopsReplay() throws Exception {
+        for (boolean duringCommit : new boolean[] {false, true}) {
+            Connection connection = connection();
+            PreparedStatement statement = mock(PreparedStatement.class);
+            when(connection.prepareStatement(anyString())).thenReturn(statement);
+            SQLException first = new SQLException("original failure", "40003");
+            SQLException rollback = new SQLException("rollback failed", "08006");
+            if (duringCommit) doThrow(first).when(connection).commit();
+            else when(statement.executeBatch()).thenThrow(first);
+            doThrow(rollback).when(connection).rollback();
+            try {
+                task().startWriteWithConnection(records(), mock(TaskPluginCollector.class), connection);
+                fail();
+            } catch (DataXException expected) {
+                assertSame(first, expected.getCause());
+                assertArrayEquals(new Throwable[]{rollback}, first.getSuppressed());
+            }
+            verify(connection, times(1)).prepareStatement(anyString());
+            verify(statement, never()).execute();
             verify(connection).close();
         }
     }

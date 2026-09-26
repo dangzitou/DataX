@@ -38,3 +38,5 @@ jobs:
         run: |
           python3 -c 'import sys; sys.path.insert(0, "benchmarks"); from mysql_querysql import seed; seed(10000)'
           python3 benchmarks/mysql_checks.py /tmp/datax-ci /tmp/datax-ci-checks
+      - name: JDBC commit acknowledgement fault injection with real MySQL
+        run: python3 benchmarks/jdbc_commit_checks.py /tmp/datax-ci /tmp/mysql-commit-checks --backend mysql
