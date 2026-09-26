@@ -12,6 +12,12 @@ intended Chinese. Both compared variants used that same fixture. The helper now
 explicitly uses utf8mb4, with a Unicode precondition and 42 real MySQL checks.
 These measurements do not validate PostgreSQL production backfills.
 
+[PostgreSQL / StarRocks data-fidelity audit (中文)](REPORT-fidelity.zh-CN.md)
+adds real database checks, timestamp fraction preservation, and fail-fast CSV
+handling for StarRocks/Doris. Direct reruns still duplicate rows in targets
+without a unique key, failed jobs still leave committed batches, and parallel
+readers do not share a snapshot. This fork is not an exactly-once backfill system.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
