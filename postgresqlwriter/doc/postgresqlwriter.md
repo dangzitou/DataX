@@ -189,6 +189,35 @@ COPY 复用原有记录缓冲、`batchSize` / `batchByteSize`、连接、preSql 
 
 这是显式选择数据库的 COPY 语义，并非对所有 INSERT 作业透明替换：语句级触发器执行次数、规则、行级安全、默认/生成列等行为可能不同，需先检查目标表定义；参见 [PostgreSQL COPY 文档](https://www.postgresql.org/docs/17/sql-copy.html)。原有 `writeMode` 限制不变，其他数据库 writer 不使用这个选项。请勿把单个导入场景的性能结果当作全场景或生产速度保证。
 
+### 可选 PG 批次原子追加（实验性）
+
+在 writer 的 `parameter` 中显式配置 `"atomicBatchId": "immutable-source-batch-20260927-001"`。
+默认不启用；只实现 PG 单表追加，不是全量替换或 upsert。JDBC 与 `useCopy=true` 均可使用。
+源为 PG 时，配合 reader 的 `consistentSnapshot=true`；批次范围和内容必须固定，重跑沿用同一个 ID。
+
+数据先写入同 schema 的普通 logged 暂存表。完成后检查脏行/过滤行、任务接收行数和暂存行数，
+把暂存数据追加、批次登记、删除暂存表放在同一 PG 事务中。发布前用 `INSERT ... RETURNING`
+与暂存数据做二进制 `EXCEPT ALL` 双向比较；目标 numeric/timestamp 等精度缩窄导致数值变化时回滚。
+同 ID 重跑核对列定义、行数和内容指纹；一致则不追加，不一致则失败。提交回执丢失时仍报告失败，
+使用原 ID 重跑进行核对；不要换 ID 强行重跑。
+
+限制与成本：
+
+- 要求一个连接、一个 logged 原生表（含原生分区），拒绝目标及其分区的 RLS、用户触发器、写规则；不允许 preSql/postSql。
+- 需要同 schema 的建表、删表和锁权限。`__datax_atomic_batches_v1` 是持久化批次账本；不要删除、修改或迁移它，
+  也不要在批次期间重建/迁移目标表或改写暂存表。结构不符合要求的同名账本会被拒绝。
+- 暂存保留一整批数据；发布事务需要 WAL 和二进制对账的临时空间，并阻塞目标并发写入。
+  没有亿级容量/耗时验收；不要将亿级整批直接套用。连接断开后遗留的暂存由下一次同 ID 尝试回收。
+- 指纹是四段 SHA-256 数值的无序累加，保留重复行重数，但依然是概率校验。发布时的双向二进制比较是精确的。
+- 不会替你去重源数据，不防止不同 ID 的批次范围重叠，也不能证明 reader 未报告的源端丢失或类型转换不存在。
+  仍需源端快照、明确边界及全字段对账。变更后的目标精度、字符编码、特殊数据类型需按真实表验证。
+- 只在 PostgreSQL 17.11 做过本地真实 Engine 检查；不扩展到 MySQL、StarRocks、Doris 或其他 writer，
+  不代表全场景 +25%/+50% 或生产零错误率。数据库持久化设置应保持启用。
+
+可复现检查见 [postgresql_atomic_checks.py](../../benchmarks/postgresql_atomic_checks.py)。
+PG 锁和返回行语义见 [显式锁](https://www.postgresql.org/docs/17/explicit-locking.html)、
+[RETURNING](https://www.postgresql.org/docs/17/dml-returning.html)。
+
 ### 3.3 类型转换
 
 目前 PostgresqlWriter支持大部分 PostgreSQL类型，但也存在部分没有支持的情况，请注意检查你的类型。

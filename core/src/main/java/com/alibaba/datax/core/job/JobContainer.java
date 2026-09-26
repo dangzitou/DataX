@@ -557,6 +557,23 @@ public class JobContainer extends AbstractContainer {
     }
 
     private void post() {
+        Communication completed = super.getContainerCommunicator().collect();
+        if (this.jobWriter.requiresCompleteTransfer()) {
+            if (completed.getLongCounter(CommunicationTool.READ_FAILED_RECORDS) != 0
+                    || completed.getLongCounter(CommunicationTool.WRITE_FAILED_RECORDS) != 0
+                    || completed.getLongCounter(CommunicationTool.TRANSFORMER_FAILED_RECORDS) != 0
+                    || completed.getLongCounter(CommunicationTool.TRANSFORMER_FILTER_RECORDS) != 0
+                    // Channel.pullAll counts one TerminateRecord per successful task.
+                    || Math.addExact(completed.getLongCounter(CommunicationTool.READ_SUCCEED_RECORDS), this.totalStage)
+                    != completed.getLongCounter(CommunicationTool.WRITE_RECEIVED_RECORDS)) {
+                throw DataXException.asDataXException(FrameworkErrorCode.RUNTIME_ERROR,
+                        "Atomic publication requires every input record: dirty, filtered or missing records detected.");
+            }
+        }
+        // The scheduler creates the communicator after plugin initialization.
+        JobPluginCollector collector = new DefaultJobPluginCollector(super.getContainerCommunicator());
+        this.jobWriter.setJobPluginCollector(collector);
+        this.jobReader.setJobPluginCollector(collector);
         this.postJobWriter();
         this.postJobReader();
     }

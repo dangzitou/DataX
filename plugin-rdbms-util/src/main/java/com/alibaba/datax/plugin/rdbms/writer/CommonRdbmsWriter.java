@@ -364,6 +364,7 @@ public class CommonRdbmsWriter {
                     if (rollback != e) e.addSuppressed(rollback);
                     throw e;
                 }
+                if (!allowBatchFallback()) throw e;
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为:" + e.getMessage());
                 doOneInsert(connection, buffer);
                 return;
@@ -388,6 +389,8 @@ public class CommonRdbmsWriter {
                                 + "SQLState=" + commit.getSQLState() + ", vendorCode=" + commit.getErrorCode(), commit);
             }
         }
+
+        protected boolean allowBatchFallback() { return true; }
 
         public boolean needToDumpRecord() {
             return dumpRecordCount.incrementAndGet() <= dumpRecordLimit;

@@ -34,6 +34,9 @@ class CommitDropProxy:
             data.extend(chunk)
         return bytes(data)
 
+    def should_drop_commit(self, inserted, tags):
+        return inserted > 0
+
     def relay(self, client):
         server = socket.create_connection(('127.0.0.1', 25432), timeout=10)
         self.connections.extend([client, server])
@@ -54,6 +57,7 @@ class CommitDropProxy:
         sender = threading.Thread(target=requests, daemon=True)
         sender.start()
         inserted = 0
+        tags = set()
         try:
             while not self.stopped.is_set():
                 kind = self.exact(server, 1)
@@ -63,12 +67,17 @@ class CommitDropProxy:
                 body = self.exact(server, size-4)
                 if kind == b'C' and body.startswith(b'INSERT '):
                     inserted += int(body.rstrip(b'\0').split()[-1])
+                if kind == b'C':
+                    tags.add(body.rstrip(b'\0'))
                 # JDBC startup also commits. Only interrupt a transaction that inserted rows.
-                if kind == b'C' and body == b'COMMIT\0' and inserted and not self.dropped.is_set():
+                if kind == b'C' and body == b'COMMIT\0' and self.should_drop_commit(inserted, tags) and not self.dropped.is_set():
                     self.dropped_insert_rows = inserted
                     self.dropped.set()
                     break  # Suppress COMMIT completion and close the connection.
                 client.sendall(kind+length+body)
+                if kind == b'C' and body == b'COMMIT\0':
+                    inserted = 0
+                    tags.clear()
         except (EOFError, OSError):
             pass
         except Exception as error:

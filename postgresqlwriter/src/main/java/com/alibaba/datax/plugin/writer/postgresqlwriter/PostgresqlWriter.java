@@ -33,10 +33,12 @@ public class PostgresqlWriter extends Writer {
 	public static class Job extends Writer.Job {
 		private Configuration originalConfig = null;
 		private CommonRdbmsWriter.Job commonRdbmsWriterMaster;
+		private PostgresqlAtomicBatch atomicBatch;
 
 		@Override
 		public void init() {
 			this.originalConfig = super.getPluginJobConf();
+			PostgresqlAtomicBatch.validate(this.originalConfig);
 
 			// warn：not like mysql, PostgreSQL only support insert mode, don't use
 			String writeMode = this.originalConfig.getString(Key.WRITE_MODE);
@@ -47,26 +49,34 @@ public class PostgresqlWriter extends Writer {
 
 			this.commonRdbmsWriterMaster = new CommonRdbmsWriter.Job(DATABASE_TYPE);
 			this.commonRdbmsWriterMaster.init(this.originalConfig);
+			if (this.originalConfig.getString(PostgresqlAtomicBatch.ID) != null)
+				this.atomicBatch = new PostgresqlAtomicBatch(this.originalConfig);
 		}
 
 		@Override
 		public void prepare() {
 			this.commonRdbmsWriterMaster.prepare(this.originalConfig);
+			if (atomicBatch != null) atomicBatch.prepare();
 		}
 
 		@Override
 		public List<Configuration> split(int mandatoryNumber) {
+			if (atomicBatch != null) atomicBatch.taskCount = mandatoryNumber;
 			return this.commonRdbmsWriterMaster.split(this.originalConfig, mandatoryNumber);
 		}
 
 		@Override
 		public void post() {
-			this.commonRdbmsWriterMaster.post(this.originalConfig);
+			if (atomicBatch != null) atomicBatch.publish(getJobPluginCollector().getMessage(originalConfig.getString(PostgresqlAtomicBatch.TOKEN)));
+			else this.commonRdbmsWriterMaster.post(this.originalConfig);
 		}
+
+		@Override public boolean requiresCompleteTransfer() { return atomicBatch != null; }
 
 		@Override
 		public void destroy() {
-			this.commonRdbmsWriterMaster.destroy(this.originalConfig);
+			if (atomicBatch != null) atomicBatch.close();
+			if (commonRdbmsWriterMaster != null) this.commonRdbmsWriterMaster.destroy(this.originalConfig);
 		}
 
 	}
@@ -109,6 +119,10 @@ public class PostgresqlWriter extends Writer {
 			this.commonRdbmsWriterSlave = new CommonRdbmsWriter.Task(DATABASE_TYPE){
                 private String copySql;
 
+                @Override protected boolean allowBatchFallback() {
+                    return writerSliceConfig.getString(PostgresqlAtomicBatch.TOKEN) == null;
+                }
+
                 @Override
                 protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement statement,
                         int index, int type, String typeName, Column column) throws SQLException {
@@ -122,6 +136,8 @@ public class PostgresqlWriter extends Writer {
 
                 @Override
                 protected void doBatchInsert(Connection connection, List<Record> buffer) throws SQLException {
+                    if (writerSliceConfig.getString(PostgresqlAtomicBatch.TOKEN) != null)
+                        PostgresqlAtomicBatch.fence(connection, writerSliceConfig);
                     if (!writerSliceConfig.getBool("useCopy", false)) {
                         super.doBatchInsert(connection, buffer);
                         return;
@@ -208,7 +224,21 @@ public class PostgresqlWriter extends Writer {
 		}
 
 		public void startWrite(RecordReceiver recordReceiver) {
-			this.commonRdbmsWriterSlave.startWrite(recordReceiver, this.writerSliceConfig, super.getTaskPluginCollector());
+			if (writerSliceConfig.getString(PostgresqlAtomicBatch.TOKEN) == null) {
+				this.commonRdbmsWriterSlave.startWrite(recordReceiver, this.writerSliceConfig, super.getTaskPluginCollector());
+				return;
+			}
+			final long[] received = {0};
+			RecordReceiver counted = new RecordReceiver() {
+				public Record getFromReader() {
+					Record record = recordReceiver.getFromReader();
+					if (record != null) received[0] = Math.addExact(received[0], 1);
+					return record;
+				}
+				public void shutdown() { recordReceiver.shutdown(); }
+			};
+			this.commonRdbmsWriterSlave.startWrite(counted, this.writerSliceConfig, super.getTaskPluginCollector());
+			super.getTaskPluginCollector().collectMessage(writerSliceConfig.getString(PostgresqlAtomicBatch.TOKEN), Long.toString(received[0]));
 		}
 
 		@Override

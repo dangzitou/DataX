@@ -18,6 +18,8 @@ public abstract class Writer extends BaseObject {
 	 * 每个Writer插件必须实现Job内部类
 	 */
 	public abstract static class Job extends AbstractJobPlugin {
+		/** Atomic publication must not follow tolerated dirty or filtered input. */
+		public boolean requiresCompleteTransfer() { return false; }
 		/**
 		 * 切分任务。<br>
 		 * 

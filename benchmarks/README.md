@@ -77,6 +77,15 @@ JDBC fault injection reproduces duplicate writes in the original implementation;
 separate real PG TCP-failure checks verify the new explicit diagnostic. This is
 not whole-job atomicity or idempotent reruns, and adds no performance claim.
 
+`postgresqlwriter.parameter.atomicBatchId` adds experimental opt-in PG atomic
+append through logged staging and a durable batch ledger. Same-ID reruns compare
+columns, counts and a probabilistic content fingerprint; publication compares
+the complete binary row multisets in the same transaction as the ledger insert.
+It rejects dirty/filtered input and target precision changes detected during
+publication. It is not source-to-target proof, cross-writer recovery, upsert or
+a billion-row capacity claim. See the [writer contract](../postgresqlwriter/doc/postgresqlwriter.md)
+and run `postgresql_atomic_checks.py` against the disposable PG server.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC
