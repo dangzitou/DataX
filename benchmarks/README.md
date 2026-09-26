@@ -16,7 +16,7 @@ These measurements do not validate PostgreSQL production backfills.
 adds real database checks, timestamp fraction preservation, and fail-fast CSV
 handling for StarRocks/Doris. Direct reruns still duplicate rows in targets
 without a unique key, failed jobs still leave committed batches, and parallel
-readers do not share a snapshot. This fork is not an exactly-once backfill system.
+readers do not share a snapshot by default. This fork is not an exactly-once backfill system.
 
 [PostgreSQL million-row results and native COPY (中文)](REPORT-pg.zh-CN.md)
 adds six measured PG scenarios, an opt-in strict COPY writer, and native-driver
@@ -36,6 +36,11 @@ Raw failures, memory controls and bounded-storage execution records are retained
 [Stream Load status and interruption checks (中文)](REPORT-stream-status.zh-CN.md)
 documents rejection of unknown/null/empty results and interrupted label polling.
 The 48 Engine checks use a loopback HTTP simulator, separately from real-server tests.
+
+[Stream Load row-count validation (中文)](REPORT-stream-rows.zh-CN.md) adds real
+StarRocks/Doris reproductions of successful loads with missing rows, exact
+response-counter checks, and rejection without automatic retry. Already committed
+partial batches remain; this is detection, not atomic backfill or full-field proof.
 
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical

@@ -18,9 +18,12 @@
 本修复未添加整作业事务、稳定的重跑标签、跨作业幂等或输出字段对账；也未证明服务端过滤行数为零。Success 本身不能证明全部输入行无损写入。显式配置的过滤规则、目标类型精度、已提交批次、网络断开后的结果确认仍需要额外验收，不能据此承诺亿级零错误。
 
 ```sh
-python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe
-python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate
+python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --suite status --expect-unsafe
+python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate --suite status
 mvn -B -pl core,plugin-rdbms-util,postgresqlreader,postgresqlwriter,starrocksreader,starrockswriter,dorisreader,doriswriter -am test
 ```
 
 使用 JDK 8，构建方式见[指南](README.md)。[结果、配置、请求摘要与日志](results/2026-09-27-stream-status/)均保留；该检查已加入远端 CI，CI 是否通过以具体提交的 Actions 状态为准。
+
+后续[行数验证](REPORT-stream-rows.zh-CN.md)补充了 `Success` 响应的计数核对，并增加真实
+StarRocks/Doris 过滤行的复现；上表保留本报告当时的状态检测范围。
