@@ -1,0 +1,25 @@
+{
+  "scope": "Owned runtime and disposable OLAP layers only; cached images/Maven/workspaces excluded.",
+  "before_cleanup": {
+    "temporary_root_kib": 978588,
+    "postgres_kib": 1439048,
+    "host_free_bytes": 283361579008
+  },
+  "after_cleanup": {
+    "temporary_root_kib": 833204,
+    "postgres_kib": 1439048,
+    "host_free_bytes": 283510292480
+  },
+  "removed_runtime": "/tmp/datax-perf/candidate-native-read",
+  "removed_runtime_bytes": 148023432,
+  "removed_containers": [
+    "datax-perf-starrocks",
+    "datax-perf-doris"
+  ],
+  "remaining_stages": 0,
+  "other_pg_client_connections": 0,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-stream-queue"
+  ]
+}

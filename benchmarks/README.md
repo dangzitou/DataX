@@ -112,6 +112,12 @@ and byte count. Eight million-row comparisons still fail the per-pair +25% gate;
 file medians improve, while ordinary-table results against the preceding fork
 are flat or slightly slower. All adverse pairs and fault regressions are retained.
 
+[Stopping queued writes after terminal failure (中文)](REPORT-stream-queue.zh-CN.md)
+fixes StarRocks/Doris/SelectDB manager shutdown and queue cancellation. Real SR/Doris
+checks reproduce two committed tail batches after an earlier failure in upstream;
+the candidate stops those queued writes. In-flight and earlier commits cannot be
+retracted. This is a reliability fix with no new throughput or billion-row claim.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

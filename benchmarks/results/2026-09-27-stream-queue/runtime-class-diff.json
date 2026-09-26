@@ -1,0 +1,17 @@
+{
+  "plugin/writer/doriswriter/doriswriter-0.0.1-SNAPSHOT.jar": [
+    "com/alibaba/datax/plugin/writer/doriswriter/DorisWriter$Task.class",
+    "com/alibaba/datax/plugin/writer/doriswriter/DorisWriterManager$1.class",
+    "com/alibaba/datax/plugin/writer/doriswriter/DorisWriterManager.class"
+  ],
+  "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar": [
+    "com/starrocks/connector/datax/plugin/writer/starrockswriter/StarRocksWriter$Task.class",
+    "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksWriterManager$1.class",
+    "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksWriterManager.class"
+  ],
+  "plugin/writer/selectdbwriter/selectdbwriter-0.0.1-SNAPSHOT.jar": [
+    "com/alibaba/datax/plugin/writer/selectdbwriter/SelectdbWriter$Task.class",
+    "com/alibaba/datax/plugin/writer/selectdbwriter/SelectdbWriterManager$1.class",
+    "com/alibaba/datax/plugin/writer/selectdbwriter/SelectdbWriterManager.class"
+  ]
+}

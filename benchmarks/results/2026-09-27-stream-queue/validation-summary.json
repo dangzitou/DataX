@@ -1,0 +1,25 @@
+{
+  "scope": "Small-data correctness and lifecycle tests; no throughput or production error-rate estimate.",
+  "source_runtime_commit": "305cd330d9b70f8b8c46d6adc778bf249c15a0b1",
+  "final_checks": {
+    "stream-queue-final": 60,
+    "stream-queue-upstream-final": 8,
+    "stream-queue-previous-final": 12,
+    "stream-queue-sr-real-before": 4,
+    "stream-queue-sr-real-after": 4,
+    "stream-queue-doris-real-before-v2": 4,
+    "stream-queue-doris-real-after": 4,
+    "stream-queue-status": 56,
+    "stream-queue-sr-rows": 22,
+    "stream-queue-doris-rows": 22,
+    "stream-queue-sr-fidelity": 16,
+    "stream-queue-doris-fidelity": 16
+  },
+  "junit": 55,
+  "simulated_manager_checks": 80,
+  "real_database_manager_checks_with_replayed_failure": 16,
+  "simulated_http_engine_runs": 56,
+  "real_database_engine_runs": 76,
+  "performance_goal_met": false,
+  "hundred_million_row_recovery_validated": false
+}
