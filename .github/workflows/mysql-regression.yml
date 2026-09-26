@@ -18,7 +18,9 @@ jobs:
           java-version: '8'
           cache: maven
       - name: Unit tests
-        run: mvn -B -pl core,plugin-rdbms-util,rdbmsreader,mysqlreader,mysqlwriter,streamreader,streamwriter -am test
+        run: |
+          mvn -B -pl core,plugin-rdbms-util,rdbmsreader,mysqlreader,mysqlwriter,streamreader,streamwriter -am test
+          python3 benchmarks/test_performance_gate.py
       - name: Build focused distribution
         run: python3 benchmarks/build.py . /tmp/datax-ci
       - name: Start disposable MySQL

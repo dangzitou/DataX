@@ -51,6 +51,19 @@ def main():
         results.append(entry)
         print(json.dumps(entry), flush=True)
 
+    # A duplicate in the second batch must roll back before individual fallback;
+    # the following batch must resume transactions without replaying stale rows.
+    for attempt in range(4):
+        name = "writer-batch-fallback-%d" % (attempt + 1)
+        sql("DROP TABLE IF EXISTS check_target; CREATE TABLE check_target LIKE source_data;")
+        query = QUERY + " WHERE id<=5 UNION ALL " + QUERY + " WHERE id=2 ORDER BY id"
+        config = job(False, 1, "check_target", query)
+        config["job"]["setting"]["errorLimit"]["record"] = 1
+        config["job"]["content"][0]["writer"]["parameter"]["batchSize"] = 2
+        seconds = run(runtime, config, output, name)
+        check = validate("check_target", QUERY + " WHERE id<=5")
+        results.append({"case": name, "seconds": seconds, **check})
+
     failures = [
         ("missing-table", "SELECT * FROM absent_datax_table", {}, "MYSQLErrCode-04"),
         ("missing-column", "SELECT nonexistent_column FROM source_data", {}, "MYSQLErrCode-06"),

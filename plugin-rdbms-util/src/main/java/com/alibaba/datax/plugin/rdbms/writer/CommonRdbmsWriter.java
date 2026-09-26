@@ -199,6 +199,7 @@ public class CommonRdbmsWriter {
         protected String writeMode;
         protected boolean emptyAsNull;
         protected Triple<List<String>, List<Integer>, List<String>> resultSetMetaData;
+        private PreparedStatement batchStatement;
 
         private int dumpRecordLimit = Constant.DEFAULT_DUMP_RECORD_LIMIT;
         private AtomicLong dumpRecordCount = new AtomicLong(0);
@@ -265,16 +266,12 @@ public class CommonRdbmsWriter {
 
         public void startWriteWithConnection(RecordReceiver recordReceiver, TaskPluginCollector taskPluginCollector, Connection connection) {
             this.taskPluginCollector = taskPluginCollector;
-
-            // 用于写入数据的时候的类型根据目的表字段类型转换
-            this.resultSetMetaData = DBUtil.getColumnMetaData(connection,
-                    this.table, StringUtils.join(this.columns, ","));
-            // 写数据库的SQL语句
-            calcWriteRecordSql();
-
             List<Record> writeBuffer = new ArrayList<Record>(this.batchSize);
             int bufferBytes = 0;
             try {
+                this.resultSetMetaData = DBUtil.getColumnMetaData(connection,
+                        this.table, StringUtils.join(this.columns, ","));
+                calcWriteRecordSql();
                 Record record;
                 while ((record = recordReceiver.getFromReader()) != null) {
                     if (record.getColumnNumber() != this.columnNumber) {
@@ -308,7 +305,8 @@ public class CommonRdbmsWriter {
             } finally {
                 writeBuffer.clear();
                 bufferBytes = 0;
-                DBUtil.closeDBResources(null, null, connection);
+                DBUtil.closeDBResources(null, batchStatement, connection);
+                batchStatement = null;
             }
         }
 
@@ -347,28 +345,30 @@ public class CommonRdbmsWriter {
 
         protected void doBatchInsert(Connection connection, List<Record> buffer)
                 throws SQLException {
-            PreparedStatement preparedStatement = null;
             try {
-                connection.setAutoCommit(false);
-                preparedStatement = connection
-                        .prepareStatement(this.writeRecordSql);
+                if (connection.getAutoCommit()) {
+                    connection.setAutoCommit(false);
+                }
+                if (batchStatement == null) {
+                    batchStatement = connection.prepareStatement(this.writeRecordSql);
+                }
+                batchStatement.clearBatch();
 
                 for (Record record : buffer) {
-                    preparedStatement = fillPreparedStatement(
-                            preparedStatement, record);
-                    preparedStatement.addBatch();
+                    batchStatement = fillPreparedStatement(batchStatement, record);
+                    batchStatement.addBatch();
                 }
-                preparedStatement.executeBatch();
+                batchStatement.executeBatch();
                 connection.commit();
             } catch (SQLException e) {
+                DBUtil.closeDBResources(batchStatement, null);
+                batchStatement = null;
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为:" + e.getMessage());
                 connection.rollback();
                 doOneInsert(connection, buffer);
             } catch (Exception e) {
                 throw DataXException.asDataXException(
                         DBUtilErrorCode.WRITE_DATA_ERROR, e);
-            } finally {
-                DBUtil.closeDBResources(preparedStatement, null);
             }
         }
 
