@@ -562,13 +562,22 @@ public class JobContainer extends AbstractContainer {
     }
 
     private void destroy() {
-        if (this.jobWriter != null) {
-            this.jobWriter.destroy();
+        Throwable failure = null;
+        try {
+            if (this.jobWriter != null) this.jobWriter.destroy();
+        } catch (RuntimeException | Error e) {
+            failure = e;
+            throw e;
+        } finally {
             this.jobWriter = null;
-        }
-        if (this.jobReader != null) {
-            this.jobReader.destroy();
-            this.jobReader = null;
+            try {
+                if (this.jobReader != null) this.jobReader.destroy();
+            } catch (RuntimeException | Error e) {
+                if (failure == null) throw e;
+                if (failure != e) failure.addSuppressed(e);
+            } finally {
+                this.jobReader = null;
+            }
         }
     }
 

@@ -713,6 +713,26 @@ public final class DBUtil {
                                              Configuration config, DataBaseType databaseType, String message) {
         List<String> sessionConfig = null;
         switch (databaseType) {
+            case PostgreSQL:
+                String snapshot = config.getString(com.alibaba.datax.plugin.rdbms.reader.Key.POSTGRESQL_SNAPSHOT);
+                if (snapshot == null) break;
+                // SET TRANSACTION SNAPSHOT accepts a literal, not a JDBC parameter.
+                if (!snapshot.matches("[0-9A-Fa-f]+-[0-9A-Fa-f]+-[0-9]+")) {
+                    throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,
+                            "Invalid PostgreSQL snapshot identifier");
+                }
+                try {
+                    conn.setReadOnly(true);
+                    conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                    conn.setAutoCommit(false);
+                    try (Statement statement = conn.createStatement()) {
+                        statement.execute("SET TRANSACTION SNAPSHOT '" + snapshot + "'");
+                    }
+                } catch (SQLException e) {
+                    throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,
+                            "Cannot import PostgreSQL snapshot; refusing an inconsistent read", e);
+                }
+                break;
             case Oracle:
                 sessionConfig = config.getList(Key.SESSION,
                         new ArrayList<String>(), String.class);

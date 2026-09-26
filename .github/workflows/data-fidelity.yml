@@ -42,6 +42,10 @@ jobs:
           docker exec datax-perf-postgres pg_isready -U postgres
       - name: PostgreSQL field fidelity and rerun hazards
         run: python3 benchmarks/postgresql_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/pg-checks
+      - name: PostgreSQL shared snapshot and source changes
+        run: |
+          python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-baseline /tmp/snapshot-baseline --expect-inconsistent
+          python3 benchmarks/postgresql_snapshot_checks.py /tmp/datax-candidate /tmp/snapshot-candidate
       - name: PostgreSQL native writer regression
         run: |
           python3 benchmarks/postgresql_writer_checks.py /tmp/datax-candidate /tmp/pg-driver-checks

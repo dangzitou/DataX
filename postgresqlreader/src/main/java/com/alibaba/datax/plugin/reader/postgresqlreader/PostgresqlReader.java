@@ -6,10 +6,15 @@ import com.alibaba.datax.common.spi.Reader;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.reader.CommonRdbmsReader;
 import com.alibaba.datax.plugin.rdbms.reader.Key;
+import com.alibaba.datax.plugin.rdbms.util.DBUtil;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 
 import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import org.postgresql.Driver;
@@ -23,10 +28,15 @@ public class PostgresqlReader extends Reader {
 
         private Configuration originalConfig;
         private CommonRdbmsReader.Job commonRdbmsReaderMaster;
+        private Connection snapshotConnection;
 
         @Override
         public void init() {
             this.originalConfig = super.getPluginJobConf();
+            if (this.originalConfig.get(Key.POSTGRESQL_SNAPSHOT) != null) {
+                throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                        Key.POSTGRESQL_SNAPSHOT + " is reserved; use consistentSnapshot=true");
+            }
             int fetchSize = this.originalConfig.getInt(com.alibaba.datax.plugin.rdbms.reader.Constant.FETCH_SIZE,
                     Constant.DEFAULT_FETCH_SIZE);
             if (fetchSize < 1) {
@@ -37,6 +47,40 @@ public class PostgresqlReader extends Reader {
 
             this.commonRdbmsReaderMaster = new CommonRdbmsReader.Job(DATABASE_TYPE);
             this.commonRdbmsReaderMaster.init(this.originalConfig);
+        }
+
+        @Override
+        public void prepare() {
+            if (!originalConfig.getBool("consistentSnapshot", false)) return;
+            if (originalConfig.getList("connection", Object.class).size() != 1) {
+                throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                        "consistentSnapshot requires one PostgreSQL connection entry");
+            }
+            String url = originalConfig.getString("connection[0].jdbcUrl");
+            if (PGProperty.PG_HOST.get(Driver.parseURL(url, null)).contains(",")) {
+                throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                        "consistentSnapshot requires a single PostgreSQL server, without JDBC host failover");
+            }
+            snapshotConnection = DBUtil.getConnection(DATABASE_TYPE, url,
+                    originalConfig.getString(Key.USERNAME), originalConfig.getString(Key.PASSWORD));
+            try {
+                snapshotConnection.setReadOnly(true);
+                snapshotConnection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                snapshotConnection.setAutoCommit(false);
+                try (Statement statement = snapshotConnection.createStatement()) {
+                    statement.setQueryTimeout(originalConfig.getInt(Key.QUERY_TIMEOUT,
+                            com.alibaba.datax.plugin.rdbms.util.Constant.SOCKET_TIMEOUT_INSECOND));
+                    try (ResultSet result = statement.executeQuery("SELECT pg_export_snapshot()")) {
+                        if (!result.next()) throw new SQLException("PostgreSQL did not export a snapshot");
+                        originalConfig.set(Key.POSTGRESQL_SNAPSHOT, result.getString(1));
+                    }
+                }
+            } catch (SQLException e) {
+                DBUtil.closeDBResources(null, null, snapshotConnection);
+                snapshotConnection = null;
+                throw DataXException.asDataXException(DBUtilErrorCode.SET_SESSION_ERROR,
+                        "Cannot export PostgreSQL snapshot", e);
+            }
         }
 
         @Override
@@ -51,7 +95,12 @@ public class PostgresqlReader extends Reader {
 
         @Override
         public void destroy() {
-            this.commonRdbmsReaderMaster.destroy(this.originalConfig);
+            try {
+                if (this.commonRdbmsReaderMaster != null) this.commonRdbmsReaderMaster.destroy(this.originalConfig);
+            } finally {
+                DBUtil.closeDBResources(null, null, snapshotConnection);
+                snapshotConnection = null;
+            }
         }
 
     }

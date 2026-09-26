@@ -155,6 +155,9 @@ public class SingleTableSplitUtil {
 
         Connection conn = DBUtil.getConnection(DATABASE_TYPE, jdbcURL, username, password);
         try {
+            if (DATABASE_TYPE == DataBaseType.PostgreSQL) {
+                DBUtil.dealWithSessionConfig(conn, configuration, DATABASE_TYPE, "splitPk range discovery");
+            }
             return checkSplitPk(conn, pkRangeSQL, fetchSize, table, username, configuration);
         } finally {
             DBUtil.closeDBResources(null, null, conn);
