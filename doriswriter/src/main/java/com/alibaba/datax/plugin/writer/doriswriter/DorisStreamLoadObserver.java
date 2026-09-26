@@ -75,6 +75,9 @@ public class DorisStreamLoadObserver {
         } else if (RESULT_LABEL_EXISTED.equals(loadResult.get(keyStatus))) {
             LOG.debug("StreamLoad response:{}",JSON.toJSONString(loadResult));
             checkStreamLoadState(host, data.getLabel());
+        } else if (!"Success".equals(loadResult.get(keyStatus))
+                && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
+            throw new IOException("Unable to flush data to Doris: unknown result status. " + loadResult);
         }
     }
 
@@ -84,7 +87,8 @@ public class DorisStreamLoadObserver {
             try {
                 TimeUnit.SECONDS.sleep(Math.min(++idx, 5));
             } catch (InterruptedException ex) {
-                break;
+                Thread.currentThread().interrupt();
+                throw new IOException("Interrupted before confirming Doris load label " + label, ex);
             }
             try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
                 HttpGet httpGet = new HttpGet(new StringBuilder(host).append("/api/").append(options.getDatabase()).append("/get_load_state?label=").append(label).toString());

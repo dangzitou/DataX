@@ -25,6 +25,10 @@ jobs:
           git worktree add --detach /tmp/datax-baseline-src 80ec23d5c5328eb90ca364d2749e92dfaf44541e
           python3 benchmarks/build.py /tmp/datax-baseline-src /tmp/datax-baseline --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter
           python3 benchmarks/build.py . /tmp/datax-candidate --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter
+      - name: Stream Load status fault injection (HTTP simulator)
+        run: |
+          python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe
+          python3 benchmarks/stream_load_status_checks.py /tmp/datax-candidate /tmp/status-candidate
       - name: Start disposable PostgreSQL
         run: |
           docker run -d --name datax-perf-postgres --memory 1g -p 127.0.0.1:25432:5432 \

@@ -97,6 +97,9 @@ public class StarRocksStreamLoadVisitor {
             LOG.debug(new StringBuilder("StreamLoad response:\n").append(JSON.toJSONString(loadResult)).toString());
             // has to block-checking the state to get the final result
             checkLabelState(host, flushData.getLabel());
+        } else if (!"Success".equals(loadResult.get(keyStatus))
+                && !"Publish Timeout".equals(loadResult.get(keyStatus))) {
+            throw new IOException("Unable to flush data to StarRocks: unknown result status. " + loadResult);
         }
     }
 
@@ -163,7 +166,8 @@ public class StarRocksStreamLoadVisitor {
             try {
                 TimeUnit.SECONDS.sleep(Math.min(++idx, 5));
             } catch (InterruptedException ex) {
-                break;
+                Thread.currentThread().interrupt();
+                throw new IOException("Interrupted before confirming StarRocks load label " + label, ex);
             }
             try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
                 HttpGet httpGet = new HttpGet(new StringBuilder(host).append("/api/").append(writerOptions.getDatabase()).append("/get_load_state?label=").append(label).toString());
