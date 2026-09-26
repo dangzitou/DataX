@@ -11,6 +11,10 @@
 [Stream Load 行数验证](REPORT-stream-rows.zh-CN.md)随后补充真实 StarRocks/Doris 检查：
 服务端返回 `Success` 但过滤了输入行时，作业会明确失败且不自动重试；目标已提交行仍然保留。
 
+[JDBC 提交确认异常](REPORT-commit.zh-CN.md)随后修复公共 writer 在 commit 异常后自动逐行重放的风险，
+通过真实 PG/MySQL 写入和模拟确认异常重复复现，并另做真实 PG TCP 断连检查。
+它不解决下文的整作业重跑重复和部分提交问题。
+
 ## 已复现与修复
 
 | 检查 | 未修改原版 `80ec23d` | 本轮修复版 | 证据范围 |

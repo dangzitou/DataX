@@ -1,0 +1,23 @@
+{
+  "observed_utc": "2026-09-26T19:50:05.279192+00:00",
+  "mysql_container": {
+    "id": "3fb53bd51cb3ff0384fa5a5dacb93f354d4dfad667f98405d84276f4f82e2031",
+    "image": "mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b",
+    "memory_limit": 1073741824,
+    "nano_cpus": 2000000000,
+    "mounts": [
+      {
+        "Type": "volume",
+        "Name": "9f8139e7d617cd084b8421b73942f51eddbf8a697c6750c1c39653c7cb902b77",
+        "Source": "/var/lib/docker/volumes/9f8139e7d617cd084b8421b73942f51eddbf8a697c6750c1c39653c7cb902b77/_data",
+        "Destination": "/var/lib/mysql",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+      }
+    ]
+  },
+  "mysql_version_durability_charset": "8.0.46\t1\t1\tutf8mb4",
+  "mysql_data_bytes": 236716032
+}

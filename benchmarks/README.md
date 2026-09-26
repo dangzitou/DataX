@@ -71,6 +71,12 @@ million-row PG-to-file comparison gains 9.47% median throughput over upstream,
 with a -6.71% worst pair; the +25% gate still fails. Text output is not a
 lossless interchange format for arbitrary fields or an atomic publication path.
 
+[Uncertain JDBC commit outcomes (中文)](REPORT-commit.zh-CN.md) prevents automatic
+batch replay after commit exceptions and preserves rollback failures. Real PG/MySQL
+JDBC fault injection reproduces duplicate writes in the original implementation;
+separate real PG TCP-failure checks verify the new explicit diagnostic. This is
+not whole-job atomicity or idempotent reruns, and adds no performance claim.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

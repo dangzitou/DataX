@@ -1,0 +1,13 @@
+{
+  "removed_mysql_container": "3fb53bd51cb3ff0384fa5a5dacb93f354d4dfad667f98405d84276f4f82e2031",
+  "anonymous_volume_removed": true,
+  "retired_runtime": "/tmp/datax-perf/candidate-file-batch",
+  "retired_runtime_bytes": 132390306,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-commit-guard"
+  ],
+  "temporary_tree_bytes": 757727917,
+  "postgres_bytes": 1455517696,
+  "host_free_bytes": 282627887104
+}
