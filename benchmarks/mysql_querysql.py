@@ -59,11 +59,11 @@ def job(split, channels, destination, query=QUERY):
                                  "writer": {"name": "mysqlwriter", "parameter": writer}}]}}
 
 
-def run(runtime, config, output, name, expect_success=True):
+def run(runtime, config, output, name, expect_success=True, jvm_options=()):
     config_file = output / (name + ".json")
-    config_file.write_text(json.dumps(config, ensure_ascii=False, indent=2))
+    config_file.write_text(json.dumps(config, ensure_ascii=True, indent=2))
     java = str(Path(os.environ["JAVA_HOME"]) / "bin/java")
-    command = [java, "-Xms1g", "-Xmx1g", "-Dfile.encoding=UTF-8", "-Ddatax.home=" + str(runtime),
+    command = [java, "-Xms1g", "-Xmx1g", *jvm_options, "-Dfile.encoding=UTF-8", "-Ddatax.home=" + str(runtime),
                "-Dlogback.configurationFile=" + str(runtime / "conf/logback.xml"),
                "-cp", str(runtime / "lib/*"), "com.alibaba.datax.core.Engine",
                "-mode", "standalone", "-jobid", "-1", "-job", str(config_file)]

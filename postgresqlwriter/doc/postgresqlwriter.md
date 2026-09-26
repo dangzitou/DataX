@@ -174,6 +174,21 @@ PostgresqlWriter通过 DataX 框架获取 Reader 生成的协议数据，根据�
 
 	* 默认值：1024 <br />
 
+### 可选 COPY 批量写入
+
+`parameter.useCopy` 默认为 `false`，继续使用原来的 JDBC INSERT。设为 `true` 可使用 PostgreSQL 原生 `COPY FROM STDIN`，适合经过验收的批量导入表。例如：
+
+```json
+"useCopy": true,
+"batchSize": 1024
+```
+
+COPY 复用原有记录缓冲、`batchSize` / `batchByteSize`、连接、preSql / postSql 和批次提交边界，不增加并发或关闭数据库持久化。非 NULL 字段均使用 CSV 引号；NULL 使用未引用的空字段，从而区分 NULL、空串及字面 `\N`。整批先严格编码为 UTF-8，保留跨传输缓冲区边界的 emoji，并拒绝不合法的 UTF-16 输入。时间与二进制格式使用现有 PostgreSQL JDBC 驱动的转换方法。
+
+每批检查 COPY 返回行数必须等于输入行数，不一致会回滚并报错。COPY 发生错误时回滚当前批次、使任务失败；即使 `errorLimit` 非零，也不会跳过错误行或自动改为逐条重放。此前成功提交的批次仍然保留；COPY **不提供整任务原子性、共享源快照或重跑幂等性**。请使用隔离暂存目标与完整对账后发布的流程。
+
+这是显式选择数据库的 COPY 语义，并非对所有 INSERT 作业透明替换：语句级触发器执行次数、规则、行级安全、默认/生成列等行为可能不同，需先检查目标表定义；参见 [PostgreSQL COPY 文档](https://www.postgresql.org/docs/17/sql-copy.html)。原有 `writeMode` 限制不变，其他数据库 writer 不使用这个选项。请勿把单个导入场景的性能结果当作全场景或生产速度保证。
+
 ### 3.3 类型转换
 
 目前 PostgresqlWriter支持大部分 PostgreSQL类型，但也存在部分没有支持的情况，请注意检查你的类型。

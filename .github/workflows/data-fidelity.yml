@@ -38,6 +38,10 @@ jobs:
           docker exec datax-perf-postgres pg_isready -U postgres
       - name: PostgreSQL field fidelity and rerun hazards
         run: python3 benchmarks/postgresql_checks.py /tmp/datax-baseline /tmp/datax-candidate /tmp/pg-checks
+      - name: PostgreSQL native writer regression
+        run: |
+          python3 benchmarks/postgresql_writer_checks.py /tmp/datax-candidate /tmp/pg-driver-checks
+          python3 benchmarks/postgresql_copy_checks.py /tmp/datax-candidate /tmp/pg-copy-checks
       - name: Start disposable StarRocks
         run: |
           docker run -d --name datax-perf-starrocks --memory 4g \
