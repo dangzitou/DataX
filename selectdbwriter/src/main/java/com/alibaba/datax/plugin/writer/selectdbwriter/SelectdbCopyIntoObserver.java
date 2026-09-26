@@ -1,5 +1,8 @@
 package com.alibaba.datax.plugin.writer.selectdbwriter;
 
+import com.alibaba.datax.common.util.BatchPayload;
+import java.io.InputStream;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +58,8 @@ public class SelectdbCopyIntoObserver {
         }
         String loadUrl = String.format(UPLOAD_URL_PATTERN, host);
         String uploadAddress = getUploadAddress(loadUrl, data.getLabel());
-        put(uploadAddress, data.getLabel(), addRows(data.getRows(), data.getBytes().intValue()));
+        BatchPayload payload = addRows(data.getRows());
+        put(uploadAddress, data.getLabel(), payload.openStream(), payload.length());
         executeCopy(host,data.getLabel());
 
     }
@@ -85,42 +88,28 @@ public class SelectdbCopyIntoObserver {
 
     }
 
-    private byte[] addRows(List<byte[]> rows, int totalBytes) {
+    private BatchPayload addRows(List<byte[]> rows) {
         if (Keys.StreamLoadFormat.CSV.equals(options.getStreamLoadFormat())) {
-            Map<String, Object> props = (options.getLoadProps() == null ? new HashMap<>() : options.getLoadProps());
-            byte[] lineDelimiter = DelimiterParser.parse((String) props.get("file.line_delimiter"), "\n").getBytes(StandardCharsets.UTF_8);
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + rows.size() * lineDelimiter.length);
-            for (byte[] row : rows) {
-                bos.put(row);
-                bos.put(lineDelimiter);
-            }
-            return bos.array();
+            Map<String, Object> props = options.getLoadProps();
+            String delimiter = props == null ? null : (String) props.get("file.line_delimiter");
+            return BatchPayload.delimited(rows, DelimiterParser.parse(delimiter, "\n").getBytes(StandardCharsets.UTF_8));
         }
-
         if (Keys.StreamLoadFormat.JSON.equals(options.getStreamLoadFormat())) {
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + (rows.isEmpty() ? 2 : rows.size() + 1));
-            bos.put("[".getBytes(StandardCharsets.UTF_8));
-            byte[] jsonDelimiter = ",".getBytes(StandardCharsets.UTF_8);
-            boolean isFirstElement = true;
-            for (byte[] row : rows) {
-                if (!isFirstElement) {
-                    bos.put(jsonDelimiter);
-                }
-                bos.put(row);
-                isFirstElement = false;
-            }
-            bos.put("]".getBytes(StandardCharsets.UTF_8));
-            return bos.array();
+            return BatchPayload.json(rows);
         }
-        throw new RuntimeException("Failed to join rows data, unsupported `file.type` from copy into properties:");
+        throw new IllegalArgumentException("Unsupported batch format");
     }
 
     public void put(String loadUrl, String fileName, byte[] data) throws IOException {
-        LOG.info(String.format("Executing upload file to: '%s', size: '%s'", loadUrl, data.length));
+        put(loadUrl, fileName, new ByteArrayInputStream(data), data.length);
+    }
+
+    private void put(String loadUrl, String fileName, InputStream data, long bytes) throws IOException {
+        LOG.info(String.format("Executing upload file to: '%s', size: '%s'", loadUrl, bytes));
         HttpPutBuilder putBuilder = new HttpPutBuilder();
         putBuilder.setUrl(loadUrl)
             .addCommonHeader()
-            .setEntity(new InputStreamEntity(new ByteArrayInputStream(data)));
+            .setEntity(new InputStreamEntity(data));
         CloseableHttpResponse response = httpClient.execute(putBuilder.build());
         final int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != 200) {

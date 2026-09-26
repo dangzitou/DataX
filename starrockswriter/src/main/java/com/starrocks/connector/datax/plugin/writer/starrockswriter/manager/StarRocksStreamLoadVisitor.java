@@ -1,9 +1,11 @@
 package com.starrocks.connector.datax.plugin.writer.starrockswriter.manager;
 
+import com.alibaba.datax.common.util.BatchPayload;
+import java.io.InputStream;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import com.alibaba.fastjson2.JSON;
@@ -17,7 +19,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.EntityTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -66,7 +68,7 @@ public class StarRocksStreamLoadVisitor {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Start to join batch data: rows[%d] bytes[%d] label[%s].", flushData.getRows().size(), flushData.getBytes(), flushData.getLabel()));
         }
-        Map<String, Object> loadResult = doHttpPut(loadUrl, flushData.getLabel(), joinRows(flushData.getRows(), flushData.getBytes().intValue()));
+        Map<String, Object> loadResult = doHttpPut(loadUrl, flushData.getLabel(), joinRows(flushData.getRows()));
         final String keyStatus = "Status";
         if (null == loadResult || !loadResult.containsKey(keyStatus)) {
             LOG.error("unknown result status. {}", loadResult);
@@ -132,34 +134,16 @@ public class StarRocksStreamLoadVisitor {
         }
     }
 
-    private byte[] joinRows(List<byte[]> rows, int totalBytes) {
+    private BatchPayload joinRows(List<byte[]> rows) {
         if (StarRocksWriterOptions.StreamLoadFormat.CSV.equals(writerOptions.getStreamLoadFormat())) {
-            Map<String, Object> props = (writerOptions.getLoadProps() == null ? new HashMap<>() : writerOptions.getLoadProps());
-            byte[] lineDelimiter = StarRocksDelimiterParser.parse((String)props.get("row_delimiter"), "\n").getBytes(StandardCharsets.UTF_8);
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + rows.size() * lineDelimiter.length);
-            for (byte[] row : rows) {
-                bos.put(row);
-                bos.put(lineDelimiter);
-            }
-            return bos.array();
+            Map<String, Object> props = writerOptions.getLoadProps();
+            String delimiter = props == null ? null : (String) props.get("row_delimiter");
+            return BatchPayload.delimited(rows, StarRocksDelimiterParser.parse(delimiter, "\n").getBytes(StandardCharsets.UTF_8));
         }
-       
         if (StarRocksWriterOptions.StreamLoadFormat.JSON.equals(writerOptions.getStreamLoadFormat())) {
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + (rows.isEmpty() ? 2 : rows.size() + 1));
-            bos.put("[".getBytes(StandardCharsets.UTF_8));
-            byte[] jsonDelimiter = ",".getBytes(StandardCharsets.UTF_8);
-            boolean isFirstElement = true;
-            for (byte[] row : rows) {
-                if (!isFirstElement) {
-                    bos.put(jsonDelimiter);
-                }
-                bos.put(row);
-                isFirstElement = false;
-            }
-            bos.put("]".getBytes(StandardCharsets.UTF_8));
-            return bos.array();
+            return BatchPayload.json(rows);
         }
-        throw new RuntimeException("Failed to join rows data, unsupported `format` from stream load properties:");
+        throw new IllegalArgumentException("Unsupported batch format");
     }
 
     @SuppressWarnings("unchecked")
@@ -210,8 +194,8 @@ public class StarRocksStreamLoadVisitor {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> doHttpPut(String loadUrl, String label, byte[] data) throws IOException {
-        LOG.info(String.format("Executing stream load to: '%s', size: '%s'", loadUrl, data.length));
+    private Map<String, Object> doHttpPut(String loadUrl, String label, BatchPayload data) throws IOException {
+        LOG.info(String.format("Executing stream load to: '%s', size: '%s'", loadUrl, data.length()));
         final HttpClientBuilder httpClientBuilder = HttpClients.custom()
             .setRedirectStrategy(new DefaultRedirectStrategy() {
                 @Override
@@ -234,7 +218,10 @@ public class StarRocksStreamLoadVisitor {
             httpPut.setHeader("label", label);
             httpPut.setHeader("Content-Type", "application/x-www-form-urlencoded");
             httpPut.setHeader("Authorization", getBasicAuthHeader(writerOptions.getUsername(), writerOptions.getPassword()));
-            httpPut.setEntity(new ByteArrayEntity(data));
+            httpPut.setEntity(new EntityTemplate(data::writeTo) {
+                @Override public long getContentLength() { return data.length(); }
+                @Override public InputStream getContent() { return data.openStream(); }
+            });
             httpPut.setConfig(RequestConfig.custom().setRedirectsEnabled(true).build());
             try (CloseableHttpResponse resp = httpclient.execute(httpPut)) {
                 int code = resp.getStatusLine().getStatusCode();

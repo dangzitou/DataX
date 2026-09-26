@@ -1,5 +1,8 @@
 package com.alibaba.datax.plugin.writer.doriswriter;
 
+import com.alibaba.datax.common.util.BatchPayload;
+import java.io.InputStream;
+
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.datax.common.util.StreamLoadResponseValidator;
 import org.apache.commons.codec.binary.Base64;
@@ -9,7 +12,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.EntityTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,10 +24,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public class DorisStreamLoadObserver {
                 .append("/_stream_load")
                 .toString();
         LOG.info("Start to join batch data: rows[{}] bytes[{}] label[{}].", data.getRows().size(), data.getBytes(), data.getLabel());
-        Map<String, Object> loadResult = put(loadUrl, data.getLabel(), addRows(data.getRows(), data.getBytes().intValue()));
+        Map<String, Object> loadResult = put(loadUrl, data.getLabel(), addRows(data.getRows()));
         LOG.info("StreamLoad response :{}",JSON.toJSONString(loadResult));
         final String keyStatus = "Status";
         if (null == loadResult || !loadResult.containsKey(keyStatus)) {
@@ -130,37 +131,19 @@ public class DorisStreamLoadObserver {
         }
     }
 
-    private byte[] addRows(List<byte[]> rows, int totalBytes) {
+    private BatchPayload addRows(List<byte[]> rows) {
         if (Keys.StreamLoadFormat.CSV.equals(options.getStreamLoadFormat())) {
-            Map<String, Object> props = (options.getLoadProps() == null ? new HashMap<> () : options.getLoadProps());
-            byte[] lineDelimiter = DelimiterParser.parse((String)props.get("line_delimiter"), "\n").getBytes(StandardCharsets.UTF_8);
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + rows.size() * lineDelimiter.length);
-            for (byte[] row : rows) {
-                bos.put(row);
-                bos.put(lineDelimiter);
-            }
-            return bos.array();
+            Map<String, Object> props = options.getLoadProps();
+            String delimiter = props == null ? null : (String) props.get("line_delimiter");
+            return BatchPayload.delimited(rows, DelimiterParser.parse(delimiter, "\n").getBytes(StandardCharsets.UTF_8));
         }
-
         if (Keys.StreamLoadFormat.JSON.equals(options.getStreamLoadFormat())) {
-            ByteBuffer bos = ByteBuffer.allocate(totalBytes + (rows.isEmpty() ? 2 : rows.size() + 1));
-            bos.put("[".getBytes(StandardCharsets.UTF_8));
-            byte[] jsonDelimiter = ",".getBytes(StandardCharsets.UTF_8);
-            boolean isFirstElement = true;
-            for (byte[] row : rows) {
-                if (!isFirstElement) {
-                    bos.put(jsonDelimiter);
-                }
-                bos.put(row);
-                isFirstElement = false;
-            }
-            bos.put("]".getBytes(StandardCharsets.UTF_8));
-            return bos.array();
+            return BatchPayload.json(rows);
         }
-        throw new RuntimeException("Failed to join rows data, unsupported `format` from stream load properties:");
+        throw new IllegalArgumentException("Unsupported batch format");
     }
-    private Map<String, Object> put(String loadUrl, String label, byte[] data) throws IOException {
-        LOG.info(String.format("Executing stream load to: '%s', size: '%s'", loadUrl, data.length));
+    private Map<String, Object> put(String loadUrl, String label, BatchPayload data) throws IOException {
+        LOG.info(String.format("Executing stream load to: '%s', size: '%s'", loadUrl, data.length()));
         final HttpClientBuilder httpClientBuilder = HttpClients.custom()
                 .setRedirectStrategy(new DefaultRedirectStrategy () {
                     @Override
@@ -185,7 +168,10 @@ public class DorisStreamLoadObserver {
             httpPut.setHeader("label", label);
             httpPut.setHeader("two_phase_commit", "false");
             httpPut.setHeader("Authorization", getBasicAuthHeader(options.getUsername(), options.getPassword()));
-            httpPut.setEntity(new ByteArrayEntity(data));
+            httpPut.setEntity(new EntityTemplate(data::writeTo) {
+                @Override public long getContentLength() { return data.length(); }
+                @Override public InputStream getContent() { return data.openStream(); }
+            });
             httpPut.setConfig(RequestConfig.custom().setRedirectsEnabled(true).build());
             try ( CloseableHttpResponse resp = httpclient.execute(httpPut)) {
                 HttpEntity respEntity = getHttpEntity(resp);
