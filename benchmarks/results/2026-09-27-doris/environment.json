@@ -1,0 +1,74 @@
+{
+  "note": "Local correctness fixtures, not performance tests; StarRocks and Doris ran sequentially.",
+  "containers": [
+    {
+      "Name": "/datax-perf-doris",
+      "Image": "sha256:76839a1beea086888529b042b5bc97a2116f63108365b00faa167f015ba1934c",
+      "configured_image": "apache/doris@sha256:76839a1beea086888529b042b5bc97a2116f63108365b00faa167f015ba1934c",
+      "cpu_limit": 4000000000,
+      "memory_bytes": 5368709120,
+      "ports": {
+        "8030/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "28031"
+          }
+        ],
+        "8040/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "28041"
+          }
+        ],
+        "9030/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "29031"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "/datax-perf-starrocks",
+      "Image": "sha256:ee96cdee08524e8b67c45d269c74aecc2bd2696757bb880e368f8576ac5f7da5",
+      "configured_image": "starrocks/allin1-ubuntu@sha256:ee96cdee08524e8b67c45d269c74aecc2bd2696757bb880e368f8576ac5f7da5",
+      "cpu_limit": 4000000000,
+      "memory_bytes": 5368709120,
+      "ports": {
+        "8030/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "28030"
+          }
+        ],
+        "8040/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "28040"
+          }
+        ],
+        "9030/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "29030"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "/datax-perf-postgres",
+      "Image": "sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73",
+      "configured_image": "postgres:17-alpine",
+      "cpu_limit": 4000000000,
+      "memory_bytes": 2147483648,
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "25432"
+          }
+        ]
+      }
+    }
+  ]
+}

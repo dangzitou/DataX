@@ -18,6 +18,16 @@ handling for StarRocks/Doris. Direct reruns still duplicate rows in targets
 without a unique key, failed jobs still leave committed batches, and parallel
 readers do not share a snapshot. This fork is not an exactly-once backfill system.
 
+[PostgreSQL million-row results and native COPY (中文)](REPORT-pg.zh-CN.md)
+adds six measured PG scenarios, an opt-in strict COPY writer, and native-driver
+controls. All six +50% gates failed; successful correctness checks do not imply
+a production backfill or universal speed guarantee.
+
+[Doris real-server fidelity follow-up (中文)](REPORT-doris.zh-CN.md) adds 16
+checks using both doriswriter and dorisreader, including the upstream CSV
+corruption and candidate rejection. These small fixtures are not performance
+or production-recovery validation.
+
 This fork adds opt-in parallel querySql reads, a single-lock bounded memory
 channel, cached JDBC column metadata, a faster integer conversion path, and
 fixes for NULL preservation, partial dirty records, resource cleanup, and JDBC

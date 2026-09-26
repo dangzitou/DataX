@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-27",
+  "hardware": "Apple M5, 10 logical CPUs, 16 GiB RAM",
+  "postgres_image": "postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73",
+  "postgres_version": "17.11",
+  "container_cpu_limit": 4,
+  "container_memory_gib": 2,
+  "jvm_heap_gib": 1,
+  "timezone": "UTC",
+  "source_client_encoding": "UTF8",
+  "source_message_id1_hex": "e4b8ade69687f09f98802d31",
+  "measurements": "6 scenarios, 5 alternating pairs and 1 warmup per variant; 72 million-row transfers. No performance tests ran concurrently. Builds and image pulls excluded from performance runs.",
+  "scope": "Local generated static data. Not billion-row, production or exactly-once validation.",
+  "all_scenario_50_percent_achieved": false
+}
