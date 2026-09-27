@@ -1,0 +1,57 @@
+{
+  "common": {
+    "column": {
+      "timeZone": "UTC"
+    }
+  },
+  "core": {
+    "container": {
+      "job": {
+        "sleepInterval": 200
+      },
+      "taskGroup": {
+        "channel": 1
+      }
+    }
+  },
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 1
+      },
+      "errorLimit": {
+        "record": 0
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "postgresqlreader",
+          "parameter": {
+            "username": "postgres",
+            "password": "datax-local-benchmark",
+            "fetchSize": 1024,
+            "connection": [
+              {
+                "jdbcUrl": [
+                  "jdbc:postgresql://127.0.0.1:25432/datax_bench"
+                ],
+                "querySql": [
+                  "SELECT * FROM pg_perf_source ORDER BY id"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "streamwriter",
+          "parameter": {
+            "path": "/tmp/datax-perf/common-profile-current",
+            "fileName": "actual.tsv",
+            "print": false
+          }
+        }
+      }
+    ]
+  }
+}

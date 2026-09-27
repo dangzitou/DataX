@@ -1,0 +1,290 @@
+{
+  "recorded_at": "2026-09-27T01:18:09.448865+00:00",
+  "host": [
+    "Apple M5",
+    "17179869184"
+  ],
+  "postgres_container": {
+    "Id": "90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78",
+    "Created": "2026-09-26T15:26:49.642699698Z",
+    "Path": "docker-entrypoint.sh",
+    "Args": [
+      "-c",
+      "fsync=on",
+      "-c",
+      "synchronous_commit=on",
+      "-c",
+      "full_page_writes=on"
+    ],
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 107532,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-09-26T15:51:49.854603792Z",
+      "FinishedAt": "2026-09-26T15:49:31.61119485Z"
+    },
+    "Image": "sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73",
+    "ResolvConfPath": "/var/lib/docker/containers/90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78/resolv.conf",
+    "HostnamePath": "/var/lib/docker/containers/90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78/hostname",
+    "HostsPath": "/var/lib/docker/containers/90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78/hosts",
+    "LogPath": "/var/lib/docker/containers/90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78/90db9b967c94fc27894b7977a7eec4c01aa04aed751ab4699575c3735bfc8e78-json.log",
+    "Name": "/datax-perf-postgres",
+    "RestartCount": 0,
+    "Driver": "overlayfs",
+    "Platform": "linux",
+    "MountLabel": "",
+    "ProcessLabel": "",
+    "AppArmorProfile": "",
+    "ExecIDs": null,
+    "HostConfig": {
+      "Binds": null,
+      "ContainerIDFile": "",
+      "LogConfig": {
+        "Type": "json-file",
+        "Config": {
+          "max-file": "5",
+          "max-size": "20m"
+        }
+      },
+      "NetworkMode": "bridge",
+      "PortBindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "25432"
+          }
+        ]
+      },
+      "RestartPolicy": {
+        "Name": "no",
+        "MaximumRetryCount": 0
+      },
+      "AutoRemove": false,
+      "VolumeDriver": "",
+      "VolumesFrom": null,
+      "ConsoleSize": [
+        0,
+        0
+      ],
+      "CapAdd": null,
+      "CapDrop": null,
+      "CgroupnsMode": "private",
+      "Dns": null,
+      "DnsOptions": [],
+      "DnsSearch": [],
+      "ExtraHosts": null,
+      "GroupAdd": null,
+      "IpcMode": "private",
+      "Cgroup": "",
+      "Links": null,
+      "OomScoreAdj": 0,
+      "PidMode": "",
+      "Privileged": false,
+      "PublishAllPorts": false,
+      "ReadonlyRootfs": false,
+      "SecurityOpt": null,
+      "UTSMode": "",
+      "UsernsMode": "",
+      "ShmSize": 4196401152,
+      "Runtime": "runc",
+      "Isolation": "",
+      "CpuShares": 0,
+      "Memory": 2147483648,
+      "NanoCpus": 4000000000,
+      "CgroupParent": "",
+      "BlkioWeight": 0,
+      "BlkioWeightDevice": [],
+      "BlkioDeviceReadBps": [],
+      "BlkioDeviceWriteBps": [],
+      "BlkioDeviceReadIOps": [],
+      "BlkioDeviceWriteIOps": [],
+      "CpuPeriod": 0,
+      "CpuQuota": 0,
+      "CpuRealtimePeriod": 0,
+      "CpuRealtimeRuntime": 0,
+      "CpusetCpus": "",
+      "CpusetMems": "",
+      "Devices": [],
+      "DeviceCgroupRules": null,
+      "DeviceRequests": null,
+      "MemoryReservation": 0,
+      "MemorySwap": 4294967296,
+      "MemorySwappiness": null,
+      "OomKillDisable": null,
+      "PidsLimit": null,
+      "Ulimits": [],
+      "CpuCount": 0,
+      "CpuPercent": 0,
+      "IOMaximumIOps": 0,
+      "IOMaximumBandwidth": 0,
+      "MaskedPaths": [
+        "/proc/acpi",
+        "/proc/asound",
+        "/proc/interrupts",
+        "/proc/kcore",
+        "/proc/keys",
+        "/proc/latency_stats",
+        "/proc/sched_debug",
+        "/proc/scsi",
+        "/proc/timer_list",
+        "/proc/timer_stats",
+        "/sys/devices/virtual/powercap",
+        "/sys/firmware"
+      ],
+      "ReadonlyPaths": [
+        "/proc/bus",
+        "/proc/fs",
+        "/proc/irq",
+        "/proc/sys",
+        "/proc/sysrq-trigger"
+      ]
+    },
+    "Storage": {
+      "RootFS": {
+        "Snapshot": {
+          "Name": "overlayfs"
+        }
+      }
+    },
+    "SizeRw": 192512,
+    "SizeRootFs": 300298240,
+    "Mounts": [
+      {
+        "Type": "volume",
+        "Name": "38ada11f6ed85f7e04c0ffd2e44081115ba30eea83a1e120689af63bf697f8d2",
+        "Source": "/var/lib/docker/volumes/38ada11f6ed85f7e04c0ffd2e44081115ba30eea83a1e120689af63bf697f8d2/_data",
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+      }
+    ],
+    "Config": {
+      "Hostname": "90db9b967c94",
+      "Domainname": "",
+      "User": "",
+      "AttachStdin": false,
+      "AttachStdout": false,
+      "AttachStderr": false,
+      "ExposedPorts": {
+        "5432/tcp": {}
+      },
+      "Tty": false,
+      "OpenStdin": false,
+      "StdinOnce": false,
+      "Env": [
+        "POSTGRES_PASSWORD=datax-local-benchmark",
+        "POSTGRES_DB=datax_bench",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "GOSU_VERSION=1.19",
+        "LANG=en_US.utf8",
+        "PG_MAJOR=17",
+        "PG_VERSION=17.11",
+        "PG_SHA256=dd27f2b3c59e73ed14aa3324901242bf69a032a6347805f274e6260322d42979",
+        "DOCKER_PG_LLVM_DEPS=llvm21-dev \t\tclang21",
+        "PGDATA=/var/lib/postgresql/data"
+      ],
+      "Cmd": [
+        "-c",
+        "fsync=on",
+        "-c",
+        "synchronous_commit=on",
+        "-c",
+        "full_page_writes=on"
+      ],
+      "Image": "postgres:17-alpine",
+      "Volumes": {
+        "/var/lib/postgresql/data": {}
+      },
+      "WorkingDir": "/",
+      "Entrypoint": [
+        "docker-entrypoint.sh"
+      ],
+      "Labels": {},
+      "StopSignal": "SIGINT"
+    },
+    "NetworkSettings": {
+      "SandboxID": "244e7d500569cdc0c40bb75112430a2de559dd7601d5d7925ef0a1b816deb8dc",
+      "SandboxKey": "/var/run/docker/netns/244e7d500569",
+      "Ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "25432"
+          }
+        ]
+      },
+      "Networks": {
+        "bridge": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0ea3571be46ca8ac7797487a8a4a186c897513039b1f986383e5836cbe7e7592",
+          "EndpointID": "e4abc23df03af31116c5c729ec073e0267cd8a44d22acf958e174c12d709d4d4",
+          "Gateway": "192.168.215.1",
+          "IPAddress": "192.168.215.3",
+          "MacAddress": "1e:d1:6d:0a:e3:c4",
+          "IPPrefixLen": 24,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:dfc2780980fe6ca2d158bfe4342660db5e4c6431fb969088e543430d09f8d0f2",
+      "size": 2868,
+      "annotations": {
+        "com.docker.official-images.bashbrew.arch": "arm64v8",
+        "org.opencontainers.image.base.digest": "sha256:e7a1a92a5bfeee40966aea60f0796b0e7917cc35591542701834f03a68fa3d18",
+        "org.opencontainers.image.base.name": "alpine:3.24",
+        "org.opencontainers.image.created": "2026-08-13T19:15:05Z",
+        "org.opencontainers.image.revision": "2603e26e245e558218728ee14e0a42dcb020dc7f",
+        "org.opencontainers.image.source": "https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/alpine3.24",
+        "org.opencontainers.image.url": "https://hub.docker.com/_/postgres",
+        "org.opencontainers.image.version": "17.11-alpine3.24"
+      },
+      "platform": {
+        "architecture": "arm64",
+        "os": "linux",
+        "variant": "v8"
+      }
+    }
+  },
+  "owned_containers_created": false,
+  "live_container_names": [
+    "paper-exchange-feed-live-1",
+    "paper-exchange-feed-1",
+    "paper-exchange-app-1",
+    "datax-perf-postgres",
+    "buildx_buildkit_multiarch0"
+  ],
+  "tmp_before_cleanup_kib": 1194708,
+  "removed_runtimes": [
+    {
+      "name": "candidate-file-encoder",
+      "allocated_bytes": 147238912
+    },
+    {
+      "name": "candidate-file-encoder-buffered",
+      "allocated_bytes": 147238912
+    }
+  ],
+  "cleanup_at": "2026-09-27T01:19:39.757892+00:00",
+  "tmp_after_cleanup_bytes": 928911360,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-stream-fatal"
+  ]
+}

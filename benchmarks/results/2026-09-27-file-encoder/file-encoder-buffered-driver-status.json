@@ -1,0 +1,36 @@
+{
+  "completed": [
+    {
+      "name": "file-encoder-buffered-perf-prior-pg-to-file",
+      "median_seconds": {
+        "baseline": 2.4210488749999968,
+        "candidate": 2.45101575
+      },
+      "throughput_gain_percent": -1.2226308623273008
+    },
+    {
+      "name": "file-encoder-buffered-perf-prior-pg-integer-file",
+      "median_seconds": {
+        "baseline": 1.7954039579999979,
+        "candidate": 1.9898356249999996
+      },
+      "throughput_gain_percent": -9.77124263719028
+    },
+    {
+      "name": "file-encoder-buffered-perf-upstream-pg-to-file",
+      "median_seconds": {
+        "baseline": 2.640158249999999,
+        "candidate": 2.189877499999998
+      },
+      "throughput_gain_percent": 20.561914992962006
+    },
+    {
+      "name": "file-encoder-buffered-perf-upstream-pg-integer-file",
+      "median_seconds": {
+        "baseline": 2.861963833000001,
+        "candidate": 2.1857932089999963
+      },
+      "throughput_gain_percent": 30.93479388699143
+    }
+  ]
+}

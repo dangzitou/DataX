@@ -65,6 +65,12 @@ Engine checks. Managers now record fatal errors, abort queued work and rethrow;
 the candidate Engine fails explicitly where upstream stalls. This does not undo
 committed rows or guarantee cleanup after every form of memory exhaustion.
 
+[Reusable file-encoder pilots and exact byte comparisons (中文)](REPORT-file-encoder.zh-CN.md)
+records two rejected variants and all 96 million-row runs. Both regressed against
+the previous fork, so production code was restored. Ordered PG-to-file benchmarks
+now compare every output byte against a native reference as well as fingerprints.
+Unicode boundary coverage is retained; all paired +25% / +50% gates still failed.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

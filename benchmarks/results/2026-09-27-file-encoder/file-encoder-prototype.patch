@@ -1,0 +1,112 @@
+diff --git a/streamwriter/src/main/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriter.java b/streamwriter/src/main/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriter.java
+index 4341c46..a411ed1 100755
+--- a/streamwriter/src/main/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriter.java
++++ b/streamwriter/src/main/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriter.java
+@@ -109,6 +109,7 @@ public class StreamWriter extends Writer {
+         private static final String NEWLINE_FLAG = System.getProperty("line.separator", "\n");
+         private static final int BUFFER_SIZE = 64 * 1024;
+         private StringBuilder rowBuffer = new StringBuilder(256);
++        private char[] outputChars;
+ 
+         private Configuration writerSliceConfig;
+ 
+@@ -156,18 +157,19 @@ public class StreamWriter extends Writer {
+                     writeToFile(recordReceiver,path, fileName, recordNumBeforSleep, sleepTime);
+                 } else {
+                     try {
+-                        OutputStream writer = System.out;
++                        OutputStream output = System.out;
++                        java.io.Writer writer = new OutputStreamWriter(output, StandardCharsets.UTF_8);
+ 
+                         Record record;
+                         while ((record = recordReceiver.getFromReader()) != null) {
+                             if (this.print) {
+                                 appendRecord(record);
+-                                if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer);
++                                if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer, output);
+                             } else {
+                         /* do nothing */
+                             }
+                         }
+-                        flushRecords(writer);
++                        flushRecords(writer, output);
+                         writer.flush();
+ 
+                     } catch (Exception e) {
+@@ -182,16 +184,9 @@ public class StreamWriter extends Writer {
+             LOG.info("begin do write...");
+             String fileFullPath = buildFilePath(path, fileName);
+             LOG.info(String.format("write to file : [%s]", fileFullPath));
+-            try (OutputStream writer = new FileOutputStream(fileFullPath, true) {
+-                        @Override
+-                        public void write(byte[] bytes) throws IOException {
+-                            // ponytail: one JVM-wide file-write lock; use per-file locks if unrelated files contend.
+-                            // Buffers contain whole UTF-8 records, including records larger than the buffer.
+-                            synchronized (Task.class) {
+-                                super.write(bytes);
+-                            }
+-                        }
+-                    }) {
++            try (OutputStream output = new FileOutputStream(fileFullPath, true)) {
++                // Close only the raw stream: after a failed write, do not flush the encoder again on close.
++                java.io.Writer writer = new OutputStreamWriter(output, StandardCharsets.UTF_8);
+                 Record record;
+                 long count = 0;
+                 while ((record = recordReceiver.getFromReader()) != null) {
+@@ -200,10 +195,10 @@ public class StreamWriter extends Writer {
+                         TimeUnit.SECONDS.sleep(sleepTime);
+                     }
+                    appendRecord(record);
+-                   if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer);
++                   if (rowBuffer.length() >= BUFFER_SIZE) flushRecords(writer, Task.class);
+                    count++;
+                 }
+-                flushRecords(writer);
++                flushRecords(writer, Task.class);
+                 writer.flush();
+             } catch (InterruptedException e) {
+                 Thread.currentThread().interrupt();
+@@ -231,9 +226,19 @@ public class StreamWriter extends Writer {
+             rowBuffer.append(NEWLINE_FLAG);
+         }
+ 
+-        private void flushRecords(OutputStream writer) throws IOException {
++        private void flushRecords(java.io.Writer writer, Object outputLock) throws IOException {
+             if (rowBuffer.length() == 0) return;
+-            writer.write(rowBuffer.toString().getBytes(StandardCharsets.UTF_8));
++            if (outputChars == null) outputChars = new char[BUFFER_SIZE];
++            // ponytail: one JVM-wide file-write lock; use per-file locks if unrelated files contend.
++            // Keep all encoder writes for these complete records under the same output lock.
++            synchronized (outputLock) {
++                for (int offset = 0; offset < rowBuffer.length(); offset += outputChars.length) {
++                    int length = Math.min(outputChars.length, rowBuffer.length() - offset);
++                    rowBuffer.getChars(offset, offset + length, outputChars, 0);
++                    writer.write(outputChars, 0, length);
++                }
++                writer.flush();
++            }
+             // Bound retained memory after a wide row; batching avoids per-row byte arrays.
+             if (rowBuffer.capacity() > 2 * BUFFER_SIZE) rowBuffer = new StringBuilder(256);
+             rowBuffer.setLength(0);
+diff --git a/streamwriter/src/test/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriterTest.java b/streamwriter/src/test/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriterTest.java
+index 3bca64e..b7a4660 100644
+--- a/streamwriter/src/test/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriterTest.java
++++ b/streamwriter/src/test/java/com/alibaba/datax/plugin/writer/streamwriter/StreamWriterTest.java
+@@ -71,6 +71,17 @@ public class StreamWriterTest {
+         }
+     }
+ 
++    @Test public void preservesSurrogatePairsAndReplacementAcrossEncoderChunks() throws Exception {
++        for (int prefix : new int[]{8191, 8192, 65535, 65536, 131071}) {
++            String text = new String(new char[prefix]).replace('\0', 'a')
++                    + "😀\uD800x\uDC00\uD800";
++            File file = folder.newFile();
++            task(file.getName(), "\t", false).startWrite(receiver(record(text), record("next😀")));
++            String expected = text + System.lineSeparator() + "next😀" + System.lineSeparator();
++            assertArrayEquals(expected.getBytes(StandardCharsets.UTF_8), Files.readAllBytes(file.toPath()));
++        }
++    }
++
+     @Test public void cancellationFailsAndPreservesInterruptFlagFourTimes() {
+         int failedWithInterrupt = 0;
+         for (int attempt = 0; attempt < 4; attempt++) {

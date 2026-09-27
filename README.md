@@ -16,6 +16,7 @@
 > [提交回执与不完整导入](benchmarks/REPORT-stream-recovery.zh-CN.md)：SR/Doris 的 Publish Timeout 同样校验行数；标签已提交但原始计数未知时明确失败，防止把可能少行的批次判成功。完整导入丢失回执也可能需要人工对账，不能盲目重跑。
 > [上传正文内存与完整性](benchmarks/REPORT-stream-payload.zh-CN.md)：SR/SelectDB 消除整批正文的第二份内存复制，受限堆下验证重定向和重放字节一致；Doris 试验有性能回退，已恢复原实现。百万行吞吐目标仍未通过，不代表亿级回灌安全保证。
 > [异步内存错误传播](benchmarks/REPORT-stream-fatal.zh-CN.md)：修复 SR/Doris/SelectDB 后台 OOM 未传回任务、满队列生产者继续等待的问题。原版 SR/Doris 的 8 次 Engine 检查超时未退出，新版 8 次明确失败退出；不回滚已提交数据，不构成零错误率保证。
+> [文件编码原型实测](benchmarks/REPORT-file-encoder.zh-CN.md)：两版候选的 96 次百万行输出均逐字节校验，但相对前版出现退化，已撤回生产改动。保留 Unicode 边界测试及原生参考逐字节对账；八组逐轮 +25%/+50% 均未通过。
 
 > 本 fork 增加 MySQL `querySql` 自动并行、内存通道优化及 JDBC 错误/资源管理修复。
 > 100 万行真实 MySQL 同步，单条 querySql 开启自动四路并行：七轮吞吐提升均超过 50%，最低 **62.86%**，按耗时中位数计算提升 **72.66%**，逐字段校验零差异。

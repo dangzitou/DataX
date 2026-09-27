@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-09-27T01:02:35.643745+00:00",
+  "reference_runtime": "candidate-stream-fatal",
+  "upstream_runtime": "baseline-all",
+  "candidate": "Reuse JDK OutputStreamWriter and a bounded char[] instead of copying each batch through String and byte[]. Keep whole-record output locking and close only the underlying file after failures.",
+  "evidence": "Current actual PG->file JFR has 127 of 454 Java samples with flushRecords on the stack and 92 UTF8 encoder leaf samples; these are sampling counts, not additive wall time. Exact 315659578-byte output matched native PG COPY.",
+  "scenarios": [
+    "pg-to-file",
+    "pg-integer-file"
+  ],
+  "rounds": 5,
+  "method": "One warmup each plus five alternating pairs, full JVM elapsed, exact field-content checks. Same fetchSize, concurrency, JVM and source for both versions. Record all results; no local builds/profiling/compression during timed runs.",
+  "retention": "Both same-config scenarios must have >=5% median throughput gain against the prior fork and all correctness checks must pass. If not, restore production code. Also report all +25/+50 paired gates against untouched upstream; full objective remains unchanged.",
+  "disk": "Reuse existing million-row PG source. Delete generated TSV files after verification; between-run 6 GiB budget and leave 1 GiB headroom. No new containers."
+}

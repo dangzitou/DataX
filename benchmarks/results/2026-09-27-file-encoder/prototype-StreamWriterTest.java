@@ -71,10 +71,10 @@ public class StreamWriterTest {
         }
     }
 
-    @Test public void preservesUnicodeAcrossBufferBoundaries() throws Exception {
+    @Test public void preservesSurrogatePairsAndReplacementAcrossEncoderChunks() throws Exception {
         for (int prefix : new int[]{8191, 8192, 65535, 65536, 131071}) {
             String text = new String(new char[prefix]).replace('\0', 'a')
-                    + "😀𠀀中文";
+                    + "😀\uD800x\uDC00\uD800";
             File file = folder.newFile();
             task(file.getName(), "\t", false).startWrite(receiver(record(text), record("next😀")));
             String expected = text + System.lineSeparator() + "next😀" + System.lineSeparator();
