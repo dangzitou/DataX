@@ -1,6 +1,7 @@
 package com.alibaba.datax.common.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,6 +41,8 @@ public final class BatchPayload {
 
     public void writeTo(OutputStream output) throws IOException {
         Objects.requireNonNull(output, "output");
+        // Coalesce small rows with bounded storage instead of copying the whole batch.
+        output = new BufferedOutputStream(output, 64 * 1024);
         output.write(prefix);
         for (int i = 0; i < rows.length; i++) {
             if (i > 0) output.write(separator);
