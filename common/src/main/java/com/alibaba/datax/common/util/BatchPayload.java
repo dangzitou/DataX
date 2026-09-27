@@ -1,11 +1,11 @@
 package com.alibaba.datax.common.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -42,14 +42,24 @@ public final class BatchPayload {
     public void writeTo(OutputStream output) throws IOException {
         Objects.requireNonNull(output, "output");
         // Coalesce small rows with bounded storage instead of copying the whole batch.
-        output = new BufferedOutputStream(output, 64 * 1024);
-        output.write(prefix);
+        ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+        append(output, buffer, prefix);
         for (int i = 0; i < rows.length; i++) {
-            if (i > 0) output.write(separator);
-            output.write(rows[i]);
+            if (i > 0) append(output, buffer, separator);
+            append(output, buffer, rows[i]);
         }
-        output.write(suffix);
+        append(output, buffer, suffix);
+        output.write(buffer.array(), 0, buffer.position());
         output.flush();
+    }
+
+    private static void append(OutputStream output, ByteBuffer buffer, byte[] bytes) throws IOException {
+        if (bytes.length > buffer.remaining()) {
+            output.write(buffer.array(), 0, buffer.position());
+            buffer.clear();
+        }
+        if (bytes.length >= buffer.capacity()) output.write(bytes);
+        else buffer.put(bytes);
     }
 
     public InputStream openStream() {
