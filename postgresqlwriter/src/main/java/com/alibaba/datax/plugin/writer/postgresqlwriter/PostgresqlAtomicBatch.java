@@ -253,10 +253,11 @@ final class PostgresqlAtomicBatch {
                 }
                 checkTarget();
                 // Compare exact binary multisets inside the publication transaction, before committing.
+                // Group the actual bytes once; signed counts preserve duplicate multiplicity.
                 String inserted = "WITH inserted AS (INSERT INTO " + target + " (" + columns + ") SELECT " + columns + " FROM " + stage
-                        + " RETURNING " + columns + "), sent AS (SELECT record_send(ROW(" + columns + ")) b FROM " + stage
-                        + "), written AS (SELECT record_send(ROW(" + columns + ")) b FROM inserted) "
-                        + "SELECT count(*) FROM ((SELECT b FROM sent EXCEPT ALL SELECT b FROM written) UNION ALL (SELECT b FROM written EXCEPT ALL SELECT b FROM sent)) differences";
+                        + " RETURNING record_send(ROW(" + columns + ")) b) SELECT count(*) FROM ("
+                        + "SELECT b FROM (SELECT record_send(ROW(" + columns + ")) b,1 n FROM " + stage
+                        + " UNION ALL SELECT b,-1 n FROM inserted) compared GROUP BY b HAVING sum(n)<>0) differences";
                 try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(inserted)) {
                     result.next(); if (result.getLong(1) != 0) fail("Atomic publication changed or omitted staged values");
                 }

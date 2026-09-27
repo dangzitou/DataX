@@ -111,11 +111,14 @@ def main():
     p.add_argument('--baseline-rewrite', action='store_true')
     p.add_argument('--candidate-rewrite', action='store_true')
     p.add_argument('--candidate-copy', action='store_true')
+    p.add_argument('--atomic', action='store_true',
+                   help='Enable PG atomic append on both sides; include publication in elapsed time')
     p.add_argument('--baseline-manual-split', action='store_true',
                    help='query-parallel control: manually split the original into the same four ranges')
     args = p.parse_args()
     assert 1 <= args.rows <= 1000000 and args.rounds >= 1
     assert not args.baseline_manual_split or args.scenario == 'query-parallel'
+    assert not args.atomic or not args.scenario.endswith('-file')
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=True)
     assert not (output / 'results.json').exists(), 'Use a fresh evidence directory'
     storage_before = disk_guard(output)
@@ -141,7 +144,16 @@ def main():
     if args.candidate_copy:
         assert not args.scenario.endswith('-file')
         configs['candidate']['job']['content'][0]['writer']['parameter']['useCopy'] = True
+    if args.atomic:
+        for config in configs.values():
+            content = config['job']['content'][0]
+            content['writer']['parameter']['atomicBatchId'] = 'benchmark-native-batch'
+            connection = content['writer']['parameter']['connection'][0]
+            connection['jdbcUrl'] += ('&' if '?' in connection['jdbcUrl'] else '?') + 'options=-c%20temp_file_limit%3D1536MB'
+            if content['reader']['name'] == 'postgresqlreader':
+                content['reader']['parameter']['consistentSnapshot'] = True
     report = {'scenario': args.scenario, 'rows': args.rows, 'runs': [], 'host': platform.platform(),
+        'atomic': args.atomic,
         'storage_before': storage_before, 'baseline_manual_split': args.baseline_manual_split,
         'database': sql('SELECT version()'), 'jvm_options': ['-Duser.timezone=UTC'],
         'fsync': sql('SHOW fsync'), 'synchronous_commit': sql('SHOW synchronous_commit'),
@@ -171,6 +183,8 @@ def main():
         for variant in (['candidate', 'baseline'] if number % 2 == 0 else ['baseline', 'candidate']):
             storage = disk_guard(output)
             name = ('warmup' if number == 0 else str(number)) + '-' + variant
+            report['pending_run'] = {'round': number, 'variant': variant, 'job': name}
+            (output/'results.json').write_text(json.dumps(report, indent=2))
             if not args.scenario.endswith('-file'):
                 suffix = '' if args.scenario == 'stream-to-pg' else ' INCLUDING ALL'
                 sql('DROP TABLE IF EXISTS pg_perf_target; CREATE TABLE pg_perf_target (LIKE pg_perf_source' + suffix + ')')
@@ -187,11 +201,18 @@ def main():
                 (output / 'actual.tsv').unlink()
             else:
                 check = validate(args.rows, args.scenario == 'stream-to-pg')
+                if args.atomic:
+                    published = int(sql("SELECT row_count FROM __datax_atomic_batches_v1 "
+                        "WHERE target_oid='pg_perf_target'::regclass AND batch_id='benchmark-native-batch'"))
+                    stages = int(sql("SELECT count(*) FROM pg_class WHERE relname LIKE '__datax_stage_%'"))
+                    assert published == args.rows and stages == 0, (published, stages)
+                    check.update(atomic_published_rows=published, remaining_stages=stages)
             entry = {'round': number, 'variant': variant, 'seconds': seconds,
                      'storage_before_run': storage,
                      'rows_per_second': args.rows / seconds, **check,
                      **process_metrics(output / (name + '.log'))}
             report['runs'].append(entry)
+            del report['pending_run']
             (output / 'results.json').write_text(json.dumps(report, indent=2))
             print(json.dumps(entry), flush=True)
     if expected_file is not None:
