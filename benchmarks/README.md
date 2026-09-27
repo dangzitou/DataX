@@ -6,6 +6,13 @@ shows that the full target remains unmet; neither exactly-once backfill nor
 billion-row production correctness has been established. Historical +50% reports
 below retain their original thresholds and workload limits.
 
+[OLAP batch-size controls and backfill risks (中文)](REPORT-olap-batch.zh-CN.md)
+records 72 million-row jobs and four separate profiles. Same-runtime 5-to-20 MiB
+tuning increases throughput and memory use; equal-20-MiB upstream/fork controls
+still fail every-pair +25% / +50% acceptance. Plugin defaults remain unchanged.
+The report separates normal-run field equality from unresolved retry, partial
+commit and billion-row acceptance requirements.
+
 [Final measured results and complete controls (中文)](REPORT-final.zh-CN.md):
 seven paired million-row transfers each exceeded +50% throughput, with a
 minimum of +62.86% and a ratio-of-medians gain of +72.66%. Same-task-count

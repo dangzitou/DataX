@@ -1,0 +1,643 @@
+{
+  "scope": "Four same-runtime batch-size tuning groups; two untouched-upstream code controls at equal 20 MiB; no billion-row or recovery acceptance",
+  "groups": {
+    "olap-batch-starrocks-writer-csv-tuning": {
+      "backend": "starrocks",
+      "scenario": "writer-csv",
+      "comparison": "same fork runtime, 5 MiB versus 20 MiB",
+      "batch_mib": {
+        "baseline": 5,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 6.914196000000004,
+        "candidate": 2.8068863749999977
+      },
+      "median_throughput_gain_percent": 146.32974321947785,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 143.3008894195148,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 163.13031986871684,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 158.0135201371905,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 145.77716919517286,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 137.44176214068324,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 137.44176214068324,
+        "passed": true,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 143.3008894195148,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 163.13031986871684,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 158.0135201371905,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 145.77716919517286,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 137.44176214068324,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 137.44176214068324,
+        "passed": true,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 457.421875,
+          "peak_rss_mib_max": 474.625,
+          "stream_load_attempts": [
+            60
+          ],
+          "max_request_body_bytes": 5259996,
+          "attempted_body_bytes": [
+            315321496
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 595.0,
+          "peak_rss_mib_max": 658.484375,
+          "stream_load_attempts": [
+            15
+          ],
+          "max_request_body_bytes": 21039044,
+          "attempted_body_bytes": [
+            315321496
+          ]
+        }
+      }
+    },
+    "olap-batch-starrocks-writer-json-tuning": {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "comparison": "same fork runtime, 5 MiB versus 20 MiB",
+      "batch_mib": {
+        "baseline": 5,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 8.356823291999994,
+        "candidate": 3.019527
+      },
+      "median_throughput_gain_percent": 176.75934979220233,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 202.03185360848855,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 179.28702906117405,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 176.6852847844,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 188.9103975863609,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 148.13686186534665,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 148.13686186534665,
+        "passed": true,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 202.03185360848855,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 179.28702906117405,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 176.6852847844,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 188.9103975863609,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 148.13686186534665,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 148.13686186534665,
+        "passed": true,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 457.8125,
+          "peak_rss_mib_max": 490.34375,
+          "stream_load_attempts": [
+            73
+          ],
+          "max_request_body_bytes": 5257096,
+          "attempted_body_bytes": [
+            379888255
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 622.421875,
+          "peak_rss_mib_max": 633.671875,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        }
+      }
+    },
+    "olap-batch-starrocks-writer-json-same-config": {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "comparison": "upstream versus fork, same 20 MiB",
+      "batch_mib": {
+        "baseline": 20,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 3.4446456249999997,
+        "candidate": 3.111249458000003
+      },
+      "median_throughput_gain_percent": 10.715828849491004,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 12.535849072301897,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 11.754905923492643,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 9.298240962993853,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 14.256682282221544,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 10.715828849491004,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 9.298240962993853,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 12.535849072301897,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 11.754905923492643,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 9.298240962993853,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 14.256682282221544,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 10.715828849491004,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 9.298240962993853,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 857.6875,
+          "peak_rss_mib_max": 914.96875,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 582.140625,
+          "peak_rss_mib_max": 657.84375,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        }
+      }
+    },
+    "olap-batch-doris-writer-csv-tuning": {
+      "backend": "doris",
+      "scenario": "writer-csv",
+      "comparison": "same fork runtime, 5 MiB versus 20 MiB",
+      "batch_mib": {
+        "baseline": 5,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 3.8734632920000003,
+        "candidate": 3.104812292
+      },
+      "median_throughput_gain_percent": 24.756762332477923,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 23.162432165480507,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 17.08931673675307,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 27.014539682167428,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 25.26477967653684,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 17.399980307714813,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 17.08931673675307,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 23.162432165480507,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 17.08931673675307,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 27.014539682167428,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 25.26477967653684,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 17.399980307714813,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 17.08931673675307,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 479.0,
+          "peak_rss_mib_max": 489.015625,
+          "stream_load_attempts": [
+            60
+          ],
+          "max_request_body_bytes": 5259996,
+          "attempted_body_bytes": [
+            315321496
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 988.09375,
+          "peak_rss_mib_max": 1055.546875,
+          "stream_load_attempts": [
+            15
+          ],
+          "max_request_body_bytes": 21039044,
+          "attempted_body_bytes": [
+            315321496
+          ]
+        }
+      }
+    },
+    "olap-batch-doris-writer-json-tuning": {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "comparison": "same fork runtime, 5 MiB versus 20 MiB",
+      "batch_mib": {
+        "baseline": 5,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 4.951577,
+        "candidate": 3.8821420840000016
+      },
+      "median_throughput_gain_percent": 27.547547020692665,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 30.9919534046452,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 35.96855987704852,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 25.49363798607429,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 25.69658264767383,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 17.96171592268476,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 17.96171592268476,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 30.9919534046452,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 35.96855987704852,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 25.49363798607429,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 25.69658264767383,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 17.96171592268476,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 17.96171592268476,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 487.0,
+          "peak_rss_mib_max": 489.3125,
+          "stream_load_attempts": [
+            73
+          ],
+          "max_request_body_bytes": 5257096,
+          "attempted_body_bytes": [
+            379888255
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 1082.765625,
+          "peak_rss_mib_max": 1110.09375,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        }
+      }
+    },
+    "olap-batch-doris-writer-json-same-config": {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "comparison": "upstream versus fork, same 20 MiB",
+      "batch_mib": {
+        "baseline": 20,
+        "candidate": 20
+      },
+      "median_seconds": {
+        "baseline": 4.271212958,
+        "candidate": 4.172188082999998
+      },
+      "median_throughput_gain_percent": 2.3734518442130703,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 7.382862681936353,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 4.482155232722329,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -5.623787213179421,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 11.61572602275629,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -2.1520044901959023,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.623787213179421,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 7.382862681936353,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 4.482155232722329,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -5.623787213179421,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 11.61572602275629,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -2.1520044901959023,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.623787213179421,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "variants": {
+        "baseline": {
+          "peak_rss_mib_median": 1081.953125,
+          "peak_rss_mib_max": 1090.59375,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        },
+        "candidate": {
+          "peak_rss_mib_median": 1043.4375,
+          "peak_rss_mib_max": 1078.953125,
+          "stream_load_attempts": [
+            19
+          ],
+          "max_request_body_bytes": 21027620,
+          "attempted_body_bytes": [
+            379888201
+          ]
+        }
+      }
+    }
+  },
+  "engine_runs": 72,
+  "maximum_database_storage_before_bytes": 3694903296
+}

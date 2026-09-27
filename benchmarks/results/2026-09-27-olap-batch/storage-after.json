@@ -1,0 +1,52 @@
+{
+  "removed_diagnostic_files": [
+    {
+      "path": "/tmp/datax-perf/olap-current-starrocks-csv/events.json.gz",
+      "bytes": 5375882,
+      "sha256": "d173d1beb1fb5ad096ddb500a9b12cd7911bac558ca1579deed51d49f08d6b42"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-starrocks-csv/profile.jfr",
+      "bytes": 1101764,
+      "sha256": "74addcd6cce1959c5fee8eed03eb989690e7f9c171a522db63e6444731b8c4d0"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-starrocks-json/events.json.gz",
+      "bytes": 6458139,
+      "sha256": "eee51324f86cd439508cedcdf0fd879447408171482ae0223bb6c5d997c4a79f"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-starrocks-json/profile.jfr",
+      "bytes": 982692,
+      "sha256": "53f885ba1919d4d46ce8b6510705ffacb8b72beb98124cd558bed8df2999e1ee"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-doris-csv/events.json.gz",
+      "bytes": 1750576,
+      "sha256": "fad99a1ce582af74c4a40d9018cd988ffe86442a74599005ee2e84b10eba289f"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-doris-csv/profile.jfr",
+      "bytes": 1064371,
+      "sha256": "7af15071dec85e68dad61de47ce07cfa318a098aa1907fff32fabdfabca0edb0"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-doris-json/events.json.gz",
+      "bytes": 1958720,
+      "sha256": "7d07426780b0344bd60c75e2b9db8ff2caeb844a97e4db35ded707aa515cb8a8"
+    },
+    {
+      "path": "/tmp/datax-perf/olap-current-doris-json/profile.jfr",
+      "bytes": 912883,
+      "sha256": "eae928ba5af23aaea28fb63a3f05723560244f20e129e56559b72699e87229bb"
+    }
+  ],
+  "reclaimed_diagnostic_bytes": 19605027,
+  "remaining_test_containers": [
+    "datax-perf-postgres"
+  ],
+  "postgres_data_bytes": 1474347008,
+  "temporary_workspace_bytes": 1509748736,
+  "host_free_bytes": 279913373696,
+  "scope": "Only this turn diagnostic files and owned OLAP containers cleaned; PostgreSQL source/runtime retained; no other project containers touched"
+}

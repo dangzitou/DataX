@@ -1,0 +1,12 @@
+{
+  "started_at": "2026-09-27T05:48:52.287876+00:00",
+  "completed": [
+    "olap-batch-starrocks-writer-csv-tuning",
+    "olap-batch-starrocks-writer-json-tuning",
+    "olap-batch-starrocks-writer-json-same-config",
+    "olap-batch-doris-writer-csv-tuning",
+    "olap-batch-doris-writer-json-tuning",
+    "olap-batch-doris-writer-json-same-config"
+  ],
+  "finished_at": "2026-09-27T05:55:59.875498+00:00"
+}

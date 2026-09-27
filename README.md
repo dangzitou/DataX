@@ -3,6 +3,7 @@
 # DataX
 
 > 当前目标为所有场景吞吐至少 +25%，继续争取 +50%；**全场景目标和亿级零重复、零遗漏、零脏数据均未验收**。见[全部已测对照](benchmarks/REPORT-25pct.zh-CN.md)。
+> [OLAP 批次调参与风险](benchmarks/REPORT-olap-batch.zh-CN.md)：同 fork 的 SR 5→20 MiB 调参实测提速，但更耗内存；同配置原版对照 SR/Doris 仅 +10.72%/+2.37%，逐轮 +25% 未通过。默认参数未改，普通写入的重跑重复和部分提交风险仍在。
 > 最新[文件完整性修复](benchmarks/REPORT-file.zh-CN.md)解决并发输出行内容交错、分隔符截断及取消被吞掉；百万行 PG→文件中位吞吐 +9.47%，仍未达到 +25%。
 > PG 已增加显式开启的[共享快照与 querySql 自动分片](benchmarks/REPORT-pg-query.zh-CN.md)，已测单查询→四分片吞吐 +85.48%；同任务数对照未达标。普通写入仍有重跑重复与失败残留已提交批次的问题。
 > [JDBC 提交异常修复](benchmarks/REPORT-commit.zh-CN.md)：提交确认异常时禁止自动重放批次，避免在已提交后重复插入；PG/MySQL 故障注入及真实 PG 断连证据分别记录。普通模式的完整作业重跑仍不具备幂等保证。

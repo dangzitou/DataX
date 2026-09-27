@@ -1,0 +1,31 @@
+{
+  "manifest_files_verified": 62,
+  "cli_rejection_checks": [
+    {
+      "scenario": "writer-json",
+      "flags": [
+        "--baseline-batch-mib",
+        "0"
+      ],
+      "rejected_before_output_or_database_access": true
+    },
+    {
+      "scenario": "writer-csv",
+      "flags": [
+        "--candidate-batch-mib",
+        "33"
+      ],
+      "rejected_before_output_or_database_access": true
+    },
+    {
+      "scenario": "reader-pg",
+      "flags": [
+        "--baseline-batch-mib",
+        "20"
+      ],
+      "rejected_before_output_or_database_access": true
+    }
+  ],
+  "production_java_matches_255d256": true,
+  "status": "passed"
+}

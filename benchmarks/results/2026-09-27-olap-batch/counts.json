@@ -1,0 +1,42 @@
+{
+  "olap-batch-starrocks-writer-csv-tuning": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-batch-starrocks-writer-json-tuning": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-batch-starrocks-writer-json-same-config": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-batch-doris-writer-csv-tuning": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-batch-doris-writer-json-tuning": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-batch-doris-writer-json-same-config": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "olap-current-starrocks-csv": {
+    "result_entries": 0,
+    "engine_logs": 1
+  },
+  "olap-current-starrocks-json": {
+    "result_entries": 0,
+    "engine_logs": 1
+  },
+  "olap-current-doris-csv": {
+    "result_entries": 0,
+    "engine_logs": 1
+  },
+  "olap-current-doris-json": {
+    "result_entries": 0,
+    "engine_logs": 1
+  }
+}

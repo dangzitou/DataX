@@ -1,0 +1,293 @@
+[
+    {
+        "Id": "3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3",
+        "Created": "2026-09-27T05:41:05.598174465Z",
+        "Path": "/usr/bin/tini-static",
+        "Args": [
+            "--",
+            "./entrypoint.sh"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 1144327,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-27T05:41:05.658676038Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+                "Status": "healthy",
+                "FailingStreak": 0,
+                "Log": [
+                    {
+                        "Start": "2026-09-27T13:41:10.727788041+08:00",
+                        "End": "2026-09-27T13:41:10.765395414+08:00",
+                        "ExitCode": 1,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-09-27T13:41:15.767803574+08:00",
+                        "End": "2026-09-27T13:41:15.795291789+08:00",
+                        "ExitCode": 1,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-09-27T13:41:20.797037655+08:00",
+                        "End": "2026-09-27T13:41:20.823257741+08:00",
+                        "ExitCode": 1,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-09-27T13:41:25.826413195+08:00",
+                        "End": "2026-09-27T13:41:25.851544485+08:00",
+                        "ExitCode": 1,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-09-27T13:41:30.852426682+08:00",
+                        "End": "2026-09-27T13:41:31.084997359+08:00",
+                        "ExitCode": 0,
+                        "Output": "{\"online_backend_num\":1,\"total_backend_num\":1,\"status\":\"OK\"}{\"status\": \"OK\",\"msg\": \"To Be Added\"}"
+                    }
+                ]
+            }
+        },
+        "Image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+        "ResolvConfPath": "/var/lib/docker/containers/3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3/hostname",
+        "HostsPath": "/var/lib/docker/containers/3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3/hosts",
+        "LogPath": "/var/lib/docker/containers/3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3/3ee380b43bbd63c6dd6ad83771f143a62644addc3053666f016a868f95230dc3-json.log",
+        "Name": "/datax-perf-starrocks",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {
+                    "max-file": "5",
+                    "max-size": "20m"
+                }
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+                "8030/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "28030"
+                    }
+                ],
+                "8040/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "28040"
+                    }
+                ],
+                "9030/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "29030"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 4196401152,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 4294967296,
+            "NanoCpus": 4000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 8589934592,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "SizeRw": 506576896,
+        "SizeRootFs": 3715817472,
+        "Mounts": [],
+        "Config": {
+            "Hostname": "3ee380b43bbd",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "8030/tcp": {},
+                "8040/tcp": {},
+                "9030/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "SR_HOME=/data/deploy/starrocks",
+                "JAVA_HOME=/lib/jvm/java-17-openjdk"
+            ],
+            "Cmd": [
+                "./entrypoint.sh"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "./health_check.sh"
+                ],
+                "Interval": 30000000000,
+                "Timeout": 15000000000,
+                "StartPeriod": 30000000000
+            },
+            "Image": "starrocks/allin1-ubuntu@sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+            "Volumes": null,
+            "WorkingDir": "/data/deploy",
+            "Entrypoint": [
+                "/usr/bin/tini-static",
+                "--"
+            ],
+            "Labels": {
+                "org.opencontainers.image.version": "24.04"
+            }
+        },
+        "NetworkSettings": {
+            "SandboxID": "398c036959245b031b01fc2903c53e9e20d5cd69fc9c31c28521e4a8ec8df82e",
+            "SandboxKey": "/var/run/docker/netns/398c03695924",
+            "Ports": {
+                "8030/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "28030"
+                    }
+                ],
+                "8040/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "28040"
+                    }
+                ],
+                "9030/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "29030"
+                    }
+                ]
+            },
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "0ea3571be46ca8ac7797487a8a4a186c897513039b1f986383e5836cbe7e7592",
+                    "EndpointID": "de458cc00c875eae94ebb9d70eff86a905f69f67345879c5ba5f9ff9904e2379",
+                    "Gateway": "192.168.215.1",
+                    "IPAddress": "192.168.215.4",
+                    "MacAddress": "62:8e:3e:0d:98:bf",
+                    "IPPrefixLen": 24,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:ee96cdee08524e8b67c45d269c74aecc2bd2696757bb880e368f8576ac5f7da5",
+            "size": 2008,
+            "platform": {
+                "architecture": "arm64",
+                "os": "linux"
+            }
+        }
+    }
+]

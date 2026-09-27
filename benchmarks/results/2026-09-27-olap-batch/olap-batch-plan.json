@@ -1,0 +1,66 @@
+{
+  "recorded_at": "2026-09-27T05:46:52.212095+00:00",
+  "scope": "Native batch-size tuning, explicitly separate from source-code improvement and all-scenario requirements",
+  "runtime": "candidate-row-count: production 255d256",
+  "primary_groups": [
+    {
+      "backend": "starrocks",
+      "scenario": "writer-csv",
+      "baseline_runtime": "candidate-row-count",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 5,
+      "candidate_batch_mib": 20
+    },
+    {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "baseline_runtime": "candidate-row-count",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 5,
+      "candidate_batch_mib": 20
+    },
+    {
+      "backend": "doris",
+      "scenario": "writer-csv",
+      "baseline_runtime": "candidate-row-count",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 5,
+      "candidate_batch_mib": 20
+    },
+    {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "baseline_runtime": "candidate-row-count",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 5,
+      "candidate_batch_mib": 20
+    }
+  ],
+  "code_controls": [
+    {
+      "backend": "starrocks",
+      "scenario": "writer-json",
+      "baseline_runtime": "baseline-all",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 20,
+      "candidate_batch_mib": 20
+    },
+    {
+      "backend": "doris",
+      "scenario": "writer-json",
+      "baseline_runtime": "baseline-all",
+      "candidate_runtime": "candidate-row-count",
+      "baseline_batch_mib": 20,
+      "candidate_batch_mib": 20
+    }
+  ],
+  "rows": 1000000,
+  "warmups_each": 1,
+  "paired_rounds": 5,
+  "validation": "Duplicate-key target preserves repeats; row count, exact distinct-key count, key range and all six fields checked every run",
+  "performance_gate": "Every paired round >=25% and separately >=50%; all correctness checks pass; no deleted slow rounds",
+  "configuration": "One channel, 1GiB JVM, queue=1, 500000 rows, strict_mode true, max_filter_ratio zero, logged PostgreSQL source unchanged; only explicit batch byte thresholds differ in primary groups",
+  "storage": "At most one disposable OLAP container at a time; new container per group, 4GiB RAM/4CPU, Doris BE60%; 6GiB between-round budget with 1GiB reserve; no new million-row source",
+  "isolation": "No local build, profiling, compression or other DB jobs during paired runs; unrelated user containers retained",
+  "limitations": "No whole-job atomicity, retry idempotence, billion-row guarantee; larger batches retain more in-flight memory and change commit boundaries; existing plugin defaults unchanged"
+}
