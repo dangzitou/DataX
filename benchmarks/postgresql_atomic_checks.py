@@ -99,6 +99,27 @@ def main():
                 check(prefix+'-narrow-'+column, config(prefix, copy), 0, 0, False,
                       'publication changed or omitted staged values')
 
+    sql('DROP SCHEMA IF EXISTS datax_atomic_types CASCADE; CREATE SCHEMA datax_atomic_types; '
+        'CREATE DOMAIN datax_atomic_types.rounded AS numeric(38,6); '
+        'CREATE DOMAIN datax_atomic_types.nested AS datax_atomic_types.rounded; '
+        'CREATE TYPE datax_atomic_types.wrapped AS (value datax_atomic_types.rounded); '
+        "CREATE TYPE datax_atomic_types.enumerated AS ENUM ('one')")
+    try:
+        for kind in ['rounded', 'nested', 'rounded[]', 'wrapped', 'enumerated']:
+            for copy in [False, True]:
+                for attempt in range(1, 5):
+                    seed()
+                    sql('ALTER TABLE pg_atomic_target ALTER COLUMN amount TYPE datax_atomic_types.'
+                        +kind+' USING NULL; INSERT INTO pg_atomic_target(id,txt) VALUES(0,\'existing\')')
+                    name = 'custom-type-'+kind.replace('[]', '-array')+'-'+('copy' if copy else 'jdbc')+'-'+str(attempt)
+                    check(name, config(name, copy), 1, 0, False,
+                          'does not support domains or user-defined column types')
+                    assert sql("SELECT count(*) FROM pg_atomic_target WHERE id=0 AND txt='existing' "
+                               'AND signed IS NULL AND amount IS NULL AND ts IS NULL AND tz IS NULL '
+                               'AND flag IS NULL AND bin IS NULL AND day IS NULL') == '1'
+    finally:
+        sql('DROP TABLE IF EXISTS pg_atomic_target; DROP SCHEMA datax_atomic_types CASCADE')
+
     for attempt in range(1, 5):
         for case in ['constraint', 'filtered', 'transformer-dirty', 'stage-commit-drop', 'publish-commit-drop']:
             seed()

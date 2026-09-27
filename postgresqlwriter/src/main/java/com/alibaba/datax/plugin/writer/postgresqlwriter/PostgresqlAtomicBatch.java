@@ -103,12 +103,16 @@ final class PostgresqlAtomicBatch {
                 if (names.contains(quote(name))) fail("Repeated atomic column: " + name);
                 names.add(quote(name));
                 try (PreparedStatement attr = connection.prepareStatement(
-                        "SELECT a.atttypid,a.atttypmod,a.attcollation,n.nspname,t.typname FROM pg_attribute a "
+                        "SELECT a.atttypid,a.atttypmod,a.attcollation,n.nspname,t.typname,t.typtype FROM pg_attribute a "
                         + "JOIN pg_type t ON t.oid=a.atttypid JOIN pg_namespace n ON n.oid=t.typnamespace "
                         + "WHERE a.attrelid=?::oid AND a.attname=? AND a.attnum>0 AND NOT a.attisdropped")) {
                     attr.setLong(1, targetOid); attr.setString(2, name);
                     try (ResultSet result = attr.executeQuery()) {
                         if (!result.next()) throw new SQLException("Atomic column not found: " + name);
+                        // Domains retain typmods inside the type, including in arrays/composites.
+                        // Comparing stage to target cannot detect values already rounded on staging.
+                        if (!"pg_catalog".equals(result.getString(4)) || "d".equals(result.getString(6)))
+                            fail("Atomic append does not support domains or user-defined column types: " + name);
                         definition.append(name.length()).append(':').append(name).append(':')
                                 .append(result.getString(1)).append(':').append(result.getString(2)).append(':')
                                 .append(result.getString(3)).append(';');
