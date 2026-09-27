@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-09-27T03:50:55.524606+00:00",
+  "decision": "Do not replace the default logged staging implementation, regardless of speed. Finish the declared comparison as a WAL diagnostic, then revert the runtime change.",
+  "reason": "Real crash controls confirm logged staged rows survive and unlogged rows vanish. Current automated same-ID retries both rebuild staging, but removing durable staged data also removes a manual recovery copy if the original source cannot be replayed. The user requires no loss; the actual replayability of their source has not been established.",
+  "retained_work": "Crash correctness checks for existing production logged staging and transparent benchmark WAL measurements. Preserve all prototype results, including failures.",
+  "scope": "This is a stricter recovery-compatibility decision, not a relaxation of the +25/+50 performance gates."
+}

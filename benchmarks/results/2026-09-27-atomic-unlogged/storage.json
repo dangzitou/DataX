@@ -1,0 +1,13 @@
+{
+  "removed_verified_runtime_bytes": 149578523,
+  "temporary_root_bytes": 1074572198,
+  "postgres_bytes": 1458163712,
+  "host_free_bytes": 280700375040,
+  "state": {
+    "stages": 0,
+    "other_connections": 0,
+    "source_rows": 1000000,
+    "crash_schema": 0
+  },
+  "scope": "Only archived rejected runtime and disposable million-row target removed; retained source, production runtime, container and other projects."
+}

@@ -1,0 +1,257 @@
+{
+  "scope": "Same atomic mode relative to c9b499f, not untouched upstream or other writers",
+  "results": [
+    {
+      "scenario": "table-single",
+      "medians_seconds": {
+        "baseline": 14.891077707999997,
+        "candidate": 14.48844220800001
+      },
+      "median_throughput_gain_percent": 2.77901167164587,
+      "meets_performance_retention": false,
+      "minimum_gain_percent": -20.34582204624028,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 8.44068794119217,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 37.4830707733572,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": -20.34582204624028,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 8.382525749963964,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 5.422913924908634,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -20.34582204624028,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 8.44068794119217,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 37.4830707733572,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -20.34582204624028,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 8.382525749963964,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 5.422913924908634,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -20.34582204624028,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "median_database_wal_bytes": {
+        "baseline": 802212200,
+        "candidate": 434329888
+      },
+      "median_database_wal_reduction_percent": 45.858478841383864
+    },
+    {
+      "scenario": "stream-to-pg",
+      "medians_seconds": {
+        "baseline": 10.211849375,
+        "candidate": 9.91108687500001
+      },
+      "median_throughput_gain_percent": 3.034606635914394,
+      "meets_performance_retention": false,
+      "minimum_gain_percent": -6.527873937145268,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 1.3123476009263557,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -4.42706650354846,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -6.527873937145268,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 4.286046922578146,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 4.504417749139056,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -6.527873937145268,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 1.3123476009263557,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -4.42706650354846,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -6.527873937145268,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 4.286046922578146,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 4.504417749139056,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -6.527873937145268,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "median_database_wal_bytes": {
+        "baseline": 738297704,
+        "candidate": 369203728
+      },
+      "median_database_wal_reduction_percent": 49.99256722597095
+    },
+    {
+      "scenario": "table-parallel",
+      "medians_seconds": {
+        "baseline": 14.841872083000013,
+        "candidate": 13.969114542000007
+      },
+      "median_throughput_gain_percent": 6.247765657414739,
+      "meets_performance_retention": true,
+      "minimum_gain_percent": 0.6751902830240297,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 7.749056119398268,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 3.839940351174187,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 5.789178622001523,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 37.43231521923214,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 0.6751902830240297,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 0.6751902830240297,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 7.749056119398268,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 3.839940351174187,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 5.789178622001523,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 37.43231521923214,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 0.6751902830240297,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 0.6751902830240297,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "median_database_wal_bytes": {
+        "baseline": 814758728,
+        "candidate": 447678840
+      },
+      "median_database_wal_reduction_percent": 45.05381475336586
+    }
+  ],
+  "meets_initial_performance_retention": false,
+  "retained": false,
+  "recovery_decision": "Default logged staging retained regardless of throughput; unlogged crash destroys the staged recovery copy."
+}

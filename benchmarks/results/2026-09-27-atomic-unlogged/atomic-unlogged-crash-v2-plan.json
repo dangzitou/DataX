@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-09-27T04:00:47.980131+00:00",
+  "reason": "Initial verifier used id<>0, which excludes NULL-key extra rows, and recorded rather than asserted total counts. Revised verifier includes NULL keys, asserts exact counts and stores both recovery checks. An injected extra NULL-key row must be rejected.",
+  "script_sha256": "9eb52e8416166213f493a434481fac0f7b25927e0dc97f3965bda3bade702955",
+  "runtimes": [
+    "candidate-atomic-group-final",
+    "candidate-atomic-unlogged"
+  ],
+  "rounds_per_case": 4,
+  "phases": [
+    "staged",
+    "publishing",
+    "committed-reply-lost"
+  ],
+  "paths": [
+    "jdbc",
+    "copy"
+  ],
+  "prior_results": "Retained as initial evidence with weaker validation; not substituted for these corrected runs."
+}

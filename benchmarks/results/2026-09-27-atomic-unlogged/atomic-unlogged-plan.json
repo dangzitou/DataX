@@ -1,0 +1,30 @@
+{
+  "recorded_at": "2026-09-27T03:43:26.814210+00:00",
+  "change": "Only rebuildable PG atomic stage becomes UNLOGGED. Final target and ledger remain logged; all count/fingerprint/exact byte checks and one publication transaction retained. No MERGE or hash changes.",
+  "scope": "Same PG atomic mode, not ordinary mode, other writers or all-scenario proof.",
+  "baseline": "clean c9b499f candidate-atomic-group-final",
+  "candidate": "286e6ce plus archived patch",
+  "correctness": [
+    "Real SIGKILL and restart of only datax-perf-postgres, three publication points, JDBC/COPY, four repeats; baseline logged stage controls too",
+    "Source and existing target byte equality across crash, no uncommitted target rows, committed target plus ledger survive, two same-ID retries",
+    "Expanded atomic, floating and previous-version same-ID recovery checks"
+  ],
+  "performance": {
+    "scenarios": [
+      "table-single",
+      "stream-to-pg",
+      "table-parallel"
+    ],
+    "rows": 1000000,
+    "warmups_each": 1,
+    "pairs": 5,
+    "atomic_both": true,
+    "copy": false,
+    "rewrite": false,
+    "wal_metric": "Server-wide WAL insert LSN delta immediately before/after each Engine run, sampled outside the timer; includes background WAL. Identical measurement on both variants."
+  },
+  "retention": "Every correctness assertion must pass. Each of three medians >=5%, every paired gain >=0. Final user +25/+50 gates evaluated separately.",
+  "storage": "Existing one-million-row source and dedicated container; between-run 6 GiB budget guard, per-writer temp_file_limit=1536MB. No WAL or persistence-setting changes.",
+  "isolation": "No builds/profiling/compression/other local tests during performance.",
+  "limits": "UNLOGGED staging is truncated by database crash and not replicated; every retry already rebuilds it. Trial must prove failure/recovery rather than treat stage durability as given. Not production failover or hundred-million-row proof."
+}

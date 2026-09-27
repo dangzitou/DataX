@@ -1,0 +1,24 @@
+diff --git a/benchmarks/postgresql_scenarios.py b/benchmarks/postgresql_scenarios.py
+index 38d542f..05871ae 100644
+--- a/benchmarks/postgresql_scenarios.py
++++ b/benchmarks/postgresql_scenarios.py
+@@ -188,8 +188,11 @@ def main():
+             if not args.scenario.endswith('-file'):
+                 suffix = '' if args.scenario == 'stream-to-pg' else ' INCLUDING ALL'
+                 sql('DROP TABLE IF EXISTS pg_perf_target; CREATE TABLE pg_perf_target (LIKE pg_perf_source' + suffix + ')')
++            wal_before = sql('SELECT pg_current_wal_insert_lsn()')
+             seconds = run(getattr(args, variant).resolve(), configs[variant], output, name,
+                           jvm_options=report['jvm_options'])
++            # Sample outside the JVM timer; includes background server WAL, not just this job.
++            wal_bytes = int(sql("SELECT pg_wal_lsn_diff(pg_current_wal_insert_lsn(),'"+wal_before+"')"))
+             if args.scenario.endswith('-file'):
+                 actual = fingerprint(output / 'actual.tsv')
+                 assert actual == expected_file, (actual, expected_file)
+@@ -209,6 +212,7 @@ def main():
+                     check.update(atomic_published_rows=published, remaining_stages=stages)
+             entry = {'round': number, 'variant': variant, 'seconds': seconds,
+                      'storage_before_run': storage,
++                     'database_wal_bytes_during_run': wal_bytes,
+                      'rows_per_second': args.rows / seconds, **check,
+                      **process_metrics(output / (name + '.log'))}
+             report['runs'].append(entry)

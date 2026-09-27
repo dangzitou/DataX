@@ -95,6 +95,14 @@ and both prototypes were reverted after negative paired results. Twenty-four
 additional identifier, primary-key and partition checks pass on the retained
 production runtime. Checkpoint timing is recorded as a diagnostic lead, not a cause proven.
 
+[Real PostgreSQL crash recovery and rejected UNLOGGED staging (中文)](REPORT-pg-atomic-crash.zh-CN.md)
+adds process-kill/restart checks before, during and after publication, with exact
+row comparisons and same-ID recovery. A NULL-key gap in the first verifier was
+corrected and both variants fully rerun. UNLOGGED reduced database WAL by about
+45–50%, but gained only 2.78% / 3.03% / 6.25% median throughput and destroys the
+staged recovery copy on crash; the default remains logged. The new CI job checks
+that retained logged path, not the withdrawn prototype.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

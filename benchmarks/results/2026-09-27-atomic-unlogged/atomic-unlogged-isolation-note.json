@@ -1,0 +1,5 @@
+{
+  "note": "No concurrent builds, JFR, compression, Engine or database tests during the performance comparisons. A lightweight offline Ruby YAML parse/source syntax check and normal file reads/edits did occur; other project containers remained running. Thus the plan wording no other local tests was not absolute.",
+  "offline_validation_command_wall_seconds": 0.040388458,
+  "effect": "No timing samples were excluded or rerun; every +25/+50 gate failed."
+}
