@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-09-27T02:03:57.100364+00:00",
+  "runs": [
+    {
+      "conclusion": "success",
+      "headSha": "1765dd7de905dbb2d5fccddcacb8225298bde86a",
+      "status": "completed",
+      "url": "https://github.com/dangzitou/DataX/actions/runs/36285614207"
+    },
+    {
+      "conclusion": "success",
+      "headSha": "6977ee3add56e714e2dc811a8be1d1dae2da4f7b",
+      "status": "completed",
+      "url": "https://github.com/dangzitou/DataX/actions/runs/36286446431"
+    },
+    {
+      "conclusion": "",
+      "headSha": "6977ee3add56e714e2dc811a8be1d1dae2da4f7b",
+      "status": "in_progress",
+      "url": "https://github.com/dangzitou/DataX/actions/runs/36286446409"
+    }
+  ]
+}

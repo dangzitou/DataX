@@ -1,0 +1,18 @@
+{
+  "recorded_at": "2026-09-27T01:55:02.880987+00:00",
+  "reason": "Initial upstream stream-to-pg median regressed 3.5845%, while its separate prior-fork comparison improved 5.9402%. Do not combine baselines across groups. Verify repeatability and isolate the PG dependency update.",
+  "cases": [
+    [
+      "upstream-repeat",
+      "baseline-all"
+    ],
+    [
+      "driver-only",
+      "candidate-float-common"
+    ]
+  ],
+  "scenario": "stream-to-pg",
+  "warmups_per_variant": 1,
+  "measured_pairs": 5,
+  "limit": "Exactly these two additional groups, after the original ten finish; retain all outcomes. Same configurations, full-JVM timing, exact row/count checks and disk guard."
+}

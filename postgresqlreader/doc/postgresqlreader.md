@@ -247,6 +247,10 @@ PostgresqlReader插件实现了从PostgreSQL读取数据。在底层实现上，
 
 ### 本 fork：querySql 自动并行读取
 
+本 fork 的 PG reader/writer 现使用 pgJDBC 42.7.13（Java 8），用于修复二进制 NUMERIC
+无穷值读取等驱动问题。本轮实测 PG 17.11；其他服务端版本尚未完成全部回归，驱动官方也
+不保证兼容 PG 9.1 以前版本。见[浮点保真与驱动实测](../../benchmarks/REPORT-floating.zh-CN.md)。
+
 显式设置 `reader.parameter.querySqlSplitPk` 为 SELECT 输出中的简单整数列名，同时设置
 `consistentSnapshot=true` 及 `job.setting.speed.channel`，可将一条 querySql 包装为多条范围查询。
 例如输出列为 `id` 时，设置 `"querySqlSplitPk":"id"`、`"consistentSnapshot":true` 和 4 个 channel。

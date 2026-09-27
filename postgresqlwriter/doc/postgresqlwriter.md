@@ -191,6 +191,10 @@ COPY 复用原有记录缓冲、`batchSize` / `batchByteSize`、连接、preSql 
 
 ### 可选 PG 批次原子追加（实验性）
 
+本 fork 的 PG reader/writer 现使用 pgJDBC 42.7.13（Java 8）。本轮实测 PG 17.11，未完成
+所有服务端版本回归；驱动官方不保证兼容 PG 9.1 以前版本。
+见[浮点保真、驱动对照与性能](../../benchmarks/REPORT-floating.zh-CN.md)。
+
 在 writer 的 `parameter` 中显式配置 `"atomicBatchId": "immutable-source-batch-20260927-001"`。
 默认不启用；只实现 PG 单表追加，不是全量替换或 upsert。JDBC 与 `useCopy=true` 均可使用。
 源为 PG 时，配合 reader 的 `consistentSnapshot=true`；批次范围和内容必须固定，重跑沿用同一个 ID。

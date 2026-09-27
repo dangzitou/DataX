@@ -1,0 +1,46 @@
+{
+  "plugin/reader/postgresqlreader/checker-qual-3.5.0.jar": {
+    "before": "729990b3f18a95606fc2573836b6958bcdb44cb52bfbd1b7aa9c339cff35a5a4",
+    "after": null
+  },
+  "plugin/reader/postgresqlreader/checker-qual-3.55.1.jar": {
+    "before": null,
+    "after": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+  },
+  "plugin/reader/postgresqlreader/postgresql-42.3.3.jar": {
+    "before": "eed0604f512ba44817954de99a07e2a5470aa4bfcb481d4e63a93e0ff0e0aede",
+    "after": null
+  },
+  "plugin/reader/postgresqlreader/postgresql-42.7.13.jar": {
+    "before": null,
+    "after": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93"
+  },
+  "plugin/reader/postgresqlreader/postgresqlreader-0.0.1-SNAPSHOT.jar": {
+    "before": "3bed35fc63b4aab211a847d4bef0f4ccb77fafaa8c0c9aa02597597000453932",
+    "after": "cb48b86d8081f21e6d53a7511407572bca1f25a7ec75bc30d9ce9fd4a795b19b"
+  },
+  "plugin/writer/postgresqlwriter/checker-qual-3.5.0.jar": {
+    "before": "729990b3f18a95606fc2573836b6958bcdb44cb52bfbd1b7aa9c339cff35a5a4",
+    "after": null
+  },
+  "plugin/writer/postgresqlwriter/checker-qual-3.55.1.jar": {
+    "before": null,
+    "after": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+  },
+  "plugin/writer/postgresqlwriter/postgresql-42.3.3.jar": {
+    "before": "eed0604f512ba44817954de99a07e2a5470aa4bfcb481d4e63a93e0ff0e0aede",
+    "after": null
+  },
+  "plugin/writer/postgresqlwriter/postgresql-42.7.13.jar": {
+    "before": null,
+    "after": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93"
+  },
+  "plugin/writer/postgresqlwriter/postgresqlwriter-0.0.1-SNAPSHOT.jar": {
+    "before": "36e619635e3f5b0d89458f633d83e0d3087aec837d10255688448d98e2b736d4",
+    "after": "d4d85c274af0804d23e1f57e18d507c17bc2dab0dbfbc2d608162660268a78bd"
+  },
+  "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar": {
+    "before": "306a9d5f080660a364aedbc598a841e563ba0475b95458b6f5368f05b1155c33",
+    "after": "425b7065a82978017df2ed85225f6fa3df6043a6d715d70389558c16325ad308"
+  }
+}

@@ -71,6 +71,12 @@ the previous fork, so production code was restored. Ordered PG-to-file benchmark
 now compare every output byte against a native reference as well as fingerprints.
 Unicode boundary coverage is retained; all paired +25% / +50% gates still failed.
 
+[Floating-point fidelity and PG driver controls (中文)](REPORT-floating.zh-CN.md)
+records signed-zero and special-value repairs, real PostgreSQL binary-value checks,
+and same-batch atomic reruns. The PG plugins now use JDBC 42.7.13; the report separates
+the common conversion fix from the dependency update and retains all performance results.
+This does not establish all-version compatibility, billion-row safety or universal speedups.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

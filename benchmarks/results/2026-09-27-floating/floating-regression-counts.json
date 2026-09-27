@@ -1,0 +1,90 @@
+{
+  "floating-regression-atomic": {
+    "result_entries": 85,
+    "other_result_keys": []
+  },
+  "floating-regression-binding": {
+    "result_entries": 20,
+    "other_result_keys": [
+      "expect_churn"
+    ]
+  },
+  "floating-regression-commit": {
+    "result_entries": 16,
+    "other_result_keys": [
+      "source_sha256",
+      "exit_code",
+      "expect_legacy",
+      "backend"
+    ]
+  },
+  "floating-regression-commit-wire": {
+    "result_entries": 4,
+    "other_result_keys": [
+      "expect_legacy"
+    ]
+  },
+  "floating-regression-copy": {
+    "result_entries": 25,
+    "other_result_keys": []
+  },
+  "floating-regression-fidelity": {
+    "result_entries": 14,
+    "other_result_keys": []
+  },
+  "floating-regression-file": {
+    "result_entries": 24,
+    "other_result_keys": [
+      "expect_legacy"
+    ]
+  },
+  "floating-regression-float": {
+    "result_entries": 32,
+    "other_result_keys": [
+      "expect_filter_failure",
+      "expect_binary_numeric_failure"
+    ]
+  },
+  "floating-regression-float-atomic": {
+    "result_entries": 8,
+    "other_result_keys": [
+      "expect_filter_failure",
+      "expect_binary_numeric_failure",
+      "atomic_publication"
+    ]
+  },
+  "floating-regression-integer": {
+    "result_entries": 16,
+    "other_result_keys": [
+      "jdbc_reader_checks"
+    ]
+  },
+  "floating-regression-query": {
+    "result_entries": 30,
+    "other_result_keys": []
+  },
+  "floating-regression-snapshot": {
+    "result_entries": 15,
+    "other_result_keys": [
+      "expect_inconsistent"
+    ]
+  },
+  "floating-regression-time": {
+    "result_entries": 8,
+    "other_result_keys": [
+      "expect_loss",
+      "request_binary"
+    ]
+  },
+  "floating-regression-time-binary": {
+    "result_entries": 8,
+    "other_result_keys": [
+      "expect_loss",
+      "request_binary"
+    ]
+  },
+  "floating-regression-writer": {
+    "result_entries": 26,
+    "other_result_keys": []
+  }
+}

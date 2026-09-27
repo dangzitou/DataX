@@ -1,0 +1,62 @@
+{
+  "recorded_at": "2026-09-27T01:44:43.579508+00:00",
+  "candidate": "candidate-float-driver",
+  "cases": [
+    [
+      "prior",
+      "candidate-stream-fatal",
+      "table-single"
+    ],
+    [
+      "prior",
+      "candidate-stream-fatal",
+      "table-parallel"
+    ],
+    [
+      "prior",
+      "candidate-stream-fatal",
+      "stream-to-pg"
+    ],
+    [
+      "prior",
+      "candidate-stream-fatal",
+      "pg-to-file"
+    ],
+    [
+      "upstream",
+      "baseline-all",
+      "table-single"
+    ],
+    [
+      "upstream",
+      "baseline-all",
+      "table-parallel"
+    ],
+    [
+      "upstream",
+      "baseline-all",
+      "stream-to-pg"
+    ],
+    [
+      "upstream",
+      "baseline-all",
+      "pg-to-file"
+    ],
+    [
+      "driver-only",
+      "candidate-float-common",
+      "table-single"
+    ],
+    [
+      "driver-only",
+      "candidate-float-common",
+      "pg-to-file"
+    ]
+  ],
+  "rows_per_job": 1000000,
+  "warmups_per_variant": 1,
+  "measured_pairs": 5,
+  "method": "Whole JVM elapsed, alternating AB/BA; identical configuration per pair, no rewrite/COPY enabled, 1 GiB heap, UTC. Validate all fields and counts, exact byte equality on ordered file output. No builds, sampling, compression or other local tests during timed groups.",
+  "gate": "Report all paired +25% and +50% gates; do not cherry-pick medians. These repairs do not make performance success optional. If a regression is observed, retain its evidence and investigate; correctness alone is not whole-goal completion.",
+  "storage": "Reuse existing million-row PG table, replace only owned target. Remove each verified TSV and final native reference. Existing 6 GiB data guard and 1 GiB headroom; no new containers."
+}

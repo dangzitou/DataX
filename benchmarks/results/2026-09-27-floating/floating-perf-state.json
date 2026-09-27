@@ -1,0 +1,86 @@
+{
+  "started_at": "2026-09-27T01:44:43.579776+00:00",
+  "completed": [
+    {
+      "name": "floating-perf-prior-table-single",
+      "median_seconds": {
+        "baseline": 8.024841875,
+        "candidate": 7.872032583999996
+      },
+      "throughput_gain_percent": 1.941166901552105
+    },
+    {
+      "name": "floating-perf-prior-table-parallel",
+      "median_seconds": {
+        "baseline": 5.076086416999999,
+        "candidate": 4.917878667
+      },
+      "throughput_gain_percent": 3.216991729820551
+    },
+    {
+      "name": "floating-perf-prior-stream-to-pg",
+      "median_seconds": {
+        "baseline": 3.4787180830000004,
+        "candidate": 3.283662542000002
+      },
+      "throughput_gain_percent": 5.940182296600871
+    },
+    {
+      "name": "floating-perf-prior-pg-to-file",
+      "median_seconds": {
+        "baseline": 2.6914145830000002,
+        "candidate": 2.6108727500000004
+      },
+      "throughput_gain_percent": 3.084862446858039
+    },
+    {
+      "name": "floating-perf-upstream-table-single",
+      "median_seconds": {
+        "baseline": 8.910859583000004,
+        "candidate": 8.307802624999994
+      },
+      "throughput_gain_percent": 7.258922548126989
+    },
+    {
+      "name": "floating-perf-upstream-table-parallel",
+      "median_seconds": {
+        "baseline": 6.351595833000005,
+        "candidate": 6.093323291999994
+      },
+      "throughput_gain_percent": 4.238615425823555
+    },
+    {
+      "name": "floating-perf-upstream-stream-to-pg",
+      "median_seconds": {
+        "baseline": 3.8577762080000007,
+        "candidate": 4.001199708999998
+      },
+      "throughput_gain_percent": -3.5845124320436073
+    },
+    {
+      "name": "floating-perf-upstream-pg-to-file",
+      "median_seconds": {
+        "baseline": 2.837269124999999,
+        "candidate": 2.6189835000000024
+      },
+      "throughput_gain_percent": 8.334746095192891
+    },
+    {
+      "name": "floating-perf-driver-only-table-single",
+      "median_seconds": {
+        "baseline": 8.491021000000003,
+        "candidate": 8.259123916
+      },
+      "throughput_gain_percent": 2.807768552191847
+    },
+    {
+      "name": "floating-perf-driver-only-pg-to-file",
+      "median_seconds": {
+        "baseline": 2.6593717920000017,
+        "candidate": 2.657292124999998
+      },
+      "throughput_gain_percent": 0.07826264114654258
+    }
+  ],
+  "finished_at": "2026-09-27T01:56:44.287236+00:00"
+}

@@ -1,0 +1,14 @@
+{
+  "plugin/reader/postgresqlreader/postgresqlreader-0.0.1-SNAPSHOT.jar": {
+    "exact_class_equality": true,
+    "classes": 4
+  },
+  "plugin/writer/postgresqlwriter/postgresqlwriter-0.0.1-SNAPSHOT.jar": {
+    "exact_class_equality": true,
+    "classes": 6
+  },
+  "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar": {
+    "exact_class_equality": true,
+    "classes": 1196
+  }
+}

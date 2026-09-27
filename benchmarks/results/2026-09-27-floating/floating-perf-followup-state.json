@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-09-27T01:57:08.114549+00:00",
+  "completed": [
+    {
+      "name": "floating-perf-upstream-repeat-stream-to-pg",
+      "median_seconds": {
+        "baseline": 3.4511931249999996,
+        "candidate": 3.2276025419999996
+      },
+      "throughput_gain_percent": 6.927450951301184
+    },
+    {
+      "name": "floating-perf-driver-only-stream-to-pg",
+      "median_seconds": {
+        "baseline": 3.705659624999999,
+        "candidate": 3.8560290840000064
+      },
+      "throughput_gain_percent": -3.89959348657255
+    }
+  ],
+  "finished_at": "2026-09-27T01:58:45.437435+00:00"
+}

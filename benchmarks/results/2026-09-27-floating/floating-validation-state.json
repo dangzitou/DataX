@@ -1,0 +1,20 @@
+{
+  "started_at": "2026-09-27T01:39:25.906198+00:00",
+  "completed": [
+    "floating-regression-float",
+    "floating-regression-fidelity",
+    "floating-regression-binding",
+    "floating-regression-integer",
+    "floating-regression-time",
+    "floating-regression-time-binary",
+    "floating-regression-writer",
+    "floating-regression-copy",
+    "floating-regression-query",
+    "floating-regression-snapshot",
+    "floating-regression-atomic",
+    "floating-regression-commit",
+    "floating-regression-commit-wire",
+    "floating-regression-file"
+  ],
+  "finished_at": "2026-09-27T01:43:33.976360+00:00"
+}
