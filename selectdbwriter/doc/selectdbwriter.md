@@ -6,6 +6,10 @@ SelectdbWriter支持将大批量数据写入SELECTDB中。
 ## 2 实现原理
 SelectdbWriter 通过调用selectdb api （/copy/upload），返回一个重定向的S3地址，使用Http向S3地址发送字节流，设置参数达到要求时执行copy into
 
+本 fork 上传时将已编码行组合成可读取的流，避免额外拼接整批 byte[]；保留原有 chunked 上传方式。
+已验证实际 HTTP 客户端的重定向、重放和正文哈希，尚未验证真实 SelectDB 服务端。
+编码行和队列仍占内存，这不解决整作业原子性或重跑重复。见[验证报告](../../benchmarks/REPORT-stream-payload.zh-CN.md)。
+
 ## 3 编译
 
 1. 运行 init-env.sh

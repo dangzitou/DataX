@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-09-27T00:15:07.069302+00:00",
+  "candidate_revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+  "reference_runtime": "candidate-stream-recovery",
+  "rows": 1000000,
+  "scenarios": [
+    [
+      "starrocks",
+      "writer-csv"
+    ],
+    [
+      "starrocks",
+      "writer-json"
+    ],
+    [
+      "doris",
+      "writer-csv"
+    ],
+    [
+      "doris",
+      "writer-json"
+    ]
+  ],
+  "method": "one warmup each plus five AB/BA measured pairs, same existing configuration, exact six-field validation per run",
+  "resources": "fresh disposable 4 CPU / 4 GiB OLAP per scenario; Doris BE 60%; PG unchanged; 6 GiB between-run database storage guard",
+  "retention": "Require byte equality, failure checks, constrained-heap improvement and no median throughput regression against prior runtime in these four groups. A failed performance condition requires revision or reverting the relevant production prototype; no 25%/50% claim from memory alone.",
+  "candidate_runtime": "candidate-stream-payload-nio",
+  "reason": "The BufferedOutputStream variant still measured -0.776369271110211% on Doris JSON. Reuse the original ByteBuffer.put copy operation in a bounded 64 KiB buffer. Same four scenarios and retention gate; if it still fails, revert the relevant backend rather than tuning repeatedly against sub-1% noise."
+}

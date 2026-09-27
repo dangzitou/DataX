@@ -1,0 +1,126 @@
+{
+  "recorded_at": "2026-09-27T00:40:09.064382+00:00",
+  "tmp_allocated_bytes_before": 1657303040,
+  "postgres_data_allocated_bytes": 1473585152,
+  "removed_olap_containers": [
+    {
+      "id": "44c41bc5c4597c30fa242d5c375cf3c25dc3d74f28766757bf7a2cf2ea332ee6",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 980287488
+    },
+    {
+      "id": "bb6e393a4acbf34271312aea2b5f5685bc8bddbaef9ea91c57ccad40aa137c08",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 921964544
+    },
+    {
+      "id": "e3e87a478591b396b9662af5e96141842ff966ed988e504df1aa203063d72f39",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2425008128
+    },
+    {
+      "id": "236d174741392f4438ebcdf5253304eeb800110ca06b42f971e4c33910ada57f",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2604179456
+    },
+    {
+      "id": "4159e68e117c983496829baeb80d6d77232fa0ad69e1bdc03a2a83f4659b5477",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 936402944
+    },
+    {
+      "id": "4713ff15aaa7e85b1ee148a116a961ac96955a8dd9a73df3b79235075c7e5271",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 961359872
+    },
+    {
+      "id": "d50ce61832afc5ffaddfc7b4c66679b4f927c124cb0451e89e697b56ebe38c03",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2482638848
+    },
+    {
+      "id": "6fbcb042bcab26a3cbba0249d0b43ec38830392d0632ebb0039c09dd2e91f1d5",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2626985984
+    },
+    {
+      "id": "a78786f288fe4727b74c5d058f8f408b44b2de5214004b8e7e3ca4a5189e1740",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 929693696
+    },
+    {
+      "id": "e2326e98d217a70ad7c1167be99516810288e2e884f7544ed3ed2e16924f1a6a",
+      "name": "/datax-perf-doris",
+      "image": "sha256:82a5cabc7900ebcd3d080412d636c0cebd6602799fffe2605c652b2ea7d42609",
+      "writable_layer_bytes": 964304896
+    },
+    {
+      "id": "424b5cdd08175670b5852178b914355cd6c50d1d763c14552c641c4a7ed1cdf7",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2589069312
+    },
+    {
+      "id": "f93a74566e3b6763c47206cd9139654cda9c5e1cab31f1faaf9ae21dea1462ff",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2663677952
+    },
+    {
+      "id": "4a37ec91638129be5dbc9accb88d9a5b66f2b925588c6435b5a8e71edfcfb3d8",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2576330752
+    },
+    {
+      "id": "6453a603ead02ea4e877d8af5a3cd2de845821561193908987544eee5c775010",
+      "name": "/datax-perf-starrocks",
+      "image": "sha256:faf7ce9c24d9c29c9431b4e8cbd4bb7a74cd169907c63f0c5ebaacc7f9df276b",
+      "writable_layer_bytes": 2620846080
+    }
+  ],
+  "cleanup_candidates": {
+    "candidate-stream-queue": {
+      "allocated_bytes_before": 150327296,
+      "revision": "305cd330d9b70f8b8c46d6adc778bf249c15a0b1",
+      "removed_after_archive_verification": true
+    },
+    "candidate-stream-recovery": {
+      "allocated_bytes_before": 154824704,
+      "revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "removed_after_archive_verification": true
+    },
+    "candidate-stream-payload": {
+      "allocated_bytes_before": 150044672,
+      "revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "removed_after_archive_verification": true
+    },
+    "candidate-stream-payload-buffered": {
+      "allocated_bytes_before": 147922944,
+      "revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "removed_after_archive_verification": true
+    },
+    "candidate-stream-payload-nio": {
+      "allocated_bytes_before": 147873792,
+      "revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "removed_after_archive_verification": true
+    }
+  },
+  "note": "No global prune. Only archived, superseded DataX runtime directories will be removed. Existing PG million-row source and unrelated containers are retained. Database guard is between runs, not a hard quota.",
+  "tmp_allocated_bytes_after": 906317824,
+  "cleanup_completed_at": "2026-09-27T00:40:27.946370+00:00",
+  "kept_runtimes": [
+    "baseline-all",
+    "candidate-stream-payload-final"
+  ],
+  "retired_runtime_allocated_bytes_removed": 750993408
+}

@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-09-27T00:11:30.797611+00:00",
+  "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+  "reference_runtime": "baseline-all",
+  "rows": 1000000,
+  "scenarios": [
+    [
+      "starrocks",
+      "writer-csv"
+    ],
+    [
+      "starrocks",
+      "writer-json"
+    ],
+    [
+      "doris",
+      "writer-csv"
+    ],
+    [
+      "doris",
+      "writer-json"
+    ]
+  ],
+  "method": "one warmup each plus five AB/BA measured pairs, same existing configuration, exact six-field validation per run",
+  "resources": "fresh disposable 4 CPU / 4 GiB OLAP per scenario; Doris BE 60%; PG unchanged; 6 GiB between-run database storage guard",
+  "retention": "Report all paired +25%/+50% gates against upstream. No whole-goal completion without all requested scenarios and fidelity/recovery evidence.",
+  "candidate_runtime": "candidate-stream-payload-buffered",
+  "reason": "First unbuffered StarRocks CSV group completed at -0.6889274318196081% median throughput vs prior. Test a bounded 64 KiB BufferedOutputStream while keeping other settings and retention gate unchanged.",
+  "purpose": "Measure final buffered candidate against untouched upstream; does not substitute prior-version regression checks."
+}

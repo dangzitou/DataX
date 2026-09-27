@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-09-26T23:59:26.072289+00:00",
+  "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+  "reference_runtime": "candidate-stream-recovery",
+  "rows": 1000000,
+  "scenarios": [
+    [
+      "starrocks",
+      "writer-csv"
+    ],
+    [
+      "starrocks",
+      "writer-json"
+    ],
+    [
+      "doris",
+      "writer-csv"
+    ],
+    [
+      "doris",
+      "writer-json"
+    ]
+  ],
+  "method": "one warmup each plus five AB/BA measured pairs, same existing configuration, exact six-field validation per run",
+  "resources": "fresh disposable 4 CPU / 4 GiB OLAP per scenario; Doris BE 60%; PG unchanged; 6 GiB between-run database storage guard",
+  "retention": "Require byte equality, failure checks, constrained-heap improvement and no median throughput regression against prior runtime in these four groups. A failed performance condition requires revision or reverting the relevant production prototype; no 25%/50% claim from memory alone.",
+  "candidate_runtime": "candidate-stream-payload-buffered",
+  "reason": "First unbuffered StarRocks CSV group completed at -0.6889274318196081% median throughput vs prior. Test a bounded 64 KiB BufferedOutputStream while keeping other settings and retention gate unchanged."
+}

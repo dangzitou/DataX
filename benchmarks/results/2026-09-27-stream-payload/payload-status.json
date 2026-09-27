@@ -1,0 +1,2348 @@
+{
+  "scope": "Real DataX Engine against a loopback HTTP fault simulator, NOT a database test.",
+  "expect_unsafe": false,
+  "expect_incomplete": false,
+  "suite": "all",
+  "expect_unverified": false,
+  "build": {
+    "revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "jars": {
+      "lib/commons-beanutils-1.9.2.jar": "23729e3a2677ed5fb164ec999ba3fcdde3f8460e5ed086b6a43d8b5d46998d42",
+      "lib/commons-cli-1.2.jar": "e7cd8951956d349b568b7ccfd4f5b2529a8c113e67c32b028f52ffda371259d9",
+      "lib/commons-codec-1.11.jar": "e599d5318e97aa48f42136a2927e6dfa4e8881dff0e6c8e3109ddbbff51d7b7d",
+      "lib/commons-collections-3.2.1.jar": "87363a4c94eaabeefd8b930cb059f66b64c9f7d632862f23de3012da7660047b",
+      "lib/commons-configuration-1.10.jar": "95d4e6711e88ce78992c82c25bc03c8df9ecf5a357f0de0bec72a26db3399374",
+      "lib/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "lib/commons-lang-2.6.jar": "50f11b09f877c294d56f24463f47d28f929cf5044f648661c0f0cfbae9a2f49c",
+      "lib/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "lib/commons-logging-1.1.1.jar": "ce6f913cad1f0db3aad70186d65c5bc7ffcc9a99e3fe8e0b137312819f7c362f",
+      "lib/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "lib/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "lib/datax-core-0.0.1-SNAPSHOT.jar": "f163d224e7725fc92d7d787afb25981f80c02cd8b12d7f28a9a18c1adea63c4c",
+      "lib/datax-transformer-0.0.1-SNAPSHOT.jar": "825348f6c27756e81d88d44df277e11a410ca89af9a6018717712d2629146eb8",
+      "lib/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "lib/fluent-hc-4.5.jar": "86b8274b4dea7be443472557072d9b5a2e225ff4d5b1ac0681d0f26ddaa04bfb",
+      "lib/groovy-all-2.1.9.jar": "7f6fcd9c28d699b92a74cabe1f311c1cbe45daafabdd781531c1972dfd670310",
+      "lib/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "lib/httpclient-4.5.13.jar": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743",
+      "lib/httpcore-4.4.13.jar": "e06e89d40943245fcfa39ec537cdbfce3762aecde8f9c597780d2b00c2b43424",
+      "lib/janino-2.5.16.jar": "8d052091b597fe8b68fa21495c833bd5a74b453d6ddd32e54afb8f26dea7f153",
+      "lib/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "lib/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "lib/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/dorisreader/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/reader/dorisreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/dorisreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/dorisreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/dorisreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/dorisreader/dorisreader-0.0.1-SNAPSHOT.jar": "c099d15eb985495d06a7d333dd7a329cc679216fbc7487a96df27d57d411151a",
+      "plugin/reader/dorisreader/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/reader/dorisreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/dorisreader/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/reader/dorisreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/dorisreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/dorisreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/dorisreader/mysql-connector-java-5.1.47.jar": "e4f84048f392b2b37baf46a8d508e4b8ddae286d209ef995b9e11885201c1923",
+      "plugin/reader/dorisreader/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/reader/dorisreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/mysqlreader/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/reader/mysqlreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/mysqlreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/mysqlreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/mysqlreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/mysqlreader/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/reader/mysqlreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/mysqlreader/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/reader/mysqlreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/mysqlreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/mysqlreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/mysqlreader/mysql-connector-java-5.1.47.jar": "e4f84048f392b2b37baf46a8d508e4b8ddae286d209ef995b9e11885201c1923",
+      "plugin/reader/mysqlreader/mysqlreader-0.0.1-SNAPSHOT.jar": "371519a29906f952fee76c8e8f74d1509f11269811fa29794218768595890184",
+      "plugin/reader/mysqlreader/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/reader/mysqlreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/postgresqlreader/checker-qual-3.5.0.jar": "729990b3f18a95606fc2573836b6958bcdb44cb52bfbd1b7aa9c339cff35a5a4",
+      "plugin/reader/postgresqlreader/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/reader/postgresqlreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/postgresqlreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/postgresqlreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/postgresqlreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/postgresqlreader/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/reader/postgresqlreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/postgresqlreader/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/reader/postgresqlreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/postgresqlreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/postgresqlreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/postgresqlreader/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/reader/postgresqlreader/postgresql-42.3.3.jar": "eed0604f512ba44817954de99a07e2a5470aa4bfcb481d4e63a93e0ff0e0aede",
+      "plugin/reader/postgresqlreader/postgresqlreader-0.0.1-SNAPSHOT.jar": "a52bbae7c2a9353ef64a6156daec80df4870bb7d6e5ee0a0f152212198063113",
+      "plugin/reader/postgresqlreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/rdbmsreader/Dm7JdbcDriver17-7.6.0.142.jar": "dad128b2e667d5eaa48e85ba8956cf2f798f853fca47d4e41a37fbd537ef0e86",
+      "plugin/reader/rdbmsreader/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/reader/rdbmsreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/rdbmsreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/rdbmsreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/rdbmsreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/rdbmsreader/db2jcc-db2jcc4.jar": "a264a74442f8ffc2f0cef0cef4bd82c8c1291138ca675a4c434176e8a7e770fc",
+      "plugin/reader/rdbmsreader/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/reader/rdbmsreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/rdbmsreader/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/reader/rdbmsreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/rdbmsreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/rdbmsreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/rdbmsreader/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/reader/rdbmsreader/rdbmsreader-0.0.1-SNAPSHOT.jar": "55221a03fc41f5a34fa039dacbb205fb6a916c97543bb766c338ee7ed0f5d16c",
+      "plugin/reader/rdbmsreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/starrocksreader/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/reader/starrocksreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/starrocksreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/starrocksreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/starrocksreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/starrocksreader/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/reader/starrocksreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/starrocksreader/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/reader/starrocksreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/starrocksreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/starrocksreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/starrocksreader/mysql-connector-java-5.1.46.jar": "3122089761e6403f02e8a81ed4a2d65a2e1029734651ba00f2ea92d920ff7b1e",
+      "plugin/reader/starrocksreader/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/reader/starrocksreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/starrocksreader/starrocksreader-0.0.1-SNAPSHOT.jar": "4b09078864e198433f7c99bf08ca878c3e2cdbc60a9a7515632010efdd113940",
+      "plugin/reader/streamreader/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/reader/streamreader/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/reader/streamreader/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/reader/streamreader/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/reader/streamreader/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/reader/streamreader/guava-16.0.1.jar": "a896857d07845d38c7dc5bbc0457b6d9b0f62ecffda010e5e9ec12d561f676d3",
+      "plugin/reader/streamreader/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/reader/streamreader/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/reader/streamreader/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/reader/streamreader/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/reader/streamreader/streamreader-0.0.1-SNAPSHOT.jar": "3fd33d828712fe3739c102635597b8d62e8792ca8d23332936dae7641b635e8c",
+      "plugin/writer/doriswriter/commons-codec-1.11.jar": "e599d5318e97aa48f42136a2927e6dfa4e8881dff0e6c8e3109ddbbff51d7b7d",
+      "plugin/writer/doriswriter/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/writer/doriswriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/doriswriter/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/writer/doriswriter/commons-logging-1.2.jar": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636",
+      "plugin/writer/doriswriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/doriswriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/doriswriter/doriswriter-0.0.1-SNAPSHOT.jar": "c3778666a91a34aa39673f9dcb1118bc2fa317cea406c2a96c425176398b3d9d",
+      "plugin/writer/doriswriter/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/writer/doriswriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/doriswriter/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/writer/doriswriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/doriswriter/httpclient-4.5.13.jar": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743",
+      "plugin/writer/doriswriter/httpcore-4.4.13.jar": "e06e89d40943245fcfa39ec537cdbfce3762aecde8f9c597780d2b00c2b43424",
+      "plugin/writer/doriswriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/doriswriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/doriswriter/mysql-connector-java-5.1.47.jar": "e4f84048f392b2b37baf46a8d508e4b8ddae286d209ef995b9e11885201c1923",
+      "plugin/writer/doriswriter/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/writer/doriswriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/mysqlwriter/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/writer/mysqlwriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/mysqlwriter/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/writer/mysqlwriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/mysqlwriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/mysqlwriter/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/writer/mysqlwriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/mysqlwriter/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/writer/mysqlwriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/mysqlwriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/mysqlwriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/mysqlwriter/mysql-connector-java-5.1.47.jar": "e4f84048f392b2b37baf46a8d508e4b8ddae286d209ef995b9e11885201c1923",
+      "plugin/writer/mysqlwriter/mysqlwriter-0.0.1-SNAPSHOT.jar": "8f1e261de156b1ae595a883c8b84a6350714f15aab1370e22bb64f6704479a17",
+      "plugin/writer/mysqlwriter/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/writer/mysqlwriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/postgresqlwriter/checker-qual-3.5.0.jar": "729990b3f18a95606fc2573836b6958bcdb44cb52bfbd1b7aa9c339cff35a5a4",
+      "plugin/writer/postgresqlwriter/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/writer/postgresqlwriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/postgresqlwriter/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/writer/postgresqlwriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/postgresqlwriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/postgresqlwriter/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/writer/postgresqlwriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/postgresqlwriter/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/writer/postgresqlwriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/postgresqlwriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/postgresqlwriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/postgresqlwriter/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/writer/postgresqlwriter/postgresql-42.3.3.jar": "eed0604f512ba44817954de99a07e2a5470aa4bfcb481d4e63a93e0ff0e0aede",
+      "plugin/writer/postgresqlwriter/postgresqlwriter-0.0.1-SNAPSHOT.jar": "c7d5d8aaf270624e4c7baf8a9ec99b2864b2f72cb7fe9692ba87e43985679208",
+      "plugin/writer/postgresqlwriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/selectdbwriter/commons-codec-1.11.jar": "e599d5318e97aa48f42136a2927e6dfa4e8881dff0e6c8e3109ddbbff51d7b7d",
+      "plugin/writer/selectdbwriter/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/writer/selectdbwriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/selectdbwriter/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/writer/selectdbwriter/commons-logging-1.2.jar": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636",
+      "plugin/writer/selectdbwriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/selectdbwriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/selectdbwriter/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/writer/selectdbwriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/selectdbwriter/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/writer/selectdbwriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/selectdbwriter/httpclient-4.5.13.jar": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743",
+      "plugin/writer/selectdbwriter/httpcore-4.4.13.jar": "e06e89d40943245fcfa39ec537cdbfce3762aecde8f9c597780d2b00c2b43424",
+      "plugin/writer/selectdbwriter/jackson-annotations-2.13.3.jar": "5326a6fbcde7cf8817f36c254101cd45f6acea4258518cd3c80ee5b89f4e4b9b",
+      "plugin/writer/selectdbwriter/jackson-core-2.13.3.jar": "ab119a8ea3cc69472ebc0e870b849bfbbe536ad57d613dc38453ccd592ca6a3d",
+      "plugin/writer/selectdbwriter/jackson-databind-2.13.3.jar": "6444bf08d8cd4629740afc3db1276938f494728deb663ce585c4e91f6b45eb84",
+      "plugin/writer/selectdbwriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/selectdbwriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/selectdbwriter/mysql-connector-java-5.1.47.jar": "e4f84048f392b2b37baf46a8d508e4b8ddae286d209ef995b9e11885201c1923",
+      "plugin/writer/selectdbwriter/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/writer/selectdbwriter/selectdbwriter-0.0.1-SNAPSHOT.jar": "b5f0431c2989268db1318bb9438ebe1461b42f2340c2d2d119a39a31eb003f97",
+      "plugin/writer/selectdbwriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/starrockswriter/commons-codec-1.9.jar": "ad19d2601c3abf0b946b5c3a4113e226a8c1e3305e395b90013b78dd94a723ce",
+      "plugin/writer/starrockswriter/commons-collections-3.0.jar": "505b94d86b214e7e6c1e75f04ff418a8264ea8454b55b8ced8c93c45884eb6a2",
+      "plugin/writer/starrockswriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/starrockswriter/commons-lang3-3.12.0.jar": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e",
+      "plugin/writer/starrockswriter/commons-logging-1.1.1.jar": "ce6f913cad1f0db3aad70186d65c5bc7ffcc9a99e3fe8e0b137312819f7c362f",
+      "plugin/writer/starrockswriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/starrockswriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/starrockswriter/druid-1.0.15.jar": "9d3f3b8c9267e74dffe93dc945dfbb1d6248b64c7640b8aef7d7803e6791250f",
+      "plugin/writer/starrockswriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/starrockswriter/guava-r05.jar": "d2ad39b98d67260e457ea945035d74d42eee70ab06cd556b504f380e5eb38519",
+      "plugin/writer/starrockswriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/starrockswriter/httpclient-4.5.3.jar": "db3d1b6c2d6a5e5ad47577ad61854e2f0e0936199b8e05eb541ed52349263135",
+      "plugin/writer/starrockswriter/httpcore-4.4.6.jar": "d7f853dee87680b07293d30855b39b9eb56c1297bd16ff1cd6f19ddb8fa745fb",
+      "plugin/writer/starrockswriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/starrockswriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/starrockswriter/mysql-connector-java-5.1.46.jar": "3122089761e6403f02e8a81ed4a2d65a2e1029734651ba00f2ea92d920ff7b1e",
+      "plugin/writer/starrockswriter/oceanbase-client-2.4.11.jar": "4805b0801b0bbdc75b77a62dd180fa7fe14cfbbb3238bd6e6e9a1e08227352c9",
+      "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar": "e04712af56d8e48a73ba9d0d054ba3e82bb6447c43f655c71f456b2d8f7e6d05",
+      "plugin/writer/starrockswriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar": "b136d6538922c3b580d8e5ff56c396c010ca11c89234cff1e6c27202b642d4f1",
+      "plugin/writer/streamwriter/commons-io-2.4.jar": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "plugin/writer/streamwriter/commons-lang3-3.3.2.jar": "6b81d10754dadf184d386011486e6509c2cc0c3d33565ced4fb4402b9413d47d",
+      "plugin/writer/streamwriter/commons-math3-3.1.1.jar": "a07e39d31c46032879f0a48ae1bd0142b17dd67664c008b50216e9891f346c54",
+      "plugin/writer/streamwriter/datax-common-0.0.1-SNAPSHOT.jar": "2c74c9a2fd7edc8342bd57831ee1dae2fa2743da8c7ee0fdaee203d137671211",
+      "plugin/writer/streamwriter/fastjson2-2.0.23.jar": "ece549786df7e2fab27d5eeb406685b5a4c4a38189526c5a7ae808cc30c8ed28",
+      "plugin/writer/streamwriter/hamcrest-core-1.3.jar": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "plugin/writer/streamwriter/logback-classic-1.0.13.jar": "12c1930ca91653422ac49fea33fce8be1b1fcd2d2220cea383c4794976c7418f",
+      "plugin/writer/streamwriter/logback-core-1.0.13.jar": "ecd8f24f9b2941284e98f154ff3343e720cb31c8f47b67554b145745f596f3b8",
+      "plugin/writer/streamwriter/slf4j-api-1.7.10.jar": "3863e27005740d4d1289bf87b113efea115e9a22408a7d623be8004991232bfe",
+      "plugin/writer/streamwriter/streamwriter-0.0.1-SNAPSHOT.jar": "1b49f5900afab0ec77d186f81858273fc6a1450646bcc14a2088cfb0e5fbec65"
+    },
+    "java": "openjdk version \"1.8.0_504\"\nOpenJDK Runtime Environment (Zulu 8.96.0.205-CA-macos-aarch64) (build 1.8.0_504-b01)\nOpenJDK 64-Bit Server VM (Zulu 8.96.0.205-CA-macos-aarch64) (build 25.504-b01, mixed mode)\n"
+  },
+  "results": [
+    {
+      "case": "starrocks-unknown-1",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 1.539766542,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "d622bca7-1536-4fbf-98a3-cad684bd4b55",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "d622bca7-1536-4fbf-98a3-cad684bd4b55",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-unknown-2",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 1.486621167,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "6c89181a-96a2-4772-85e8-4a9b191d2980",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "6c89181a-96a2-4772-85e8-4a9b191d2980",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-unknown-3",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 1.5083336249999997,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "5d8daae5-41f4-4d06-95e0-c42f3cbb53cc",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "5d8daae5-41f4-4d06-95e0-c42f3cbb53cc",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-unknown-4",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 1.5160064579999997,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "4dc2fcb7-6edc-4461-8401-1bbbcca253d0",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "4dc2fcb7-6edc-4461-8401-1bbbcca253d0",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-null",
+      "response": {
+        "Status": null
+      },
+      "seconds": 1.496893333,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "b22825d8-0467-45cd-a9b9-121f623f1b19",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "b22825d8-0467-45cd-a9b9-121f623f1b19",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-empty",
+      "response": {
+        "Status": ""
+      },
+      "seconds": 1.527089042000001,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "a3623ee2-f149-46d3-a253-354c9a720421",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "a3623ee2-f149-46d3-a253-354c9a720421",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-missing",
+      "response": {},
+      "seconds": 1.5135207910000013,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "c834bf9e-b571-4fc3-b94e-10b59f4ce305",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "c834bf9e-b571-4fc3-b94e-10b59f4ce305",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-fail",
+      "response": {
+        "Status": "Fail",
+        "Message": "Injected rejection"
+      },
+      "seconds": 1.4892935420000004,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "19eba2a1-c0d7-40ae-a0f8-1e559249da00",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "19eba2a1-c0d7-40ae-a0f8-1e559249da00",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-success",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4732449590000005,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "2aedec91-0f0e-4663-b885-a2e27ab005d3",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-filtered-1",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4818754169999995,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "6735cad6-82a2-49e8-a9e3-e89ecb66bfb1",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-filtered-2",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.49256395799999986,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "2823d982-92c9-433f-afa9-f8c5267603bc",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-filtered-3",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4907935830000003,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "f7f343df-1f0a-4693-ba1e-3d1ec2494e81",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-filtered-4",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.6430254580000003,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "118aab94-feed-4df2-8925-66f665cf3928",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-unselected",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 1
+      },
+      "seconds": 0.4790152919999997,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "17749e0f-af8b-4b7e-9174-4b871942eb2c",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-loaded",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4848550419999995,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "e4771356-19db-40ee-bb21-a8b132359c6e",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-extra-total",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 4,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.49471779099999935,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "fd16ce9b-f984-4677-9a48-59dab0ed1814",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-extra-loaded",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 4,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.7090819170000024,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "2a8f7e07-91cf-409c-ac7c-cbab1ee66c7a",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-empty",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 0,
+        "NumberLoadedRows": 0,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4693968330000011,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "abf4a45f-5f82-413b-91c8-ad22e4ef860b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-missing",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.47666637500000064,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "e5a0b83a-ff2e-4eb8-aeea-23dd790c5846",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-null",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": null,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4689476670000019,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "a216f153-33eb-48c2-892e-bbce51545977",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-fractional",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0.1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.6911117080000011,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "65b418cc-0d6f-4a44-a24b-471e59d404bb",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-overflow",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 18446744073709551619,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.44718737500000216,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "15e7e319-85eb-43d0-8190-038ea37ee89c",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-negative",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": -1
+      },
+      "seconds": 0.4850909169999973,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "04cafc4b-f1a4-4f51-b671-a0cac3a935cb",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-complete",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4886677499999976,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "9e09bb10-cb58-4ff9-bc07-478cf7ea27a2",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-rows-numeric-strings",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": "3",
+        "NumberLoadedRows": "3",
+        "NumberFilteredRows": "0",
+        "NumberUnselectedRows": "0"
+      },
+      "seconds": 0.4895357089999983,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "88f4e131-146f-4823-a1d8-9728131ac59d",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-complete-1",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.664786166999999,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "248b9376-19ab-4029-bb95-4d824004cc5f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-filtered-1",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.48207787500000165,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "af360d43-9ae8-4d9c-be83-f0212118f47d",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-missing-1",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.498454584000001,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "e3b2bc49-0b26-4755-a6f5-a590a6f61544",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-visible-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.517829250000002,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "37f00840-fbef-4314-8e97-eff3f45ff0c7",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=37f00840-fbef-4314-8e97-eff3f45ff0c7"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-committed-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.4931659579999987,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "20fdee28-dc75-41bb-914f-25190ee5ae4e",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=20fdee28-dc75-41bb-914f-25190ee5ae4e"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-ack-lost-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.5585428330000006,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "bcbf89ed-728f-417e-bb56-06aacec82259",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "bcbf89ed-728f-417e-bb56-06aacec82259",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=bcbf89ed-728f-417e-bb56-06aacec82259"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-complete-2",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.48258408300000255,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "fdfd7b56-e808-4313-872a-9858a38d1f89",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-filtered-2",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4947778750000005,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "b27e0f63-14ce-4ac0-8690-2becd528f9b8",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-missing-2",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.468506957999999,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "683c6258-7c01-4e83-b4ab-ad34043730e3",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-visible-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5373902500000014,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "02f4e8f8-8767-4b0d-a931-84849ba5fe07",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=02f4e8f8-8767-4b0d-a931-84849ba5fe07"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-committed-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5158358340000007,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "d54290b1-a2c6-496f-8da8-2f4299757eb8",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=d54290b1-a2c6-496f-8da8-2f4299757eb8"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-ack-lost-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.546589583999996,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "490fbaaa-26aa-4262-946c-9658d75dad20",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "490fbaaa-26aa-4262-946c-9658d75dad20",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=490fbaaa-26aa-4262-946c-9658d75dad20"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-complete-3",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4778977080000004,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "e0cc8974-ecf0-4787-871e-5f7a44517b99",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-filtered-3",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4651300419999984,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "975d0f8b-e721-4a32-bf28-44b8ddea88d4",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-missing-3",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.48203179100000426,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "9c0ec0d0-1b08-496d-b712-7807eeeaa70b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-visible-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.517510958999999,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "4ab3dde3-fdbb-4a26-b4d2-573dc929077a",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=4ab3dde3-fdbb-4a26-b4d2-573dc929077a"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-committed-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5147834169999967,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "dd252ee9-8eb8-48f9-9c08-d0ace3882364",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=dd252ee9-8eb8-48f9-9c08-d0ace3882364"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-ack-lost-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.585835750000001,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "3be3ab6e-429a-411f-9a48-a9e9390a05c4",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "3be3ab6e-429a-411f-9a48-a9e9390a05c4",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=3be3ab6e-429a-411f-9a48-a9e9390a05c4"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-complete-4",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.46881237499999884,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "f883766f-6197-4b0a-8115-d9e436240cc6",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-filtered-4",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.47188487500000065,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "b2963882-1b2d-434f-9018-8cbc093b982b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-timeout-missing-4",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.7133532920000007,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "a9b1abf7-403b-4b0f-848f-edc2e4f37d75",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-visible-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.4999401669999983,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "1a9302b3-cc8f-47ab-8f4c-c94f2d177039",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=1a9302b3-cc8f-47ab-8f4c-c94f2d177039"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-committed-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.541296041999999,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "1b0ec19c-8b92-46ed-b9ff-8e501ce9c583",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=1b0ec19c-8b92-46ed-b9ff-8e501ce9c583"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "starrocks-recovery-ack-lost-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.6102493329999987,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "2e4b18ef-f53a-45a1-9e87-30f48cd550c9",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "2e4b18ef-f53a-45a1-9e87-30f48cd550c9",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=2e4b18ef-f53a-45a1-9e87-30f48cd550c9"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-unknown-1",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 6.659361167,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_d89fa4df-2914-472e-aa22-58a37ebb0032",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_d89fa4df-2914-472e-aa22-58a37ebb0032",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_d89fa4df-2914-472e-aa22-58a37ebb0032",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_d89fa4df-2914-472e-aa22-58a37ebb0032",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-unknown-2",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 6.445429625000003,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_3d032298-46f0-40f2-9220-98fa300ecdaf",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_3d032298-46f0-40f2-9220-98fa300ecdaf",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_3d032298-46f0-40f2-9220-98fa300ecdaf",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_3d032298-46f0-40f2-9220-98fa300ecdaf",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-unknown-3",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 6.681849667000002,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_8e030913-e81b-4f74-a019-8c5cf0c46fde",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_8e030913-e81b-4f74-a019-8c5cf0c46fde",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_8e030913-e81b-4f74-a019-8c5cf0c46fde",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_8e030913-e81b-4f74-a019-8c5cf0c46fde",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-unknown-4",
+      "response": {
+        "Status": "UnexpectedFailure"
+      },
+      "seconds": 6.492568124999991,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_4f10ccc4-ba17-4988-b13f-91f94a211e77",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4f10ccc4-ba17-4988-b13f-91f94a211e77",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4f10ccc4-ba17-4988-b13f-91f94a211e77",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4f10ccc4-ba17-4988-b13f-91f94a211e77",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-null",
+      "response": {
+        "Status": null
+      },
+      "seconds": 6.4339668329999995,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_03bca56d-71bf-4b49-8fbb-4b0f22413a8f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_03bca56d-71bf-4b49-8fbb-4b0f22413a8f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_03bca56d-71bf-4b49-8fbb-4b0f22413a8f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_03bca56d-71bf-4b49-8fbb-4b0f22413a8f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-empty",
+      "response": {
+        "Status": ""
+      },
+      "seconds": 6.68442716700001,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_30c0a308-d62f-4f3d-a4c4-c645b7bae161",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_30c0a308-d62f-4f3d-a4c4-c645b7bae161",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_30c0a308-d62f-4f3d-a4c4-c645b7bae161",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_30c0a308-d62f-4f3d-a4c4-c645b7bae161",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-missing",
+      "response": {},
+      "seconds": 6.663869375000004,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_26bef6ea-e826-4824-932b-6a0e3d42fa45",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_26bef6ea-e826-4824-932b-6a0e3d42fa45",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_26bef6ea-e826-4824-932b-6a0e3d42fa45",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_26bef6ea-e826-4824-932b-6a0e3d42fa45",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-fail",
+      "response": {
+        "Status": "Fail",
+        "Message": "Injected rejection"
+      },
+      "seconds": 6.675302500000001,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_4e2fa517-9701-44e9-8d0d-088027fd9d12",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4e2fa517-9701-44e9-8d0d-088027fd9d12",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4e2fa517-9701-44e9-8d0d-088027fd9d12",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_4e2fa517-9701-44e9-8d0d-088027fd9d12",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-success",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.46736779200000456,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_d7e7d7ab-ae1d-4e48-a9dd-be635aa43018",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-filtered-1",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4774051670000006,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_3f687858-796d-4c40-9b00-ff7bb6ae3ea1",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-filtered-2",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4923644160000009,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_6d3e0f19-6794-4414-a264-5f6939dafe3b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-filtered-3",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4931560419999954,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_be6bb2f5-95d3-47a0-baf2-9203f529c048",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-filtered-4",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.46896858299999167,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_606afc03-b441-4ce5-90e9-7a5bb585c5ec",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-unselected",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 1
+      },
+      "seconds": 0.48354045899999676,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_e8d9aa82-214c-45ee-a22a-e76bd9fedf4e",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-loaded",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4799546670000012,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_3a98d238-874b-4cef-8521-e2650e373786",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-extra-total",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 4,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.49141620800000396,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_7d99b175-954a-4e85-9511-3633a117b459",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-extra-loaded",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 4,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.5180482500000068,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_0dfb1715-6846-446b-b5ed-bd39dea3168f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-empty",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 0,
+        "NumberLoadedRows": 0,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4762279579999955,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_bf8e805e-db90-49a3-8a0e-ca4a87b072a4",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-missing",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.48308099999999854,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_6057f667-9fc1-41f5-86fe-035be061c17b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-null",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": null,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.47277820799999404,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_7231fc0f-7624-4b05-8cb9-904f9c8e6bfd",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-fractional",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0.1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.49420462500000895,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_96c41971-3d0e-4bb7-8230-e6b8ed362bd8",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-overflow",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 18446744073709551619,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4894740420000119,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_c87a4388-d1b7-431d-a297-8b5c51d182d5",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-negative",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": -1
+      },
+      "seconds": 0.4913252919999991,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_02802db7-4413-46f0-a85f-dafa064de16f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-complete",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.470908541,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_7c0452ca-86d0-483c-89a8-661a4c933e1b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-rows-numeric-strings",
+      "response": {
+        "Status": "Success",
+        "NumberTotalRows": "3",
+        "NumberLoadedRows": "3",
+        "NumberFilteredRows": "0",
+        "NumberUnselectedRows": "0"
+      },
+      "seconds": 0.48024029200000484,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_4119d5a3-caba-49c3-999c-aea68dbfbe7d",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-complete-1",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.5011330420000064,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_1678c409-5486-4f13-8bed-e6b759b27fcb",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-filtered-1",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4776805829999944,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_d84a4932-336a-41c4-b129-3f9c2a38c457",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-missing-1",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.47215287500000613,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_e0e74f70-f185-4cb6-9bc2-bc6f1a42f8b1",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-visible-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5101264999999984,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_a94da727-0021-452d-a327-dc34b6351a33",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_a94da727-0021-452d-a327-dc34b6351a33"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-committed-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.4931908749999963,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_e3c8b291-54c3-47bb-aaae-8772580b20ce",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_e3c8b291-54c3-47bb-aaae-8772580b20ce"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-ack-lost-1",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.553762415999998,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_3b62cb32-594b-4562-a53f-05f37a202e28",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_3b62cb32-594b-4562-a53f-05f37a202e28",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_3b62cb32-594b-4562-a53f-05f37a202e28"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-complete-2",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.49714600000000075,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_72ea8548-e922-432a-9806-0fee027c348d",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-filtered-2",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.5023968750000023,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_c5a7469b-0f82-4bbf-a17c-6e0358bdf23f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-missing-2",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.4940859169999925,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_c0e40738-d661-4013-b71c-d0aa67b2e79f",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-visible-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.4940805000000097,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_9d202bb2-8f21-4f6e-b611-a66f01b350bc",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_9d202bb2-8f21-4f6e-b611-a66f01b350bc"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-committed-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5403315840000005,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_21e2a6cb-f382-4dba-8b9b-19504b9c3c24",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_21e2a6cb-f382-4dba-8b9b-19504b9c3c24"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-ack-lost-2",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.5294683750000075,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_ab292ca3-314a-40d8-877a-b73078550436",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_ab292ca3-314a-40d8-877a-b73078550436",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_ab292ca3-314a-40d8-877a-b73078550436"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-complete-3",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.508622583999994,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_6cbde240-fc63-4ab3-b127-5b64443a78e9",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-filtered-3",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4817512909999948,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_232a4942-7e62-49ff-8905-a3ce61f95811",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-missing-3",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.48585170799999844,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_fd190d96-85f9-4489-9032-4fe3dfc7e2e8",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-visible-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5243277080000013,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_3b40f862-f348-4fcb-a17a-865b24ef5f38",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_3b40f862-f348-4fcb-a17a-865b24ef5f38"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-committed-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5182056249999931,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_333038d3-5c82-4721-80d5-6e0f9c284883",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_333038d3-5c82-4721-80d5-6e0f9c284883"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-ack-lost-3",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.538657709000006,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_064982fa-2a67-4814-8154-edddcd58e496",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_064982fa-2a67-4814-8154-edddcd58e496",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_064982fa-2a67-4814-8154-edddcd58e496"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-complete-4",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 3,
+        "NumberFilteredRows": 0,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4950920420000102,
+      "expected_success": true,
+      "requests": [
+        {
+          "label": "datax_doris_writer_f7d36f46-4f72-4323-a0ca-73977c65838b",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-filtered-4",
+      "response": {
+        "Status": "Publish Timeout",
+        "NumberTotalRows": 3,
+        "NumberLoadedRows": 2,
+        "NumberFilteredRows": 1,
+        "NumberUnselectedRows": 0
+      },
+      "seconds": 0.4851045830000089,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_10f3dbd5-d9e0-4404-b4fe-f979500fb9f2",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-timeout-missing-4",
+      "response": {
+        "Status": "Publish Timeout"
+      },
+      "seconds": 0.5077576250000106,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_40ce6fbb-af36-48fb-8098-552fd6d463f1",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-visible-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.5114917909999974,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_99126d18-0b91-468e-b8ca-f76dd15d9085",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_99126d18-0b91-468e-b8ca-f76dd15d9085"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-committed-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 1.543181125000018,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_c1c85547-c216-4e8a-8fb9-ff79f742c98d",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_c1c85547-c216-4e8a-8fb9-ff79f742c98d"
+      ],
+      "unsafe_success_reproduced": false
+    },
+    {
+      "case": "doris-recovery-ack-lost-4",
+      "response": {
+        "Status": "Label Already Exists"
+      },
+      "seconds": 2.5708423330000016,
+      "expected_success": false,
+      "requests": [
+        {
+          "label": "datax_doris_writer_aac75ebe-ecfc-47d9-b2c3-d0fd06a1e676",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        },
+        {
+          "label": "datax_doris_writer_aac75ebe-ecfc-47d9-b2c3-d0fd06a1e676",
+          "bytes": 39,
+          "sha256": "9ca019d952bbea5714777159d558c8cf2a0cc8fff71e49891e9b708f2ae63a90"
+        }
+      ],
+      "state_polls": [
+        "/api/test/get_load_state?label=datax_doris_writer_aac75ebe-ecfc-47d9-b2c3-d0fd06a1e676"
+      ],
+      "unsafe_success_reproduced": false
+    }
+  ]
+}

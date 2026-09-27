@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-09-27T00:21:54.712259+00:00",
+  "selected_payload_implementation": "5188855 bounded BufferedOutputStream",
+  "retained_backends": [
+    "starrocks",
+    "selectdb"
+  ],
+  "restored_backend": "Doris visitor from 4e135da; both prior Doris JSON pilots failed the median retention condition",
+  "reason": "The NIO variant already regressed StarRocks CSV by 1.118843056822394%; finish its planned measurements but do not add another tuning variant or separate buffer strategy for each backend.",
+  "upstream_comparisons": [
+    [
+      "starrocks",
+      "writer-csv"
+    ],
+    [
+      "starrocks",
+      "writer-json"
+    ]
+  ],
+  "limits": "SelectDB HTTP framing/heap validation only; no actual SelectDB database. Doris contiguous allocation remains. All-scenario 25%/50% and hundred-million-row safety are not achieved."
+}

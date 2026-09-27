@@ -1,0 +1,1229 @@
+{
+  "created_at": "2026-09-27T00:39:26.101264+00:00",
+  "production_revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+  "retained_backends": [
+    "starrocks",
+    "selectdb"
+  ],
+  "doris": "Restored to 4e135da implementation after measured pilot regressions",
+  "unit_tests": {
+    "common": {
+      "tests": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core": {
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "plugin-rdbms-util": {
+      "tests": 30,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "starrockswriter": {
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "doriswriter": {
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "streamwriter": {
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "checks": {
+    "payload-final-streamed": {
+      "checks": 64,
+      "revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 0
+    },
+    "payload-final-doris": {
+      "checks": 32,
+      "revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 8
+    },
+    "payload-upstream": {
+      "checks": 64,
+      "revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 16
+    },
+    "payload-before-v2": {
+      "checks": 96,
+      "revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 24
+    },
+    "payload-after": {
+      "checks": 96,
+      "revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 0
+    },
+    "payload-buffered-after": {
+      "checks": 96,
+      "revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 0
+    },
+    "payload-nio-after": {
+      "checks": 96,
+      "revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "scope": "HTTP clients + hashing sink, not real databases or Engine; bounded heap, no payload files.",
+      "expected_oom_checks": 0
+    },
+    "payload-final-status": {
+      "checks": 98,
+      "revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "scope": "Real DataX Engine against a loopback HTTP fault simulator, NOT a database test.",
+      "expected_oom_checks": 0
+    },
+    "payload-final-queue": {
+      "checks": 60,
+      "revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "scope": "Real manager/HTTP-client queue failure checks; simulated server, not database/Engine.",
+      "expected_oom_checks": 0
+    }
+  },
+  "performance": [
+    {
+      "directory": "payload-buffered-perf-doris-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "median_seconds": {
+        "baseline": 3.914609999999996,
+        "candidate": 3.883059166999999
+      },
+      "throughput_gain_percent": 0.8125251674795608,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -0.9849368321206642,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -1.6084150746601744,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 3.745080320335803,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 2.1917173082270702,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 4.201777473504165,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.6084150746601744,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -0.9849368321206642,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -1.6084150746601744,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 3.745080320335803,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 2.1917173082270702,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 4.201777473504165,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.6084150746601744,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2373496832
+    },
+    {
+      "directory": "payload-buffered-perf-doris-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "median_seconds": {
+        "baseline": 5.133057040999999,
+        "candidate": 5.173220334
+      },
+      "throughput_gain_percent": -0.776369271110211,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 4.155883635034008,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.557483830507914,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -8.41335708688109,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -5.807492442098338,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 6.917708272504353,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -8.41335708688109,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 4.155883635034008,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.557483830507914,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -8.41335708688109,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -5.807492442098338,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 6.917708272504353,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -8.41335708688109,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2357919744
+    },
+    {
+      "directory": "payload-buffered-perf-starrocks-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "median_seconds": {
+        "baseline": 6.974512417,
+        "candidate": 6.964690665999996
+      },
+      "throughput_gain_percent": 0.14102207077122397,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.13014741807462205,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 0.19656370689811187,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 0.25657880447458314,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -1.61127849158762,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 2.6043361823013367,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.61127849158762,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.13014741807462205,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 0.19656370689811187,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 0.25657880447458314,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -1.61127849158762,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 2.6043361823013367,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.61127849158762,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3721773056
+    },
+    {
+      "directory": "payload-buffered-perf-starrocks-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "51888551657b7a4c585731ba1a8acbeeed92b8cd",
+      "median_seconds": {
+        "baseline": 8.403857166999998,
+        "candidate": 8.392803875000006
+      },
+      "throughput_gain_percent": 0.13169963417014596,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -1.5552366395867878,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 1.0281675145184632,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 2.863633932362908,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -2.138648713164848,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.21407613579015328,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -2.138648713164848,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -1.5552366395867878,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 1.0281675145184632,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 2.863633932362908,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -2.138648713164848,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.21407613579015328,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -2.138648713164848,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3965575168
+    },
+    {
+      "directory": "payload-nio-perf-doris-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "median_seconds": {
+        "baseline": 3.8448722080000017,
+        "candidate": 3.8677767919999937
+      },
+      "throughput_gain_percent": -0.5921899124935903,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -5.740306837135789,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -4.085133292517007,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 5.581829306845676,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 10.767315845405378,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -5.735983587751836,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.740306837135789,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -5.740306837135789,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -4.085133292517007,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 5.581829306845676,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 10.767315845405378,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -5.735983587751836,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.740306837135789,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2358861824
+    },
+    {
+      "directory": "payload-nio-perf-doris-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "median_seconds": {
+        "baseline": 5.138127209000004,
+        "candidate": 4.978254624999998
+      },
+      "throughput_gain_percent": 3.211418379388453,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 2.751908785682722,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.2731680023745175,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 10.658428464775604,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 4.439358873978927,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.2588519533573974,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -0.2588519533573974,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 2.751908785682722,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.2731680023745175,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 10.658428464775604,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 4.439358873978927,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.2588519533573974,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -0.2588519533573974,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2366427136
+    },
+    {
+      "directory": "payload-nio-perf-starrocks-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "median_seconds": {
+        "baseline": 6.936505166999993,
+        "candidate": 7.014991917
+      },
+      "throughput_gain_percent": -1.118843056822394,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -1.2299871620792713,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -2.5342403043795536,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.15769347028098402,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.11143369188439944,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -3.535869778208811,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.535869778208811,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -1.2299871620792713,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -2.5342403043795536,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.15769347028098402,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.11143369188439944,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -3.535869778208811,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.535869778208811,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3779313664
+    },
+    {
+      "directory": "payload-nio-perf-starrocks-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "52ed53cca67831eb777f94aa8c6aae19796f772e",
+      "median_seconds": {
+        "baseline": 8.184679790999994,
+        "candidate": 8.208639583999997
+      },
+      "throughput_gain_percent": -0.2918850651782101,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -2.7879555226982156,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 2.5959007185382132,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -2.7455920038406023,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.6238186262221168,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.2918850651782101,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -2.7879555226982156,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -2.7879555226982156,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 2.5959007185382132,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -2.7455920038406023,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.6238186262221168,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.2918850651782101,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -2.7879555226982156,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3933163520
+    },
+    {
+      "directory": "payload-perf-doris-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "median_seconds": {
+        "baseline": 3.865738916000005,
+        "candidate": 3.8531989999999983
+      },
+      "throughput_gain_percent": 0.3254416914363123,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -4.329475093292567,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -5.4707723587827495,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -4.962610877127505,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 6.5659641482404885,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 7.196830908877283,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.4707723587827495,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -4.329475093292567,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -5.4707723587827495,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -4.962610877127505,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 6.5659641482404885,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 7.196830908877283,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.4707723587827495,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2319757312
+    },
+    {
+      "directory": "payload-perf-doris-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "median_seconds": {
+        "baseline": 4.903239082999999,
+        "candidate": 4.939974124999999
+      },
+      "throughput_gain_percent": -0.7436282270000816,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -4.4746991045449995,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.508739777523641,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.7465677957686294,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -5.409573321700689,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.41909715468391173,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.409573321700689,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -4.4746991045449995,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 5.508739777523641,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.7465677957686294,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": -5.409573321700689,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -0.41909715468391173,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.409573321700689,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 2385772544
+    },
+    {
+      "directory": "payload-perf-starrocks-writer-csv",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "median_seconds": {
+        "baseline": 6.984971791999996,
+        "candidate": 7.033427000000003
+      },
+      "throughput_gain_percent": -0.6889274318196081,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 3.121214594601285,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -2.574217613149743,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.4812404809129394,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 3.123169843046858,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -1.480868316398254,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.4812404809129394,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 3.121214594601285,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -2.574217613149743,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.4812404809129394,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 3.123169843046858,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -1.480868316398254,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.4812404809129394,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3888541696
+    },
+    {
+      "directory": "payload-perf-starrocks-writer-json",
+      "runs": 12,
+      "reference_revision": "8b9521444671ff18f613b481786e8d87ab005ae7",
+      "candidate_revision": "61d7c411c801a4d07123d720cb5be2dbcccef642",
+      "median_seconds": {
+        "baseline": 8.279779750000003,
+        "candidate": 8.324061084
+      },
+      "throughput_gain_percent": -0.5319679126948307,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.10192892922029628,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 1.4104007985436873,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.5036716251449747,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 1.1495772985622432,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -5.09063286881144,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.09063286881144,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.10192892922029628,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 1.4104007985436873,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.5036716251449747,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 1.1495772985622432,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -5.09063286881144,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -5.09063286881144,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3919384576
+    },
+    {
+      "directory": "payload-upstream-perf-starrocks-writer-csv",
+      "runs": 12,
+      "reference_revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+      "candidate_revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "median_seconds": {
+        "baseline": 6.9833962500000055,
+        "candidate": 6.954264249999998
+      },
+      "throughput_gain_percent": 0.41890844168033237,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.14647008847845644,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 0.10217019191856025,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.477658164461317,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.5555724171088405,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 1.30714248594892,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.477658164461317,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 0.14647008847845644,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 0.10217019191856025,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -3.477658164461317,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 0.5555724171088405,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 1.30714248594892,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -3.477658164461317,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3865300992
+    },
+    {
+      "directory": "payload-upstream-perf-starrocks-writer-json",
+      "runs": 12,
+      "reference_revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e",
+      "candidate_revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d",
+      "median_seconds": {
+        "baseline": 8.377966790999992,
+        "candidate": 8.243428000000009
+      },
+      "throughput_gain_percent": 1.6320733437592105,
+      "gate25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 1.388309424430223,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -1.2140594564298168,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.83886980114386,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 2.6633399925597656,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 1.6320733437592105,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.2140594564298168,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 1.388309424430223,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": -1.2140594564298168,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -0.83886980114386,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 2.6633399925597656,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 1.6320733437592105,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -1.2140594564298168,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "maximum_database_storage_before_bytes": 3926237184
+    }
+  ],
+  "whole_goal_met": false,
+  "hundred_million_backfill_validated": false,
+  "real_selectdb_validated": false,
+  "production_error_rate_measured": false
+}

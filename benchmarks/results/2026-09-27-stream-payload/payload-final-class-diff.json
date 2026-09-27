@@ -1,0 +1,109 @@
+[
+  {
+    "jar": "lib/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/dorisreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/mysqlreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/postgresqlreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/rdbmsreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/starrocksreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/reader/streamreader/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/doriswriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/mysqlwriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/postgresqlwriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/selectdbwriter-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/plugin/writer/selectdbwriter/SelectdbCopyIntoObserver$1.class",
+      "com/alibaba/datax/plugin/writer/selectdbwriter/SelectdbCopyIntoObserver.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar",
+    "classes": [
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor$1.class",
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor$2.class",
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor$3.class",
+      "com/starrocks/connector/datax/plugin/writer/starrockswriter/manager/StarRocksStreamLoadVisitor.class"
+    ]
+  },
+  {
+    "jar": "plugin/writer/streamwriter/datax-common-0.0.1-SNAPSHOT.jar",
+    "classes": [
+      "com/alibaba/datax/common/util/BatchPayload$1.class",
+      "com/alibaba/datax/common/util/BatchPayload.class"
+    ]
+  }
+]

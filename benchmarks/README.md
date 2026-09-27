@@ -53,6 +53,12 @@ extends counter validation to Publish Timeout and rejects existing-label recover
 when the original counters are unavailable. Correctly committed batches with a
 lost reply may also fail explicitly and require reconciliation before restarting.
 
+[Bounded upload payloads and rejected performance variants (中文)](REPORT-stream-payload.zh-CN.md)
+removes the contiguous batch copy for StarRocks/SelectDB, with real client
+redirect/replay byte checks under a bounded heap. Doris remains unchanged after
+measured regressions. All pilot results and limitations are retained; this adds
+no whole-job atomicity, universal throughput or production-error-rate claim.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

@@ -1,0 +1,38 @@
+{
+  "common": {
+    "tests": 10,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "core": {
+    "tests": 7,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "plugin-rdbms-util": {
+    "tests": 30,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "starrockswriter": {
+    "tests": 5,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "doriswriter": {
+    "tests": 5,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "streamwriter": {
+    "tests": 3,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  }
+}
