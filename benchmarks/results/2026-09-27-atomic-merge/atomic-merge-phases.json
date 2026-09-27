@@ -1,0 +1,545 @@
+{
+  "scope": "Coarse existing INFO log timestamps; not individual SQL profiling or causation proof",
+  "results": [
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "1-baseline",
+      "schedule_seconds": 6.74,
+      "publication_seconds": 6.817,
+      "publication_from": "2026-09-27 03:09:32.166000",
+      "publication_to": "2026-09-27 03:09:38.983000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "1-candidate",
+      "schedule_seconds": 6.983,
+      "publication_seconds": 5.841,
+      "publication_from": "2026-09-27 03:09:47.881000",
+      "publication_to": "2026-09-27 03:09:53.722000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "2-baseline",
+      "schedule_seconds": 7.354,
+      "publication_seconds": 7.122,
+      "publication_from": "2026-09-27 03:10:24.909000",
+      "publication_to": "2026-09-27 03:10:32.031000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "2-candidate",
+      "schedule_seconds": 7.799,
+      "publication_seconds": 11.347,
+      "publication_from": "2026-09-27 03:10:03.517000",
+      "publication_to": "2026-09-27 03:10:14.864000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "3-baseline",
+      "schedule_seconds": 6.734,
+      "publication_seconds": 6.953,
+      "publication_from": "2026-09-27 03:10:40.690000",
+      "publication_to": "2026-09-27 03:10:47.643000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "3-candidate",
+      "schedule_seconds": 7.149,
+      "publication_seconds": 6.317,
+      "publication_from": "2026-09-27 03:10:56.582000",
+      "publication_to": "2026-09-27 03:11:02.899000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "4-baseline",
+      "schedule_seconds": 6.781,
+      "publication_seconds": 7.06,
+      "publication_from": "2026-09-27 03:11:26.529000",
+      "publication_to": "2026-09-27 03:11:33.589000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "4-candidate",
+      "schedule_seconds": 7.159,
+      "publication_seconds": 6.126,
+      "publication_from": "2026-09-27 03:11:11.740000",
+      "publication_to": "2026-09-27 03:11:17.866000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "5-baseline",
+      "schedule_seconds": 7.213,
+      "publication_seconds": 6.839,
+      "publication_from": "2026-09-27 03:11:42.866000",
+      "publication_to": "2026-09-27 03:11:49.705000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "5-candidate",
+      "schedule_seconds": 6.95,
+      "publication_seconds": 5.814,
+      "publication_from": "2026-09-27 03:11:58.322000",
+      "publication_to": "2026-09-27 03:12:04.136000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "warmup-baseline",
+      "schedule_seconds": 6.957,
+      "publication_seconds": 11.522,
+      "publication_from": "2026-09-27 03:09:12.077000",
+      "publication_to": "2026-09-27 03:09:23.599000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "table-single",
+      "job": "warmup-candidate",
+      "schedule_seconds": 6.983,
+      "publication_seconds": 6.334,
+      "publication_from": "2026-09-27 03:08:56.859000",
+      "publication_to": "2026-09-27 03:09:03.193000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "1-baseline",
+      "schedule_seconds": 3.865,
+      "publication_seconds": 5.697,
+      "publication_from": "2026-09-27 03:12:28.886000",
+      "publication_to": "2026-09-27 03:12:34.583000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "1-candidate",
+      "schedule_seconds": 3.861,
+      "publication_seconds": 4.296,
+      "publication_from": "2026-09-27 03:12:39.494000",
+      "publication_to": "2026-09-27 03:12:43.790000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "2-baseline",
+      "schedule_seconds": 3.673,
+      "publication_seconds": 5.855,
+      "publication_from": "2026-09-27 03:12:57.489000",
+      "publication_to": "2026-09-27 03:13:03.344000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "2-candidate",
+      "schedule_seconds": 3.677,
+      "publication_seconds": 4.259,
+      "publication_from": "2026-09-27 03:12:48.565000",
+      "publication_to": "2026-09-27 03:12:52.824000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "3-baseline",
+      "schedule_seconds": 3.876,
+      "publication_seconds": 5.964,
+      "publication_from": "2026-09-27 03:13:08.251000",
+      "publication_to": "2026-09-27 03:13:14.215000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "3-candidate",
+      "schedule_seconds": 3.883,
+      "publication_seconds": 4.107,
+      "publication_from": "2026-09-27 03:13:19.148000",
+      "publication_to": "2026-09-27 03:13:23.255000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "4-baseline",
+      "schedule_seconds": 3.891,
+      "publication_seconds": 5.61,
+      "publication_from": "2026-09-27 03:13:37.123000",
+      "publication_to": "2026-09-27 03:13:42.733000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "4-candidate",
+      "schedule_seconds": 3.68,
+      "publication_seconds": 4.31,
+      "publication_from": "2026-09-27 03:13:27.956000",
+      "publication_to": "2026-09-27 03:13:32.266000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "5-baseline",
+      "schedule_seconds": 4.066,
+      "publication_seconds": 5.891,
+      "publication_from": "2026-09-27 03:13:47.775000",
+      "publication_to": "2026-09-27 03:13:53.666000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "5-candidate",
+      "schedule_seconds": 3.871,
+      "publication_seconds": 4.261,
+      "publication_from": "2026-09-27 03:13:58.533000",
+      "publication_to": "2026-09-27 03:14:02.794000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "warmup-baseline",
+      "schedule_seconds": 3.464,
+      "publication_seconds": 5.913,
+      "publication_from": "2026-09-27 03:12:18.112000",
+      "publication_to": "2026-09-27 03:12:24.025000"
+    },
+    {
+      "family": "atomic-hash",
+      "scenario": "stream-to-pg",
+      "job": "warmup-candidate",
+      "schedule_seconds": 3.278,
+      "publication_seconds": 4.292,
+      "publication_from": "2026-09-27 03:12:09.428000",
+      "publication_to": "2026-09-27 03:12:13.720000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "1-baseline",
+      "schedule_seconds": 7.185,
+      "publication_seconds": 8.206,
+      "publication_from": "2026-09-27 03:20:16.032000",
+      "publication_to": "2026-09-27 03:20:24.238000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "1-candidate",
+      "schedule_seconds": 7.163,
+      "publication_seconds": 4.879,
+      "publication_from": "2026-09-27 03:20:33.158000",
+      "publication_to": "2026-09-27 03:20:38.037000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "2-baseline",
+      "schedule_seconds": 7.58,
+      "publication_seconds": 7.712,
+      "publication_from": "2026-09-27 03:21:01.482000",
+      "publication_to": "2026-09-27 03:21:09.194000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "2-candidate",
+      "schedule_seconds": 7.379,
+      "publication_seconds": 5.018,
+      "publication_from": "2026-09-27 03:20:47.155000",
+      "publication_to": "2026-09-27 03:20:52.173000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "3-baseline",
+      "schedule_seconds": 7.782,
+      "publication_seconds": 13.698,
+      "publication_from": "2026-09-27 03:21:18.948000",
+      "publication_to": "2026-09-27 03:21:32.646000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "3-candidate",
+      "schedule_seconds": 7.192,
+      "publication_seconds": 4.951,
+      "publication_from": "2026-09-27 03:21:41.740000",
+      "publication_to": "2026-09-27 03:21:46.691000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "4-baseline",
+      "schedule_seconds": 6.78,
+      "publication_seconds": 7.42,
+      "publication_from": "2026-09-27 03:22:15.546000",
+      "publication_to": "2026-09-27 03:22:22.966000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "4-candidate",
+      "schedule_seconds": 7.994,
+      "publication_seconds": 10.779,
+      "publication_from": "2026-09-27 03:21:56.404000",
+      "publication_to": "2026-09-27 03:22:07.183000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "5-baseline",
+      "schedule_seconds": 7.987,
+      "publication_seconds": 7.686,
+      "publication_from": "2026-09-27 03:22:32.726000",
+      "publication_to": "2026-09-27 03:22:40.412000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "5-candidate",
+      "schedule_seconds": 7.586,
+      "publication_seconds": 5.551,
+      "publication_from": "2026-09-27 03:22:50.341000",
+      "publication_to": "2026-09-27 03:22:55.892000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "warmup-baseline",
+      "schedule_seconds": 6.985,
+      "publication_seconds": 7.054,
+      "publication_from": "2026-09-27 03:20:00.066000",
+      "publication_to": "2026-09-27 03:20:07.120000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-single",
+      "job": "warmup-candidate",
+      "schedule_seconds": 6.964,
+      "publication_seconds": 5.042,
+      "publication_from": "2026-09-27 03:19:46.364000",
+      "publication_to": "2026-09-27 03:19:51.406000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "1-baseline",
+      "schedule_seconds": 4.086,
+      "publication_seconds": 6.131,
+      "publication_from": "2026-09-27 03:23:24.195000",
+      "publication_to": "2026-09-27 03:23:30.326000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "1-candidate",
+      "schedule_seconds": 3.889,
+      "publication_seconds": 10.121,
+      "publication_from": "2026-09-27 03:23:35.262000",
+      "publication_to": "2026-09-27 03:23:45.383000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "2-baseline",
+      "schedule_seconds": 4.078,
+      "publication_seconds": 5.833,
+      "publication_from": "2026-09-27 03:23:59.409000",
+      "publication_to": "2026-09-27 03:24:05.242000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "2-candidate",
+      "schedule_seconds": 2.66,
+      "publication_seconds": 5.339,
+      "publication_from": "2026-09-27 03:23:48.957000",
+      "publication_to": "2026-09-27 03:23:54.296000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "3-baseline",
+      "schedule_seconds": 3.883,
+      "publication_seconds": 6.112,
+      "publication_from": "2026-09-27 03:24:10.087000",
+      "publication_to": "2026-09-27 03:24:16.199000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "3-candidate",
+      "schedule_seconds": 4.058,
+      "publication_seconds": 5.271,
+      "publication_from": "2026-09-27 03:24:21.335000",
+      "publication_to": "2026-09-27 03:24:26.606000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "4-baseline",
+      "schedule_seconds": 4.1,
+      "publication_seconds": 6.286,
+      "publication_from": "2026-09-27 03:24:41.875000",
+      "publication_to": "2026-09-27 03:24:48.161000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "4-candidate",
+      "schedule_seconds": 4.308,
+      "publication_seconds": 4.939,
+      "publication_from": "2026-09-27 03:24:31.912000",
+      "publication_to": "2026-09-27 03:24:36.851000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "5-baseline",
+      "schedule_seconds": 4.084,
+      "publication_seconds": 5.944,
+      "publication_from": "2026-09-27 03:24:53.463000",
+      "publication_to": "2026-09-27 03:24:59.407000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "5-candidate",
+      "schedule_seconds": 4.496,
+      "publication_seconds": 5.222,
+      "publication_from": "2026-09-27 03:25:04.954000",
+      "publication_to": "2026-09-27 03:25:10.176000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "warmup-baseline",
+      "schedule_seconds": 4.122,
+      "publication_seconds": 5.959,
+      "publication_from": "2026-09-27 03:23:13.125000",
+      "publication_to": "2026-09-27 03:23:19.084000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "stream-to-pg",
+      "job": "warmup-candidate",
+      "schedule_seconds": 4.292,
+      "publication_seconds": 5.397,
+      "publication_from": "2026-09-27 03:23:02.433000",
+      "publication_to": "2026-09-27 03:23:07.830000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "1-baseline",
+      "schedule_seconds": 4.704,
+      "publication_seconds": 14.289,
+      "publication_from": "2026-09-27 03:25:51.966000",
+      "publication_to": "2026-09-27 03:26:06.255000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "1-candidate",
+      "schedule_seconds": 4.885,
+      "publication_seconds": 5.469,
+      "publication_from": "2026-09-27 03:26:13.167000",
+      "publication_to": "2026-09-27 03:26:18.636000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "2-baseline",
+      "schedule_seconds": 5.711,
+      "publication_seconds": 8.251,
+      "publication_from": "2026-09-27 03:26:39.768000",
+      "publication_to": "2026-09-27 03:26:48.019000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "2-candidate",
+      "schedule_seconds": 5.517,
+      "publication_seconds": 5.782,
+      "publication_from": "2026-09-27 03:26:26.323000",
+      "publication_to": "2026-09-27 03:26:32.105000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "3-baseline",
+      "schedule_seconds": 5.732,
+      "publication_seconds": 8.392,
+      "publication_from": "2026-09-27 03:26:55.840000",
+      "publication_to": "2026-09-27 03:27:04.232000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "3-candidate",
+      "schedule_seconds": 4.89,
+      "publication_seconds": 6.868,
+      "publication_from": "2026-09-27 03:27:16.151000",
+      "publication_to": "2026-09-27 03:27:23.019000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "4-baseline",
+      "schedule_seconds": 5.502,
+      "publication_seconds": 8.727,
+      "publication_from": "2026-09-27 03:27:43.613000",
+      "publication_to": "2026-09-27 03:27:52.340000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "4-candidate",
+      "schedule_seconds": 5.527,
+      "publication_seconds": 5.569,
+      "publication_from": "2026-09-27 03:27:30.503000",
+      "publication_to": "2026-09-27 03:27:36.072000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "5-baseline",
+      "schedule_seconds": 5.53,
+      "publication_seconds": 8.706,
+      "publication_from": "2026-09-27 03:28:00.282000",
+      "publication_to": "2026-09-27 03:28:08.988000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "5-candidate",
+      "schedule_seconds": 5.508,
+      "publication_seconds": 6.983,
+      "publication_from": "2026-09-27 03:28:16.533000",
+      "publication_to": "2026-09-27 03:28:23.516000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "warmup-baseline",
+      "schedule_seconds": 5.508,
+      "publication_seconds": 13.488,
+      "publication_from": "2026-09-27 03:25:31.725000",
+      "publication_to": "2026-09-27 03:25:45.213000"
+    },
+    {
+      "family": "atomic-merge",
+      "scenario": "table-parallel",
+      "job": "warmup-candidate",
+      "schedule_seconds": 6.139,
+      "publication_seconds": 6.513,
+      "publication_from": "2026-09-27 03:25:17.806000",
+      "publication_to": "2026-09-27 03:25:24.319000"
+    }
+  ]
+}

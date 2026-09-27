@@ -89,6 +89,12 @@ publication scans. Two million-row atomic-mode comparisons gain 6.14% / 13.16%
 over the previous fork; both still fail the per-pair +25% / +50% gates. The report
 also retains increased temporary I/O, rejected rewrite controls and upgrade checks.
 
+[Rejected fingerprint and PG 17 publication trials (中文)](REPORT-pg-atomic-merge.zh-CN.md)
+retains five paired million-row experiments: every +25% / +50% gate failed,
+and both prototypes were reverted after negative paired results. Twenty-four
+additional identifier, primary-key and partition checks pass on the retained
+production runtime. Checkpoint timing is recorded as a diagnostic lead, not a cause proven.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

@@ -1,0 +1,564 @@
+{
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "scope": "Real PG SQL probe; all inserted rows are rolled back, not an Engine benchmark.",
+  "checks": [
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "5",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "5",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "5",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "duplicates-nulls-special",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "5",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "3"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "3"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "3"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "3"
+      ],
+      "exact": false
+    },
+    {
+      "case": "numeric-rounding",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "1",
+        "1"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "1",
+        "1"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "1",
+        "1"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "2"
+      ],
+      "exact": false
+    },
+    {
+      "case": "timestamp-rounding",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "1",
+        "1"
+      ],
+      "exact": false
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "2",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "2",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "2",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "quoted-identifiers",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "2",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "0",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "0",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "0",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "empty",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "0",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "existing-default",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 1,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 1,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 2,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 2,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 3,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 3,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 4,
+      "variant": "grouped",
+      "actual": [
+        "0"
+      ],
+      "exact": true
+    },
+    {
+      "case": "partitioned",
+      "attempt": 4,
+      "variant": "merge",
+      "actual": [
+        "3",
+        "0"
+      ],
+      "exact": true
+    }
+  ],
+  "plans": [
+    {
+      "variant": "grouped",
+      "scope": "Single native SQL with temporary target, not Engine performance",
+      "execution_ms": 3663.176,
+      "temp_read_blocks": 181722,
+      "temp_written_blocks": 299647,
+      "storage_before": {
+        "postgres_bytes": 1815838720,
+        "output_bytes": 16870,
+        "host_free_bytes": 280933617664
+      }
+    },
+    {
+      "variant": "merge",
+      "scope": "Single native SQL with temporary target, not Engine performance",
+      "execution_ms": 1377.074,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 1342,
+      "storage_before": {
+        "postgres_bytes": 1815838720,
+        "output_bytes": 25110,
+        "host_free_bytes": 279403376640
+      }
+    }
+  ]
+}

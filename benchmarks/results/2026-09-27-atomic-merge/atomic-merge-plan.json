@@ -1,0 +1,26 @@
+{
+  "recorded_at": "2026-09-27T03:16:07.071459+00:00",
+  "change": "PG >=17 native MERGE ON false INSERT RETURNING; per-row exact binary comparison and returned count. Older versions retain grouped byte comparison. Hash experiment was rejected; no OFFSET 0.",
+  "baseline": "clean c9b499f candidate-atomic-group-final; same atomic semantics",
+  "correctness": [
+    "expanded atomic regression incl JDBC/COPY quoted identifiers, duplicate PK and partition routing",
+    "floating and same-ID retries",
+    "previous publisher followed by same-ID candidate rerun"
+  ],
+  "performance": {
+    "scenarios": [
+      "table-single",
+      "stream-to-pg",
+      "table-parallel"
+    ],
+    "rows": 1000000,
+    "warmups_each": 1,
+    "pairs": 5,
+    "atomic_both": true,
+    "rewrite": false,
+    "copy": false
+  },
+  "retention": "All three scenario medians >=5%, every pair >=0, all correctness checks pass; every-pair +25/+50 evaluated separately.",
+  "isolation": "No builds, profiling, compression or concurrent local tests during Engine timing.",
+  "storage": "Existing capped million-row fixture and container, 6 GiB between-run guard; both benchmark JDBC URLs use verified per-backend temp_file_limit=1536MB."
+}

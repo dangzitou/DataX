@@ -1,0 +1,49 @@
+{
+  "scope": "Global settings sampled after performance; benchmark writers separately set startup temp_file_limit=1536MB",
+  "settings": {
+    "checkpoint_completion_target": {
+      "setting": "0.9",
+      "unit": null
+    },
+    "checkpoint_timeout": {
+      "setting": "300",
+      "unit": "s"
+    },
+    "fsync": {
+      "setting": "on",
+      "unit": null
+    },
+    "full_page_writes": {
+      "setting": "on",
+      "unit": null
+    },
+    "max_wal_size": {
+      "setting": "1024",
+      "unit": "MB"
+    },
+    "min_wal_size": {
+      "setting": "80",
+      "unit": "MB"
+    },
+    "shared_buffers": {
+      "setting": "16384",
+      "unit": "8kB"
+    },
+    "synchronous_commit": {
+      "setting": "on",
+      "unit": null
+    },
+    "temp_file_limit": {
+      "setting": "-1",
+      "unit": "kB"
+    },
+    "wal_compression": {
+      "setting": "off",
+      "unit": null
+    },
+    "work_mem": {
+      "setting": "4096",
+      "unit": "kB"
+    }
+  }
+}

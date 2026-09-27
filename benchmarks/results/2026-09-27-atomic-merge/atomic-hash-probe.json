@@ -1,0 +1,241 @@
+{
+  "scope": "Real PG fingerprint equality and native SQL diagnostics, not whole Engine performance",
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "plans": {
+    "previous": {
+      "execution_ms": 2340.055,
+      "nodes": [
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Plain",
+          "Actual Rows": 1,
+          "Output": [
+            "count(*)",
+            "(COALESCE(sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 1, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 17, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 33, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 49, 16)))::bit(64))::bigint), '0'::numeric))::text"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        {
+          "Node Type": "Gather",
+          "Actual Rows": 3,
+          "Output": [
+            "(PARTIAL count(*))",
+            "(PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 1, 16)))::bit(64))::bigint))",
+            "(PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 17, 16)))::bit(64))::bigint))",
+            "(PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 33, 16)))::bit(64))::bigint))",
+            "(PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 49, 16)))::bit(64))::bigint))"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Plain",
+          "Actual Rows": 1,
+          "Output": [
+            "PARTIAL count(*)",
+            "PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 1, 16)))::bit(64))::bigint)",
+            "PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 17, 16)))::bit(64))::bigint)",
+            "PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 33, 16)))::bit(64))::bigint)",
+            "PARTIAL sum(((('x'::text || substr(encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text), 49, 16)))::bit(64))::bigint)"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        {
+          "Node Type": "Seq Scan",
+          "Actual Rows": 333333,
+          "Output": [
+            "pg_perf_source.id",
+            "pg_perf_source.tenant",
+            "pg_perf_source.amount",
+            "pg_perf_source.created",
+            "pg_perf_source.message",
+            "pg_perf_source.payload"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        }
+      ]
+    },
+    "materialized": {
+      "execution_ms": 1748.148,
+      "nodes": [
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Plain",
+          "Actual Rows": 1,
+          "Output": [
+            "count(*)",
+            "(COALESCE(sum(((('x'::text || substr(hashes.h, 1, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(hashes.h, 17, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(hashes.h, 33, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr(hashes.h, 49, 16)))::bit(64))::bigint), '0'::numeric))::text"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 9155
+        },
+        {
+          "Node Type": "Seq Scan",
+          "Actual Rows": 1000000,
+          "Output": [
+            "encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        {
+          "Node Type": "CTE Scan",
+          "Actual Rows": 1000000,
+          "Output": [
+            "hashes.h"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 9155
+        }
+      ]
+    },
+    "offset": {
+      "execution_ms": 1373.363,
+      "nodes": [
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Plain",
+          "Actual Rows": 1,
+          "Output": [
+            "count(*)",
+            "(COALESCE(sum(((('x'::text || substr((encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)), 1, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr((encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)), 17, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr((encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)), 33, 16)))::bit(64))::bigint), '0'::numeric))::text",
+            "(COALESCE(sum(((('x'::text || substr((encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)), 49, 16)))::bit(64))::bigint), '0'::numeric))::text"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        {
+          "Node Type": "Seq Scan",
+          "Actual Rows": 1000000,
+          "Output": [
+            "encode(sha256(record_send(ROW(pg_perf_source.id, pg_perf_source.tenant, pg_perf_source.amount, pg_perf_source.created, pg_perf_source.message, pg_perf_source.payload))), 'hex'::text)"
+          ],
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        }
+      ]
+    }
+  },
+  "results": [
+    {
+      "source": "pg_perf_source",
+      "attempt": 1,
+      "outputs": {
+        "previous": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "materialized": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "offset": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511"
+      }
+    },
+    {
+      "source": "pg_perf_source",
+      "attempt": 2,
+      "outputs": {
+        "previous": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "materialized": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "offset": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511"
+      }
+    },
+    {
+      "source": "pg_perf_source",
+      "attempt": 3,
+      "outputs": {
+        "previous": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "materialized": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "offset": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511"
+      }
+    },
+    {
+      "source": "pg_perf_source",
+      "attempt": 4,
+      "outputs": {
+        "previous": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "materialized": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511",
+        "offset": "1000000|-650811794007586309989|-4161152030257299170348|-4887833774547009111900|-5265082553453912364511"
+      }
+    },
+    {
+      "source": "pg_perf_source WHERE false",
+      "attempt": 1,
+      "outputs": {
+        "previous": "0|0|0|0|0",
+        "materialized": "0|0|0|0|0",
+        "offset": "0|0|0|0|0"
+      }
+    },
+    {
+      "source": "pg_perf_source WHERE false",
+      "attempt": 2,
+      "outputs": {
+        "previous": "0|0|0|0|0",
+        "materialized": "0|0|0|0|0",
+        "offset": "0|0|0|0|0"
+      }
+    },
+    {
+      "source": "pg_perf_source WHERE false",
+      "attempt": 3,
+      "outputs": {
+        "previous": "0|0|0|0|0",
+        "materialized": "0|0|0|0|0",
+        "offset": "0|0|0|0|0"
+      }
+    },
+    {
+      "source": "pg_perf_source WHERE false",
+      "attempt": 4,
+      "outputs": {
+        "previous": "0|0|0|0|0",
+        "materialized": "0|0|0|0|0",
+        "offset": "0|0|0|0|0"
+      }
+    },
+    {
+      "source": "pg_atomic_source",
+      "attempt": 1,
+      "outputs": {
+        "previous": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "materialized": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "offset": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962"
+      }
+    },
+    {
+      "source": "pg_atomic_source",
+      "attempt": 2,
+      "outputs": {
+        "previous": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "materialized": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "offset": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962"
+      }
+    },
+    {
+      "source": "pg_atomic_source",
+      "attempt": 3,
+      "outputs": {
+        "previous": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "materialized": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "offset": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962"
+      }
+    },
+    {
+      "source": "pg_atomic_source",
+      "attempt": 4,
+      "outputs": {
+        "previous": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "materialized": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962",
+        "offset": "8|2759605265523836320|-23444674115786420930|-22854325311494388016|5935197671950933962"
+      }
+    }
+  ]
+}

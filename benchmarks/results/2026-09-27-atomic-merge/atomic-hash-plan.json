@@ -1,0 +1,28 @@
+{
+  "recorded_at": "2026-09-27T03:05:53.281474+00:00",
+  "change": "Add OFFSET 0 to the existing hash CTE so one digest projection feeds all four numeric sums; preserve fingerprint format, values, stage locks and publication comparison.",
+  "evidence": "Native PG plans/equality probes and immutable wrapper counters: previous 256 calls for 64 rows, offset 64 calls; materialized also 64 but writes 9155 temporary blocks; offset plan has zero temporary writes.",
+  "scope": "Whole PG atomic mode compared with current c9b499f runtime; not upstream or all-scenario proof.",
+  "correctness": [
+    "Existing 125 atomic result entries and real commit/generation faults",
+    "Floating special values and same-ID reruns",
+    "Current published batches must be recognized by new candidate"
+  ],
+  "performance": {
+    "baseline": "candidate-atomic-group-final",
+    "candidate": "candidate-atomic-hash",
+    "scenarios": [
+      "table-single",
+      "stream-to-pg"
+    ],
+    "rows": 1000000,
+    "warmups_each": 1,
+    "pairs": 5,
+    "atomic": true,
+    "native_rewrite": "off/default on both sides",
+    "copy": false
+  },
+  "retention": "Both medians gain >=5%, all pairs avoid regression, and all correctness checks pass. Every-pair +25/+50 still evaluated separately; never count this as all-scenario completion.",
+  "storage": "Existing source and container; 6 GiB between-run guard and verified native PG per-backend temp_file_limit=1536MB in both benchmark variants.",
+  "isolation": "No builds, compression, profiling or other local tests during Engine timing."
+}

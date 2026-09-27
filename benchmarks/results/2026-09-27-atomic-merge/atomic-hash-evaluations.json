@@ -1,0 +1,89 @@
+{
+  "scope": "Real PG function-statistics probe using an immutable PL/pgSQL wrapper; not native sha256 timing or whole Engine performance",
+  "results": [
+    {
+      "mode": "previous",
+      "attempt": 1,
+      "records": 64,
+      "wrapped_hash_calls": 256,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "materialized",
+      "attempt": 1,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "offset",
+      "attempt": 1,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "previous",
+      "attempt": 2,
+      "records": 64,
+      "wrapped_hash_calls": 256,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "materialized",
+      "attempt": 2,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "offset",
+      "attempt": 2,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "previous",
+      "attempt": 3,
+      "records": 64,
+      "wrapped_hash_calls": 256,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "materialized",
+      "attempt": 3,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "offset",
+      "attempt": 3,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "previous",
+      "attempt": 4,
+      "records": 64,
+      "wrapped_hash_calls": 256,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "materialized",
+      "attempt": 4,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    },
+    {
+      "mode": "offset",
+      "attempt": 4,
+      "records": 64,
+      "wrapped_hash_calls": 64,
+      "fingerprint": "64|35035254874940176807|21199335581135317910|-166813331952669188|-79459803228802990558"
+    }
+  ]
+}

@@ -99,29 +99,6 @@ def main():
                 check(prefix+'-narrow-'+column, config(prefix, copy), 0, 0, False,
                       'publication changed or omitted staged values')
 
-    # Publication must preserve quoted names, partition routing and strict INSERT constraints.
-    for copy in [False, True]:
-        for attempt in range(1, 5):
-            for case in ['quoted-columns', 'duplicate-pk', 'partitioned-insert']:
-                seed()
-                name = case+'-'+('copy' if copy else 'jdbc')+'-'+str(attempt)
-                cfg = config(name, copy)
-                if case == 'quoted-columns':
-                    for table in [SOURCE, TARGET]:
-                        sql('ALTER TABLE '+table+' RENAME txt TO "t,x"; '
-                            'ALTER TABLE '+table+' RENAME bin TO "s""q"')
-                    cfg['job']['content'][0]['writer']['parameter']['column'] = [
-                        '"t,x"' if c == 'txt' else '"s""q"' if c == 'bin' else c for c in COLUMNS]
-                    check(name, cfg, 8, 1)
-                elif case == 'duplicate-pk':
-                    sql('ALTER TABLE pg_atomic_target ADD PRIMARY KEY(id)')
-                    check(name, cfg, 0, 0, False, 'violates unique constraint')
-                else:
-                    sql('DROP TABLE pg_atomic_target; CREATE TABLE pg_atomic_target (LIKE pg_atomic_source) PARTITION BY RANGE(id); '
-                        'CREATE TABLE pg_atomic_target_p1 PARTITION OF pg_atomic_target FOR VALUES FROM (0) TO (3); '
-                        'CREATE TABLE pg_atomic_target_p2 PARTITION OF pg_atomic_target DEFAULT')
-                    check(name, cfg, 8, 1)
-
     sql('DROP SCHEMA IF EXISTS datax_atomic_types CASCADE; CREATE SCHEMA datax_atomic_types; '
         'CREATE DOMAIN datax_atomic_types.rounded AS numeric(38,6); '
         'CREATE DOMAIN datax_atomic_types.nested AS datax_atomic_types.rounded; '

@@ -1,0 +1,72 @@
+{
+  "atomic-hash-probe": {
+    "result_entries": 12,
+    "engine_logs": 0,
+    "pending_run": null
+  },
+  "atomic-hash-regression": {
+    "result_entries": 125,
+    "engine_logs": 133,
+    "pending_run": null
+  },
+  "atomic-hash-float": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-hash-upgrade": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-hash-perf-table-single": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-hash-perf-stream-to-pg": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-merge-probe": {
+    "result_entries": 56,
+    "engine_logs": 0,
+    "pending_run": null
+  },
+  "atomic-merge-regression": {
+    "result_entries": 149,
+    "engine_logs": 157,
+    "pending_run": null
+  },
+  "atomic-merge-float": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-merge-upgrade": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-merge-perf-table-single": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-merge-perf-stream-to-pg": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-merge-perf-table-parallel": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-merge-retained": {
+    "result_entries": 24,
+    "engine_logs": 24,
+    "pending_run": null
+  }
+}

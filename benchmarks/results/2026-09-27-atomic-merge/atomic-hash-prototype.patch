@@ -1,0 +1,15 @@
+diff --git a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+index 6195f43..d2d9a7a 100644
+--- a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
++++ b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+@@ -221,8 +221,9 @@ final class PostgresqlAtomicBatch {
+             if (!stageComment.equals(comment(stage))) fail("Atomic staging generation changed before publication");
+             // Sum all four signed SHA-256 limbs, preserving multiplicity (XOR would cancel duplicates).
+             // PostgreSQL numeric sums do not overflow; binary record_send preserves typed field boundaries.
++            // OFFSET 0 keeps one digest projection below the four aggregates, without a materialized CTE.
+             StringBuilder hashQuery = new StringBuilder("WITH hashes AS (SELECT encode(sha256(record_send(ROW(")
+-                    .append(columns).append("))),'hex') h FROM ").append(stage).append(") SELECT count(*)");
++                    .append(columns).append("))),'hex') h FROM ").append(stage).append(" OFFSET 0) SELECT count(*)");
+             for (int offset : new int[]{1,17,33,49}) hashQuery.append(",coalesce(sum(('x'||substr(h,").append(offset)
+                     .append(",16))::bit(64)::bigint),0)::text");
+             hashQuery.append(" FROM hashes");

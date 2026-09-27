@@ -1,0 +1,73 @@
+diff --git a/benchmarks/postgresql_atomic_checks.py b/benchmarks/postgresql_atomic_checks.py
+index 57708c0..5be5a97 100644
+--- a/benchmarks/postgresql_atomic_checks.py
++++ b/benchmarks/postgresql_atomic_checks.py
+@@ -99,6 +99,29 @@ def main():
+                 check(prefix+'-narrow-'+column, config(prefix, copy), 0, 0, False,
+                       'publication changed or omitted staged values')
+ 
++    # MERGE RETURNING must preserve quoted names, partition routing and strict INSERT constraints.
++    for copy in [False, True]:
++        for attempt in range(1, 5):
++            for case in ['quoted-columns', 'duplicate-pk', 'partitioned-insert']:
++                seed()
++                name = case+'-'+('copy' if copy else 'jdbc')+'-'+str(attempt)
++                cfg = config(name, copy)
++                if case == 'quoted-columns':
++                    for table in [SOURCE, TARGET]:
++                        sql('ALTER TABLE '+table+' RENAME txt TO "t,x"; '
++                            'ALTER TABLE '+table+' RENAME bin TO "s""q"')
++                    cfg['job']['content'][0]['writer']['parameter']['column'] = [
++                        '"t,x"' if c == 'txt' else '"s""q"' if c == 'bin' else c for c in COLUMNS]
++                    check(name, cfg, 8, 1)
++                elif case == 'duplicate-pk':
++                    sql('ALTER TABLE pg_atomic_target ADD PRIMARY KEY(id)')
++                    check(name, cfg, 0, 0, False, 'violates unique constraint')
++                else:
++                    sql('DROP TABLE pg_atomic_target; CREATE TABLE pg_atomic_target (LIKE pg_atomic_source) PARTITION BY RANGE(id); '
++                        'CREATE TABLE pg_atomic_target_p1 PARTITION OF pg_atomic_target FOR VALUES FROM (0) TO (3); '
++                        'CREATE TABLE pg_atomic_target_p2 PARTITION OF pg_atomic_target DEFAULT')
++                    check(name, cfg, 8, 1)
++
+     sql('DROP SCHEMA IF EXISTS datax_atomic_types CASCADE; CREATE SCHEMA datax_atomic_types; '
+         'CREATE DOMAIN datax_atomic_types.rounded AS numeric(38,6); '
+         'CREATE DOMAIN datax_atomic_types.nested AS datax_atomic_types.rounded; '
+diff --git a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+index 6195f43..be50274 100644
+--- a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
++++ b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+@@ -252,14 +252,27 @@ final class PostgresqlAtomicBatch {
+                     try (ResultSet result = identity.executeQuery()) { result.next(); if (!result.getBoolean(1)) fail("Atomic target was replaced"); }
+                 }
+                 checkTarget();
+-                // Compare exact binary multisets inside the publication transaction, before committing.
+-                // Group the actual bytes once; signed counts preserve duplicate multiplicity.
+-                String inserted = "WITH inserted AS (INSERT INTO " + target + " (" + columns + ") SELECT " + columns + " FROM " + stage
+-                        + " RETURNING record_send(ROW(" + columns + ")) b) SELECT count(*) FROM ("
+-                        + "SELECT b FROM (SELECT record_send(ROW(" + columns + ")) b,1 n FROM " + stage
+-                        + " UNION ALL SELECT b,-1 n FROM inserted) compared GROUP BY b HAVING sum(n)<>0) differences";
++                boolean mergeReturning = connection.getMetaData().getDatabaseMajorVersion() >= 17;
++                String inserted;
++                if (mergeReturning) {
++                    // PG 17 returns both the source and actual inserted row. ON false only appends.
++                    List<String> names = config.getList(Key.COLUMN, String.class);
++                    String source = "s." + String.join(",s.", names), written = "t." + String.join(",t.", names);
++                    inserted = "WITH inserted AS (MERGE INTO " + target + " AS t USING " + stage + " AS s ON false "
++                            + "WHEN NOT MATCHED THEN INSERT (" + columns + ") VALUES (" + source + ") RETURNING "
++                            + "record_send(ROW(" + source + ")) IS NOT DISTINCT FROM record_send(ROW(" + written + ")) AS exact) "
++                            + "SELECT count(*) FILTER (WHERE NOT exact),count(*) FROM inserted";
++                } else {
++                    // Older servers compare complete binary multisets, including duplicate multiplicity.
++                    inserted = "WITH inserted AS (INSERT INTO " + target + " (" + columns + ") SELECT " + columns + " FROM " + stage
++                            + " RETURNING record_send(ROW(" + columns + ")) b) SELECT count(*) FROM ("
++                            + "SELECT b FROM (SELECT record_send(ROW(" + columns + ")) b,1 n FROM " + stage
++                            + " UNION ALL SELECT b,-1 n FROM inserted) compared GROUP BY b HAVING sum(n)<>0) differences";
++                }
+                 try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(inserted)) {
+-                    result.next(); if (result.getLong(1) != 0) fail("Atomic publication changed or omitted staged values");
++                    result.next();
++                    if (result.getLong(1) != 0 || (mergeReturning && result.getLong(2) != count))
++                        fail("Atomic publication changed or omitted staged values");
+                 }
+                 execute("SET CONSTRAINTS ALL IMMEDIATE");
+                 try (PreparedStatement marker = connection.prepareStatement("INSERT INTO " + ledger

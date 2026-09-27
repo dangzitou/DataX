@@ -1,0 +1,12 @@
+{
+  "started_at": "2026-09-27T03:17:08.029878+00:00",
+  "completed": [
+    "atomic-merge-regression",
+    "atomic-merge-float",
+    "atomic-merge-upgrade",
+    "atomic-merge-perf-table-single",
+    "atomic-merge-perf-stream-to-pg",
+    "atomic-merge-perf-table-parallel"
+  ],
+  "finished_at": "2026-09-27T03:28:24.721478+00:00"
+}

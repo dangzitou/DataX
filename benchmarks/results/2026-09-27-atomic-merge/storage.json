@@ -1,0 +1,14 @@
+{
+  "removed_verified_runtime_bytes": {
+    "candidate-atomic-hash": 147763927,
+    "candidate-atomic-merge": 148196889
+  },
+  "temporary_root_bytes": 1063664991,
+  "postgres_bytes": 1474789376,
+  "state": {
+    "stages": 0,
+    "other_connections": 0,
+    "source_rows": 1000000
+  },
+  "scope": "Removed only the two archived rejected candidates and disposable million-row target; retained source, production runtime and other project containers."
+}
