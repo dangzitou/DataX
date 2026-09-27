@@ -38,7 +38,9 @@ jobs:
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-baseline /tmp/queue-baseline --expect-unsafe
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-candidate /tmp/queue-candidate --backends starrocks,doris,selectdb
       - name: Stream Load fatal worker and timer errors (HTTP simulator)
-        run: python3 benchmarks/stream_load_fatal_checks.py /tmp/datax-candidate /tmp/fatal-candidate
+        run: |
+          python3 benchmarks/stream_load_fatal_checks.py /tmp/datax-candidate /tmp/fatal-candidate
+          python3 benchmarks/stream_load_fatal_checks.py /tmp/datax-candidate /tmp/fatal-engine --engine --backends starrocks,doris
       - name: Stream Load status fault injection (HTTP simulator)
         run: |
           python3 benchmarks/stream_load_status_checks.py /tmp/datax-baseline /tmp/status-baseline --expect-unsafe --expect-incomplete --expect-unverified

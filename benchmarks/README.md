@@ -59,6 +59,12 @@ redirect/replay byte checks under a bounded heap. Doris remains unchanged after
 measured regressions. All pilot results and limitations are retained; this adds
 no whole-job atomicity, universal throughput or production-error-rate claim.
 
+[Fatal asynchronous flush failures (中文)](REPORT-stream-fatal.zh-CN.md) records
+real HTTP-client allocation OOM, separate synthetic timer errors, and standalone
+Engine checks. Managers now record fatal errors, abort queued work and rethrow;
+the candidate Engine fails explicitly where upstream stalls. This does not undo
+committed rows or guarantee cleanup after every form of memory exhaustion.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

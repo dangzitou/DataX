@@ -1,0 +1,35 @@
+{
+  "created_at": "2026-09-27T00:53:28.804166+00:00",
+  "checks": {
+    "fatal-before-v4": {
+      "checks": 24,
+      "scope": "Actual HTTP-response allocation OOM and manager failure propagation; no database/Engine.",
+      "revision": "b618ac3de95888130fd896524dc20a5bc6f7b06d"
+    },
+    "fatal-after": {
+      "checks": 24,
+      "scope": "Actual HTTP-response allocation OOM and manager failure propagation; no database/Engine.",
+      "revision": "6c77ab5da6d704165586499f21b9ef6bc8284d22"
+    },
+    "fatal-engine-upstream": {
+      "checks": 8,
+      "scope": "Standalone DataX Engine with actual HTTP response allocation OOM; simulated HTTP, no database.",
+      "revision": "80ec23d5c5328eb90ca364d2749e92dfaf44541e"
+    },
+    "fatal-engine-after": {
+      "checks": 8,
+      "scope": "Standalone DataX Engine with actual HTTP response allocation OOM; simulated HTTP, no database.",
+      "revision": "6c77ab5da6d704165586499f21b9ef6bc8284d22"
+    },
+    "fatal-queue": {
+      "checks": 60,
+      "scope": "Real manager/HTTP-client queue failure checks; simulated server, not database/Engine.",
+      "revision": "6c77ab5da6d704165586499f21b9ef6bc8284d22"
+    }
+  },
+  "unit_tests": 60,
+  "production_revision": "6c77ab5",
+  "real_database": false,
+  "new_throughput_measurement": false,
+  "whole_goal_met": false
+}

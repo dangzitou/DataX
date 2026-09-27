@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-09-27T00:53:28.903023+00:00",
+  "retired_runtime": "candidate-stream-payload-final",
+  "retired_allocated_bytes": 149114880,
+  "kept_runtimes": [
+    "baseline-all",
+    "candidate-stream-fatal"
+  ],
+  "created_databases_or_containers": false,
+  "tmp_allocated_bytes_after": 905154560
+}
