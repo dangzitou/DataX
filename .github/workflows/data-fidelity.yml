@@ -66,6 +66,10 @@ jobs:
         run: python3 benchmarks/postgresql_binding_checks.py /tmp/datax-candidate /tmp/pg-binding-checks
       - name: PostgreSQL integer reads and exact numeric boundaries
         run: python3 benchmarks/postgresql_integer_checks.py /tmp/datax-candidate /tmp/pg-integer-checks
+      - name: PostgreSQL floating values, filtering and binary NUMERIC infinity
+        run: |
+          python3 benchmarks/postgresql_float_checks.py /tmp/datax-baseline /tmp/float-baseline --jdbc-only --expect-filter-failure --expect-binary-numeric-failure
+          python3 benchmarks/postgresql_float_checks.py /tmp/datax-candidate /tmp/float-candidate
       - name: JDBC commit acknowledgement fault injection with real PostgreSQL
         run: |
           python3 benchmarks/jdbc_commit_checks.py /tmp/datax-baseline /tmp/commit-baseline --expect-legacy
