@@ -25,7 +25,7 @@ public class SelectdbWriterManager {
     private int batchCount = 0;
     private long batchSize = 0;
     private volatile boolean closed = false;
-    private volatile Exception flushException;
+    private volatile Throwable flushException;
     private final LinkedBlockingDeque<WriterTuple> flushQueue;
     private final ScheduledThreadPoolExecutor scheduler;
     private Thread flushThread;
@@ -53,9 +53,10 @@ public class SelectdbWriterManager {
                         try {
                             if (batchCount == 0) startScheduler();
                             else flush(createBatchLabel(), false);
-                        } catch (Exception e) {
+                        } catch (Throwable e) {
                             if (flushException == null) flushException = e;
                             abort();
+                            if (e instanceof Error) throw (Error) e;
                         }
                     }
                 }
@@ -160,9 +161,10 @@ public class SelectdbWriterManager {
                 while (!stopped) {
                     try {
                         asyncFlush();
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         if (!stopped && flushException == null) flushException = e;
                         abort();
+                        if (e instanceof Error) throw (Error) e;
                     }
                 }
             }
