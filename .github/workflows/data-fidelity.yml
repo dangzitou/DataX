@@ -28,6 +28,11 @@ jobs:
           python3 benchmarks/build.py . /tmp/datax-candidate --extra-modules postgresqlreader postgresqlwriter starrocksreader starrockswriter dorisreader doriswriter selectdbwriter
       - name: Binary codec and factory checks (SelectDB codec only)
         run: python3 benchmarks/binary_codec_checks.py /tmp/datax-candidate /tmp/binary-codecs
+      - name: HTTP payload integrity, replay and constrained heap (no database)
+        run: |
+          python3 benchmarks/stream_load_payload_checks.py /tmp/datax-baseline /tmp/payload-baseline --backends starrocks,doris --expect-oom
+          python3 benchmarks/stream_load_payload_checks.py /tmp/datax-candidate /tmp/payload-streamed --backends starrocks,selectdb
+          python3 benchmarks/stream_load_payload_checks.py /tmp/datax-candidate /tmp/payload-doris --backends doris --expect-oom
       - name: Stream Load queued failure and task shutdown (HTTP simulator)
         run: |
           python3 benchmarks/stream_load_queue_checks.py /tmp/datax-baseline /tmp/queue-baseline --expect-unsafe
