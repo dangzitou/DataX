@@ -83,6 +83,12 @@ Unsupported domains/custom types now fail before transfer; repeated real checks 
 the existing target. Two separate native batch configuration pilots still fail the
 per-pair +25% / +50% gates and have not been enabled by default.
 
+[Exact atomic publication aggregation (中文)](REPORT-pg-atomic-group.zh-CN.md)
+preserves full binary row equality and duplicate counts while reducing repeated
+publication scans. Two million-row atomic-mode comparisons gain 6.14% / 13.16%
+over the previous fork; both still fail the per-pair +25% / +50% gates. The report
+also retains increased temporary I/O, rejected rewrite controls and upgrade checks.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

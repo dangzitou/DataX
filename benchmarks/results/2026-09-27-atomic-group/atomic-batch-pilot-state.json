@@ -1,0 +1,7 @@
+{
+  "started_at": "2026-09-27T02:31:24.053365+00:00",
+  "completed": [],
+  "running": "atomic-batch-pilot-table-single",
+  "stopped_at": "2026-09-27T02:34:06.240509+00:00",
+  "error": "Explicitly stopped: intended temp_file_limit session setting ignored by PG implementation. Retain partial data; do not accept as complete."
+}

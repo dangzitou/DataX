@@ -1,0 +1,28 @@
+{
+  "recorded_at": "2026-09-27T02:38:47.257927+00:00",
+  "evidence": "Completed pilot logs show Writer.Job post includes about 8.5 seconds of a 14.8 second million-row run. Current SQL encodes and reads sent/written sets repeatedly for two EXCEPT ALL comparisons.",
+  "change": "Preserve record_send exact byte equality and duplicate multiplicities, but encode RETURNING immediately and GROUP BY bytes once over signed counts. Keep SHA-256 ledger fingerprint format, locks, fences, commit boundary and all dirty/type checks unchanged.",
+  "correctness": [
+    "Direct real PG multiset positive/negative cases compared with previous double EXCEPT ALL",
+    "125 atomic Engine result entries including commit drops and generation fencing",
+    "floating special values and signed zeros",
+    "old-runtime publish followed by candidate same-ID retry"
+  ],
+  "performance": {
+    "scenarios": [
+      "table-single",
+      "stream-to-pg"
+    ],
+    "atomic": true,
+    "baseline": "candidate-atomic-types",
+    "candidate": "candidate-atomic-group",
+    "rows": 1000000,
+    "warmups_each": 1,
+    "pairs": 5,
+    "rewrite": "both off/default",
+    "comparison": "Same PG atomic contract on both sides; not an upstream speed claim"
+  },
+  "retention": "Both whole-job medians must improve at least 5%, all pairs must avoid regression and all correctness checks must pass. Per-pair +25/+50 target still evaluated separately; no broader completion inferred.",
+  "storage": "Reuse current source. No new containers. JDBC native temp_file_limit=1536MB, existing 6 GiB between-run guard. Archive only logs/configs; discard extra runtime if rejected.",
+  "timing_isolation": "Finish native rewrite pilot before tests/build/profiling or compression."
+}

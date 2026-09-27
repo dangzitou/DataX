@@ -1,0 +1,13 @@
+{
+  "prototype_revision": "9d24e0f41d647093ba4442b540a34f9d7c9a5199",
+  "prototype_patch_sha256": "25dfd21724a53ab4e72ed24e4cf9600e5af5743d6423a84c538e216a80bbb61a",
+  "final_clean_revision": "c9b499f63d9217386d36bebc0a395bc3d0d43c13",
+  "non_metadata_jar_entries_identical": true,
+  "repacked_jars": [
+    "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar"
+  ],
+  "changed_jar_entries": {
+    "plugin/writer/starrockswriter/starrockswriter-1.1.0.jar": []
+  },
+  "services_and_manifest_identical": true
+}

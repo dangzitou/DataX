@@ -1,0 +1,105 @@
+[
+  {
+    "case": "previous",
+    "scope": "One native SQL diagnostic, not whole-Engine performance",
+    "execution_ms": 5270.981,
+    "nodes": [
+      {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Plan Rows": 1,
+        "Actual Rows": 1,
+        "Temp Read Blocks": 90628,
+        "Temp Written Blocks": 129754
+      },
+      {
+        "Node Type": "SetOp",
+        "Strategy": "Hashed",
+        "Plan Rows": 1000000,
+        "Actual Rows": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 129752
+      },
+      {
+        "Node Type": "SetOp",
+        "Strategy": "Hashed",
+        "Plan Rows": 1000000,
+        "Actual Rows": 0,
+        "Temp Read Blocks": 90628,
+        "Temp Written Blocks": 2
+      }
+    ],
+    "storage_before": {
+      "postgres_bytes": 1815658496,
+      "output_bytes": 0,
+      "host_free_bytes": 281082802176
+    }
+  },
+  {
+    "case": "grouped",
+    "scope": "One native SQL diagnostic, not whole-Engine performance",
+    "execution_ms": 4486.225,
+    "nodes": [
+      {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Plan Rows": 1,
+        "Actual Rows": 1,
+        "Temp Read Blocks": 181722,
+        "Temp Written Blocks": 299647
+      },
+      {
+        "Node Type": "Aggregate",
+        "Strategy": "Hashed",
+        "Plan Rows": 199,
+        "Actual Rows": 0,
+        "HashAgg Batches": 165,
+        "Disk Usage": 772344,
+        "Temp Read Blocks": 181722,
+        "Temp Written Blocks": 299647
+      }
+    ],
+    "storage_before": {
+      "postgres_bytes": 2179760128,
+      "output_bytes": 22845,
+      "host_free_bytes": 279634116608
+    }
+  },
+  {
+    "case": "grouped-sort",
+    "scope": "One native SQL diagnostic, not whole-Engine performance",
+    "execution_ms": 3807.709,
+    "nodes": [
+      {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Plan Rows": 1,
+        "Actual Rows": 1,
+        "Temp Read Blocks": 184165,
+        "Temp Written Blocks": 229678
+      },
+      {
+        "Node Type": "Aggregate",
+        "Strategy": "Sorted",
+        "Plan Rows": 199,
+        "Actual Rows": 0,
+        "Temp Read Blocks": 184165,
+        "Temp Written Blocks": 229678
+      },
+      {
+        "Node Type": "Sort",
+        "Plan Rows": 2000000,
+        "Actual Rows": 2000000,
+        "Temp Read Blocks": 184165,
+        "Temp Written Blocks": 229678,
+        "Sort Method": "external merge",
+        "Sort Space Used": 736672
+      }
+    ],
+    "storage_before": {
+      "postgres_bytes": 2179760128,
+      "output_bytes": 31412,
+      "host_free_bytes": 279187075072
+    }
+  }
+]

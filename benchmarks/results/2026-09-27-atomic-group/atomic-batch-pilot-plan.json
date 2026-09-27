@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-09-27T02:31:24.053126+00:00",
+  "runtime": "candidate-atomic-types",
+  "driver": "42.7.13",
+  "evidence": "Two full-JVM diagnostic JFRs show writer native socket reads and flushIfDeadlockRisk stacks dominating samples. Counts do not equal wall-time proportions.",
+  "comparison": "Same atomic runtime, same configuration except candidate reWriteBatchedInserts=true. Complete source-to-stage, fingerprint, binary multiset publication, ledger and commit are timed. Both sides use PG shared snapshot for PG sources and temp_file_limit=1536MB.",
+  "scenarios": [
+    "table-single",
+    "stream-to-pg"
+  ],
+  "rows": 1000000,
+  "warmups_each": 1,
+  "pairs": 5,
+  "retention": "No production change during pilot. Consider default native rewrite only for our own atomic staging if both whole-job medians gain >=5%, all pairs avoid regression, and all correctness checks pass. Global +25/+50 acceptance stays unchanged.",
+  "scope": "All-scenario +25/+50 and billion-row safety remain mandatory and unproven.",
+  "storage": "Reuse existing source. Fixed test table, existing 6 GiB guard, no new containers. No builds, profiling or compression while timing."
+}

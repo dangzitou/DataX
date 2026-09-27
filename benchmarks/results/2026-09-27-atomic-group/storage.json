@@ -1,0 +1,26 @@
+{
+  "recorded_at": "2026-09-27T02:57:30.475652+00:00",
+  "removed": [
+    {
+      "path": "/tmp/datax-perf/candidate-atomic-group",
+      "bytes": 147764085,
+      "verified_manifest": "benchmarks/results/2026-09-27-atomic-group/candidate-atomic-group-build.json"
+    },
+    {
+      "path": "/tmp/datax-perf/candidate-float-driver",
+      "bytes": 150867303,
+      "verified_manifest": "benchmarks/results/2026-09-27-atomic-types/candidate-float-driver-build.json"
+    }
+  ],
+  "temporary_root_bytes": 1094467584,
+  "postgres_data_bytes": 1474355200,
+  "postgres_block_size": 8192,
+  "remaining_stages": 0,
+  "remaining_test_connections": 0,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-atomic-types",
+    "candidate-atomic-group-final"
+  ],
+  "scope": "Only verified archived runtimes and our disposable target table were removed; existing source and unrelated containers retained."
+}

@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-09-27T02:35:30.109213+00:00",
+  "completed": [
+    {
+      "name": "atomic-batch-pilot-v2-table-single",
+      "median_seconds": {
+        "baseline": 15.251575833999993,
+        "candidate": 14.071706875000004
+      },
+      "gain": 8.384689714480631
+    },
+    {
+      "name": "atomic-batch-pilot-v2-stream-to-pg",
+      "median_seconds": {
+        "baseline": 11.60208470900001,
+        "candidate": 11.317024250000003
+      },
+      "gain": 2.5188640821371955
+    }
+  ],
+  "finished_at": "2026-09-27T02:41:05.442048+00:00"
+}

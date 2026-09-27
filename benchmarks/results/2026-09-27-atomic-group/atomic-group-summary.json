@@ -1,0 +1,24 @@
+{
+  "table-single": {
+    "medians": {
+      "baseline": 17.066794541999997,
+      "candidate": 16.079238833000005
+    },
+    "gain": 6.141806333352018,
+    "minimum_pair": 2.292076902433493,
+    "gate_25": false,
+    "gate_50": false
+  },
+  "stream-to-pg": {
+    "medians": {
+      "baseline": 12.160353,
+      "candidate": 10.745816832999992
+    },
+    "gain": 13.16359834699603,
+    "minimum_pair": 9.888511559923142,
+    "gate_25": false,
+    "gate_50": false
+  },
+  "retained": true,
+  "scope": "Measured previous/candidate PG atomic mode only; not original upstream or all-scenario acceptance."
+}

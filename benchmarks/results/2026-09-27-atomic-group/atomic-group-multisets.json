@@ -1,0 +1,257 @@
+{
+  "scope": "Direct real PostgreSQL SQL checks, not Engine or performance tests",
+  "results": [
+    {
+      "case": "empty",
+      "attempt": 1,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "duplicates-reordered",
+      "attempt": 1,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "missing-duplicate",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "extra-duplicate",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-different-multiplicity",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-changed-byte",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "null-vs-empty",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "float-signed-zero",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "numeric-scale",
+      "attempt": 1,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "empty",
+      "attempt": 2,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "duplicates-reordered",
+      "attempt": 2,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "missing-duplicate",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "extra-duplicate",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-different-multiplicity",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-changed-byte",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "null-vs-empty",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "float-signed-zero",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "numeric-scale",
+      "attempt": 2,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "empty",
+      "attempt": 3,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "duplicates-reordered",
+      "attempt": 3,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "missing-duplicate",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "extra-duplicate",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-different-multiplicity",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-changed-byte",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "null-vs-empty",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "float-signed-zero",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "numeric-scale",
+      "attempt": 3,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "empty",
+      "attempt": 4,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "duplicates-reordered",
+      "attempt": 4,
+      "expected_equal": true,
+      "previous_equal": true,
+      "candidate_equal": true
+    },
+    {
+      "case": "missing-duplicate",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "extra-duplicate",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-different-multiplicity",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "same-count-changed-byte",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "null-vs-empty",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "float-signed-zero",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    },
+    {
+      "case": "numeric-scale",
+      "attempt": 4,
+      "expected_equal": false,
+      "previous_equal": false,
+      "candidate_equal": false
+    }
+  ]
+}

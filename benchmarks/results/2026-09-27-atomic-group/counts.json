@@ -1,0 +1,49 @@
+{
+  "atomic-batch-pilot-table-single": {
+    "result_entries": 9,
+    "engine_logs": 10,
+    "pending_run": {
+      "reason": "Operator stopped trial after code inspection proved PG session config ignored intended temp_file_limit; unvalidated in-flight run is not accepted."
+    }
+  },
+  "atomic-batch-pilot-v2-table-single": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-batch-pilot-v2-stream-to-pg": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-group-regression": {
+    "result_entries": 125,
+    "engine_logs": 133,
+    "pending_run": null
+  },
+  "atomic-group-float": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-group-upgrade": {
+    "result_entries": 8,
+    "engine_logs": 16,
+    "pending_run": null
+  },
+  "atomic-group-perf-table-single": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-group-perf-stream-to-pg": {
+    "result_entries": 12,
+    "engine_logs": 12,
+    "pending_run": null
+  },
+  "atomic-publication-plans": {
+    "result_entries": 3,
+    "engine_logs": 0,
+    "pending_run": null
+  }
+}

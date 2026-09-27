@@ -1,0 +1,16 @@
+{
+  "table-single": {
+    "median_gain": 8.384689714480631,
+    "minimum_pair": 7.770275013792904,
+    "gate_25": false,
+    "gate_50": false
+  },
+  "stream-to-pg": {
+    "median_gain": 2.5188640821371955,
+    "minimum_pair": -0.8754586882572468,
+    "gate_25": false,
+    "gate_50": false
+  },
+  "retained_default_rewrite": false,
+  "reason": "Stream-to-PG whole-job median improved only 2.52%, below the predeclared 5% retention threshold. No global or atomic default changed."
+}
