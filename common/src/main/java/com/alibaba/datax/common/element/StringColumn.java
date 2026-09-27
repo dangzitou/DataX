@@ -117,7 +117,8 @@ public class StringColumn extends Column {
 		BigDecimal decimal = this.asBigDecimal();
 		OverFlowUtil.validateDoubleNotOverFlow(decimal);
 
-		return decimal.doubleValue();
+		// BigDecimal drops the sign of zero, which is significant to IEEE floating-point consumers.
+		return decimal.signum() == 0 && data.startsWith("-") ? -0.0 : decimal.doubleValue();
 	}
 
 	@Override

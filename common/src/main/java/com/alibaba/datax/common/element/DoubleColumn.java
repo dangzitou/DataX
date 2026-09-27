@@ -28,7 +28,8 @@ public class DoubleColumn extends Column {
 	 * */
 	public DoubleColumn(final Double data) {
 		this(data == null ? (String) null
-				: new BigDecimal(String.valueOf(data)).toPlainString());
+				: data.isNaN() || data.isInfinite() || Double.doubleToRawLongBits(data) == Long.MIN_VALUE
+				? data.toString() : new BigDecimal(String.valueOf(data)).toPlainString());
 	}
 
 	/**
@@ -37,7 +38,8 @@ public class DoubleColumn extends Column {
 	 * */
 	public DoubleColumn(final Float data) {
 		this(data == null ? (String) null
-				: new BigDecimal(String.valueOf(data)).toPlainString());
+				: data.isNaN() || data.isInfinite() || Float.floatToRawIntBits(data) == Integer.MIN_VALUE
+				? data.toString() : new BigDecimal(String.valueOf(data)).toPlainString());
 	}
 
 	public DoubleColumn(final BigDecimal data) {
@@ -80,16 +82,15 @@ public class DoubleColumn extends Column {
 
 		String string = (String) this.getRawData();
 
-		boolean isDoubleSpecific = string.equals("NaN")
-				|| string.equals("-Infinity") || string.equals("+Infinity");
-		if (isDoubleSpecific) {
-			return Double.valueOf(string);
-		}
+		if (string.equalsIgnoreCase("NaN")) return Double.NaN;
+		if (string.equalsIgnoreCase("-Infinity")) return Double.NEGATIVE_INFINITY;
+		if (string.equalsIgnoreCase("Infinity") || string.equalsIgnoreCase("+Infinity")) return Double.POSITIVE_INFINITY;
 
 		BigDecimal result = this.asBigDecimal();
 		OverFlowUtil.validateDoubleNotOverFlow(result);
 
-		return result.doubleValue();
+		// BigDecimal has no signed zero; retain the sign from the original numeric text.
+		return result.signum() == 0 && string.startsWith("-") ? -0.0 : result.doubleValue();
 	}
 
 	@Override
@@ -150,7 +151,7 @@ public class DoubleColumn extends Column {
 			return;
 		}
 
-		if (data.equalsIgnoreCase("NaN") || data.equalsIgnoreCase("-Infinity")
+		if (data.equalsIgnoreCase("NaN") || data.equalsIgnoreCase("-Infinity") || data.equalsIgnoreCase("+Infinity")
 				|| data.equalsIgnoreCase("Infinity")) {
 			return;
 		}
