@@ -240,6 +240,8 @@ PG 锁和返回行语义见 [显式锁](https://www.postgresql.org/docs/17/expli
 | Boolean  |bool|
 | Bytes    |bytea|
 
+本 fork 的 JDBC 与 COPY 写入均支持 StringColumn 中的 PostgreSQL `date`、`time`、`timetz`、`timestamp`、`timestamptz` 文本，交由 PG 原生类型解析，避免先经 Java 日期转换改变夏令时空缺或历史日期。普通 DateColumn 的行为保持不变。此文本路径支持源查询显式 `::text`，并非跨数据库的通用无损转换；类型不同、目标精度缩窄或用户 transformer 改值仍需验证。原子模式会核对暂存与正式表的完整二进制行。
+
 ## 4 性能报告
 
 ### 4.1 环境准备

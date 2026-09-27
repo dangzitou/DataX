@@ -1,0 +1,94 @@
+diff --git a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
+index bfd0bb8..06b6918 100755
+--- a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
++++ b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
+@@ -281,6 +281,11 @@ public class CommonRdbmsReader {
+                                     "binaryColumns label is ambiguous or not a string/binary field: " + label);
+                         columnTypes[i] = Types.VARBINARY;
+                     }
++                    // java.sql temporal values can normalize DST gaps and the 1582 calendar
++                    // cutover. Preserve PG's own text, including timestamptz's UTC offset.
++                    if (dataBaseType == DataBaseType.PostgreSQL && (columnTypes[i] == Types.DATE
++                            || columnTypes[i] == Types.TIMESTAMP || columnTypes[i] == Types.TIMESTAMP_WITH_TIMEZONE))
++                        columnTypes[i] = Types.VARCHAR;
+                 }
+                 if (!remaining.isEmpty()) throw DataXException.asDataXException(DBUtilErrorCode.CONF_ERROR,
+                         "binaryColumns not found in query output: " + remaining);
+diff --git a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
+index 229081f..4af13fb 100644
+--- a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
++++ b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
+@@ -169,4 +169,25 @@ public class RdbmsReaderRegressionTest {
+         assertEquals(0,collector.dirty);
+         assertEquals(2,sender.rows.size());
+     }
++
++    @Test public void postgresqlTemporalValuesRetainNativeTextAndNull() throws Exception {
++        for (String name : new String[]{"date", "timestamp", "timestamptz"}) {
++            ResultSetMetaData meta = metadata("date".equals(name) ? Types.DATE : Types.TIMESTAMP);
++            when(meta.getColumnTypeName(1)).thenReturn(name);
++            ResultSet rs = mock(ResultSet.class);
++            when(rs.getString(1)).thenReturn("date".equals(name) ? "2011-12-30" : "2024-03-10 02:30:00.123456");
++            Task task = new Task(DataBaseType.PostgreSQL);
++            Sender sender = new Sender(); Collector collector = new Collector();
++            task.read(sender, rs, meta, "", collector);
++            Column value = sender.rows.get(0).getColumn(0);
++            assertEquals(Column.Type.STRING, value.getType());
++            assertEquals("date".equals(name) ? "2011-12-30" : "2024-03-10 02:30:00.123456", value.asString());
++            verify(rs, never()).getDate(1);
++            verify(rs, never()).getTimestamp(1);
++            when(rs.getString(1)).thenReturn(null);
++            task.read(sender, rs, meta, "", collector);
++            assertNull(sender.rows.get(1).getColumn(0).getRawData());
++            assertEquals(0, collector.dirty);
++        }
++    }
+ }
+diff --git a/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java b/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
+index f1c2218..1e0c1c0 100755
+--- a/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
++++ b/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
+@@ -127,10 +127,10 @@ public class PostgresqlReader extends Reader {
+         public void init() {
+             this.readerSliceConfig = super.getPluginJobConf();
+             String url = this.readerSliceConfig.getString(Key.JDBC_URL);
+-            // PG JDBC 42.3.3 getString still converts binary TIME/TIMETZ through java.sql.Time.
+-            // Preserve existing disabled types while requesting lossless text for these two OIDs.
++            // Binary getString can pass local calendar values through java.sql date/time types.
++            // Preserve existing exclusions and request text to avoid DST/calendar normalization.
+             String disabled = PGProperty.BINARY_TRANSFER_DISABLE.get(Driver.parseURL(url, null));
+-            disabled = (disabled == null || disabled.isEmpty() ? "" : disabled + ",") + "1083,1266";
++            disabled = (disabled == null || disabled.isEmpty() ? "" : disabled + ",") + "1082,1083,1114,1184,1266";
+             try {
+                 this.readerSliceConfig.set(Key.JDBC_URL, url + (url.contains("?") ? "&" : "?")
+                         + "binaryTransferDisable=" + URLEncoder.encode(disabled, "UTF-8"));
+diff --git a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
+index 5fc8c78..ad8c641 100755
+--- a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
++++ b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
+@@ -96,11 +96,13 @@ public class PostgresqlWriter extends Writer {
+             case Types.BINARY: case Types.VARBINARY: case Types.BLOB: case Types.LONGVARBINARY:
+                 return PGbytea.toPGString(column.asBytes());
+             case Types.DATE:
++                if (column.getType() == Column.Type.STRING) return column.asString();
+                 return dates.toString(null, new java.sql.Date(column.asDate().getTime()));
+             case Types.TIME:
+                 if (column.getType() == Column.Type.STRING) return column.asString();
+                 return dates.toString(null, new java.sql.Time(column.asDate().getTime()));
+             case Types.TIMESTAMP:
++                if (column.getType() == Column.Type.STRING) return column.asString();
+                 java.util.Date date = column.asDate();
+                 return dates.toString(null, date instanceof java.sql.Timestamp
+                         ? (java.sql.Timestamp) date : new java.sql.Timestamp(date.getTime()));
+@@ -126,8 +128,9 @@ public class PostgresqlWriter extends Writer {
+                 @Override
+                 protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement statement,
+                         int index, int type, String typeName, Column column) throws SQLException {
+-                    if (type == Types.TIME && column.getType() == Column.Type.STRING) {
+-                        // calcValueHolder supplies the PG time/timetz cast; do not parse via java.sql.Time.
++                    if ((type == Types.DATE || type == Types.TIME || type == Types.TIMESTAMP)
++                            && column.getType() == Column.Type.STRING) {
++                        // Let PostgreSQL parse its own temporal text through calcValueHolder's cast.
+                         statement.setString(index + 1, column.asString());
+                         return statement;
+                     }

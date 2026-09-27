@@ -103,6 +103,12 @@ corrected and both variants fully rerun. UNLOGGED reduced database WAL by about
 staged recovery copy on crash; the default remains logged. The new CI job checks
 that retained logged path, not the withdrawn prototype.
 
+[PG calendar conversion safety (中文)](REPORT-pg-calendar.zh-CN.md) reproduces
+silent DST and historical-calendar changes in the previous runtime, including
+atomic publication. The reader keeps DateColumn compatibility but fails on lossy
+conversion; explicit temporal text round-trips through PostgreSQL's own parser.
+These checks do not establish billion-row or cross-writer correctness.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

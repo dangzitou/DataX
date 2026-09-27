@@ -96,11 +96,13 @@ public class PostgresqlWriter extends Writer {
             case Types.BINARY: case Types.VARBINARY: case Types.BLOB: case Types.LONGVARBINARY:
                 return PGbytea.toPGString(column.asBytes());
             case Types.DATE:
+                if (column.getType() == Column.Type.STRING) return column.asString();
                 return dates.toString(null, new java.sql.Date(column.asDate().getTime()));
             case Types.TIME:
                 if (column.getType() == Column.Type.STRING) return column.asString();
                 return dates.toString(null, new java.sql.Time(column.asDate().getTime()));
             case Types.TIMESTAMP:
+                if (column.getType() == Column.Type.STRING) return column.asString();
                 java.util.Date date = column.asDate();
                 return dates.toString(null, date instanceof java.sql.Timestamp
                         ? (java.sql.Timestamp) date : new java.sql.Timestamp(date.getTime()));
@@ -126,8 +128,9 @@ public class PostgresqlWriter extends Writer {
                 @Override
                 protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement statement,
                         int index, int type, String typeName, Column column) throws SQLException {
-                    if (type == Types.TIME && column.getType() == Column.Type.STRING) {
-                        // calcValueHolder supplies the PG time/timetz cast; do not parse via java.sql.Time.
+                    if ((type == Types.DATE || type == Types.TIME || type == Types.TIMESTAMP)
+                            && column.getType() == Column.Type.STRING) {
+                        // Let PostgreSQL parse its own temporal text through calcValueHolder's cast.
                         statement.setString(index + 1, column.asString());
                         return statement;
                     }

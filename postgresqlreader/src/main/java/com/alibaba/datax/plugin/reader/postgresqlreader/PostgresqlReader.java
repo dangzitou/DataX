@@ -127,7 +127,7 @@ public class PostgresqlReader extends Reader {
         public void init() {
             this.readerSliceConfig = super.getPluginJobConf();
             String url = this.readerSliceConfig.getString(Key.JDBC_URL);
-            // PG JDBC 42.3.3 getString still converts binary TIME/TIMETZ through java.sql.Time.
+            // PG JDBC getString converts binary TIME/TIMETZ through java.sql.Time.
             // Preserve existing disabled types while requesting lossless text for these two OIDs.
             String disabled = PGProperty.BINARY_TRANSFER_DISABLE.get(Driver.parseURL(url, null));
             disabled = (disabled == null || disabled.isEmpty() ? "" : disabled + ",") + "1083,1266";

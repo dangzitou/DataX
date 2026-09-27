@@ -169,4 +169,35 @@ public class RdbmsReaderRegressionTest {
         assertEquals(0,collector.dirty);
         assertEquals(2,sender.rows.size());
     }
+
+    @Test public void postgresqlLossyTemporalConversionIsFatalBeforeEmission() throws Exception {
+        for (String name : new String[]{"date", "timestamp", "timestamptz"}) {
+            int type = "date".equals(name) ? Types.DATE : Types.TIMESTAMP;
+            ResultSetMetaData meta = metadata(type);
+            when(meta.getColumnTypeName(1)).thenReturn(name);
+            for (boolean exact : new boolean[]{true, false}) {
+                ResultSet rs = mock(ResultSet.class);
+                Timestamp timestamp = Timestamp.valueOf("2024-03-10 03:30:00.123456");
+                java.sql.Date date = java.sql.Date.valueOf("2024-03-10");
+                when(rs.getDate(1)).thenReturn(date);
+                when(rs.getTimestamp(1)).thenReturn(timestamp);
+                when(rs.getObject(1, java.time.LocalDate.class)).thenReturn(date.toLocalDate().plusDays(exact ? 0 : 1));
+                when(rs.getObject(1, java.time.LocalDateTime.class)).thenReturn(timestamp.toLocalDateTime().plusHours(exact ? 0 : 1));
+                when(rs.getObject(1, java.time.OffsetDateTime.class)).thenReturn(timestamp.toInstant()
+                        .atOffset(java.time.ZoneOffset.UTC).plusHours(exact ? 0 : 1));
+                Sender sender = new Sender(); Collector collector = new Collector();
+                Task task = new Task(DataBaseType.PostgreSQL);
+                try {
+                    task.read(sender, rs, meta, "", collector);
+                    assertTrue("Lossy temporal value was emitted", exact);
+                    assertEquals(Column.Type.DATE, sender.rows.get(0).getColumn(0).getType());
+                } catch (DataXException failure) {
+                    assertFalse(exact);
+                    assertTrue(failure.getMessage().contains("cannot be represented losslessly"));
+                    assertTrue(sender.rows.isEmpty());
+                }
+                assertEquals(0, collector.dirty);
+            }
+        }
+    }
 }

@@ -1,0 +1,11 @@
+{
+  "started_at": "2026-09-27T04:31:23.604572+00:00",
+  "completed": [
+    "pg-calendar-regression",
+    "pg-calendar-crash",
+    "pg-calendar-fidelity",
+    "pg-calendar-perf-table-single",
+    "pg-calendar-perf-table-parallel"
+  ],
+  "finished_at": "2026-09-27T04:38:29.211749+00:00"
+}

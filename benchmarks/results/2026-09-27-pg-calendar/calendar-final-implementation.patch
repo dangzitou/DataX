@@ -1,0 +1,159 @@
+diff --git a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
+index bfd0bb8..23e0d75 100755
+--- a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
++++ b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/reader/CommonRdbmsReader.java
+@@ -133,6 +133,7 @@ public class CommonRdbmsReader {
+         private ResultSetMetaData cachedMetaData;
+         private int[] columnTypes;
+         private boolean[] yearColumns;
++        private boolean[] zonedTimestampColumns;
+         private Set<String> binaryColumns = Collections.emptySet();
+ 
+         // 作为日志显示信息时，需要附带的通用信息。比如信息所对应的数据库连接等信息，针对哪个表做的操作
+@@ -265,11 +266,15 @@ public class CommonRdbmsReader {
+             if (cachedMetaData != metaData) {
+                 columnTypes = new int[columnNumber];
+                 yearColumns = new boolean[columnNumber];
++                zonedTimestampColumns = new boolean[columnNumber];
+                 Set<String> remaining = new HashSet<>(binaryColumns);
+                 for (int i = 0; i < columnNumber; i++) {
+                     columnTypes[i] = metaData.getColumnType(i + 1);
+                     yearColumns[i] = columnTypes[i] == Types.DATE
+                             && "year".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
++                    zonedTimestampColumns[i] = dataBaseType == DataBaseType.PostgreSQL
++                            && columnTypes[i] == Types.TIMESTAMP
++                            && "timestamptz".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
+                     if (!binaryColumns.isEmpty() && binaryColumns.contains(metaData.getColumnLabel(i + 1))) {
+                         String label = metaData.getColumnLabel(i + 1);
+                         int type = columnTypes[i];
+@@ -356,12 +361,33 @@ public class CommonRdbmsReader {
+                             int year = rs.getInt(i);
+                             record.addColumn(rs.wasNull() ? new LongColumn() : new LongColumn(year));
+                         } else {
+-                            record.addColumn(new DateColumn(rs.getDate(i)));
++                            java.sql.Date date = rs.getDate(i);
++                            if (dataBaseType == DataBaseType.PostgreSQL && date != null) {
++                                java.time.LocalDate nativeDate = rs.getObject(i, java.time.LocalDate.class);
++                                requireExactTemporal(nativeDate.equals(java.time.LocalDate.MIN)
++                                        || nativeDate.equals(java.time.LocalDate.MAX)
++                                        || nativeDate.equals(date.toLocalDate()));
++                            }
++                            record.addColumn(new DateColumn(date));
+                         }
+                         break;
+ 
+                     case Types.TIMESTAMP:
+-                        record.addColumn(new DateColumn(rs.getTimestamp(i)));
++                        java.sql.Timestamp timestamp = rs.getTimestamp(i);
++                        if (dataBaseType == DataBaseType.PostgreSQL && timestamp != null) {
++                            if (zonedTimestampColumns[i - 1]) {
++                                java.time.OffsetDateTime nativeTimestamp = rs.getObject(i, java.time.OffsetDateTime.class);
++                                requireExactTemporal(nativeTimestamp.equals(java.time.OffsetDateTime.MIN)
++                                        || nativeTimestamp.equals(java.time.OffsetDateTime.MAX)
++                                        || nativeTimestamp.toInstant().equals(timestamp.toInstant()));
++                            } else {
++                                java.time.LocalDateTime nativeTimestamp = rs.getObject(i, java.time.LocalDateTime.class);
++                                requireExactTemporal(nativeTimestamp.equals(java.time.LocalDateTime.MIN)
++                                        || nativeTimestamp.equals(java.time.LocalDateTime.MAX)
++                                        || nativeTimestamp.equals(timestamp.toLocalDateTime()));
++                            }
++                        }
++                        record.addColumn(new DateColumn(timestamp));
+                         break;
+ 
+                     case Types.BINARY:
+@@ -413,6 +439,11 @@ public class CommonRdbmsReader {
+             }
+             return record;
+         }
++
++        private static void requireExactTemporal(boolean exact) throws SQLException {
++            if (!exact) throw new SQLException("PostgreSQL temporal value cannot be represented losslessly by java.sql date/time. "
++                    + "Use a suitable time zone or explicit ::text with a writer that preserves PostgreSQL temporal text.", "22008");
++        }
+     }
+ 
+ }
+diff --git a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
+index 229081f..4f98617 100644
+--- a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
++++ b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/reader/RdbmsReaderRegressionTest.java
+@@ -169,4 +169,35 @@ public class RdbmsReaderRegressionTest {
+         assertEquals(0,collector.dirty);
+         assertEquals(2,sender.rows.size());
+     }
++
++    @Test public void postgresqlLossyTemporalConversionIsFatalBeforeEmission() throws Exception {
++        for (String name : new String[]{"date", "timestamp", "timestamptz"}) {
++            int type = "date".equals(name) ? Types.DATE : Types.TIMESTAMP;
++            ResultSetMetaData meta = metadata(type);
++            when(meta.getColumnTypeName(1)).thenReturn(name);
++            for (boolean exact : new boolean[]{true, false}) {
++                ResultSet rs = mock(ResultSet.class);
++                Timestamp timestamp = Timestamp.valueOf("2024-03-10 03:30:00.123456");
++                java.sql.Date date = java.sql.Date.valueOf("2024-03-10");
++                when(rs.getDate(1)).thenReturn(date);
++                when(rs.getTimestamp(1)).thenReturn(timestamp);
++                when(rs.getObject(1, java.time.LocalDate.class)).thenReturn(date.toLocalDate().plusDays(exact ? 0 : 1));
++                when(rs.getObject(1, java.time.LocalDateTime.class)).thenReturn(timestamp.toLocalDateTime().plusHours(exact ? 0 : 1));
++                when(rs.getObject(1, java.time.OffsetDateTime.class)).thenReturn(timestamp.toInstant()
++                        .atOffset(java.time.ZoneOffset.UTC).plusHours(exact ? 0 : 1));
++                Sender sender = new Sender(); Collector collector = new Collector();
++                Task task = new Task(DataBaseType.PostgreSQL);
++                try {
++                    task.read(sender, rs, meta, "", collector);
++                    assertTrue("Lossy temporal value was emitted", exact);
++                    assertEquals(Column.Type.DATE, sender.rows.get(0).getColumn(0).getType());
++                } catch (DataXException failure) {
++                    assertFalse(exact);
++                    assertTrue(failure.getMessage().contains("cannot be represented losslessly"));
++                    assertTrue(sender.rows.isEmpty());
++                }
++                assertEquals(0, collector.dirty);
++            }
++        }
++    }
+ }
+diff --git a/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java b/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
+index f1c2218..d4e6b5f 100755
+--- a/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
++++ b/postgresqlreader/src/main/java/com/alibaba/datax/plugin/reader/postgresqlreader/PostgresqlReader.java
+@@ -127,7 +127,7 @@ public class PostgresqlReader extends Reader {
+         public void init() {
+             this.readerSliceConfig = super.getPluginJobConf();
+             String url = this.readerSliceConfig.getString(Key.JDBC_URL);
+-            // PG JDBC 42.3.3 getString still converts binary TIME/TIMETZ through java.sql.Time.
++            // PG JDBC getString converts binary TIME/TIMETZ through java.sql.Time.
+             // Preserve existing disabled types while requesting lossless text for these two OIDs.
+             String disabled = PGProperty.BINARY_TRANSFER_DISABLE.get(Driver.parseURL(url, null));
+             disabled = (disabled == null || disabled.isEmpty() ? "" : disabled + ",") + "1083,1266";
+diff --git a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
+index 5fc8c78..ad8c641 100755
+--- a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
++++ b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter.java
+@@ -96,11 +96,13 @@ public class PostgresqlWriter extends Writer {
+             case Types.BINARY: case Types.VARBINARY: case Types.BLOB: case Types.LONGVARBINARY:
+                 return PGbytea.toPGString(column.asBytes());
+             case Types.DATE:
++                if (column.getType() == Column.Type.STRING) return column.asString();
+                 return dates.toString(null, new java.sql.Date(column.asDate().getTime()));
+             case Types.TIME:
+                 if (column.getType() == Column.Type.STRING) return column.asString();
+                 return dates.toString(null, new java.sql.Time(column.asDate().getTime()));
+             case Types.TIMESTAMP:
++                if (column.getType() == Column.Type.STRING) return column.asString();
+                 java.util.Date date = column.asDate();
+                 return dates.toString(null, date instanceof java.sql.Timestamp
+                         ? (java.sql.Timestamp) date : new java.sql.Timestamp(date.getTime()));
+@@ -126,8 +128,9 @@ public class PostgresqlWriter extends Writer {
+                 @Override
+                 protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement statement,
+                         int index, int type, String typeName, Column column) throws SQLException {
+-                    if (type == Types.TIME && column.getType() == Column.Type.STRING) {
+-                        // calcValueHolder supplies the PG time/timetz cast; do not parse via java.sql.Time.
++                    if ((type == Types.DATE || type == Types.TIME || type == Types.TIMESTAMP)
++                            && column.getType() == Column.Type.STRING) {
++                        // Let PostgreSQL parse its own temporal text through calcValueHolder's cast.
+                         statement.setString(index + 1, column.asString());
+                         return statement;
+                     }

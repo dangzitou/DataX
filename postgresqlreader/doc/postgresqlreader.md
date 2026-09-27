@@ -232,14 +232,16 @@ PostgresqlReader插件实现了从PostgreSQL读取数据。在底层实现上，
 | Long     |bigint, bigserial, integer, smallint, serial |
 | Double   |double precision, money, numeric, real |
 | String   |varchar, char, text, bit, inet, time, timetz|
-| Date     |date, timestamp |
+| Date     |date, timestamp, timestamptz |
 | Boolean  |bool|
 | Bytes    |bytea|
 
 请注意:
 
 * 本 fork 对 `time` / `timetz` 保留 PG 的完整文本（包括微秒、原始偏移和 `24:00:00`），不再经过只能保存有限时间信息的 `java.sql.Time`。因此 DataX 内部列类型变为 String，`common.column.timeFormat` 不再裁剪这些值；依赖 DateColumn 的自定义 transformer 或其他数据库 writer 需要验证兼容性。postgresqlwriter 的 JDBC 与 COPY 路径支持直接写回这些文本。
-* 现用 PG JDBC 42.3.3 的二进制时间转换也会丢失信息，所以读取任务将 `time`、`timetz` 两种 OID 加入 `binaryTransferDisable`，保留已有禁用列表和其他类型的传输设置。
+* PG JDBC 的二进制时间转换也可能丢失信息，所以读取任务将 `time`、`timetz` 两种 OID 加入 `binaryTransferDisable`，保留已有禁用列表和其他类型的传输设置。当前驱动版本为 42.7.13。
+* `date`、`timestamp`、`timestamptz` 仍使用 DateColumn，但读取时与驱动的 Java 8 日期时间值核对。夏令时空缺、被跳过的日期或历史历法等导致 `java.sql` 转换改变原值时，整个读取任务失败，不会当作可跳过的脏行。`common.column.timeZone` 决定 Engine 实际时区，仅设置 JVM `-Duser.timezone` 可能被它覆盖。
+* 回写 PostgreSQL 的特殊日期时间可显式查询 `SELECT ts::text AS ts, tz::text AS tz, day::text AS day FROM source_table`，并使用本 fork postgresqlwriter 的原生文本写回。源端保留 timestamp 的本地字段及 timestamptz 的偏移，PG 目标按自身类型解析；需使用相应 DATE/TIMESTAMP/TIMESTAMPTZ 目标列。不要将此处理直接推广到 MySQL、StarRocks、Doris 等目标或依赖 DateColumn 的 transformer。相关真实检查见 [calendar checks](../../benchmarks/postgresql_calendar_checks.py)。
 
 * `除上述罗列字段类型外，其他类型均不支持; money,inet,bit需用户使用a_inet::varchar类似的语法转换`。
 

@@ -133,6 +133,7 @@ public class CommonRdbmsReader {
         private ResultSetMetaData cachedMetaData;
         private int[] columnTypes;
         private boolean[] yearColumns;
+        private boolean[] zonedTimestampColumns;
         private Set<String> binaryColumns = Collections.emptySet();
 
         // 作为日志显示信息时，需要附带的通用信息。比如信息所对应的数据库连接等信息，针对哪个表做的操作
@@ -265,11 +266,15 @@ public class CommonRdbmsReader {
             if (cachedMetaData != metaData) {
                 columnTypes = new int[columnNumber];
                 yearColumns = new boolean[columnNumber];
+                zonedTimestampColumns = new boolean[columnNumber];
                 Set<String> remaining = new HashSet<>(binaryColumns);
                 for (int i = 0; i < columnNumber; i++) {
                     columnTypes[i] = metaData.getColumnType(i + 1);
                     yearColumns[i] = columnTypes[i] == Types.DATE
                             && "year".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
+                    zonedTimestampColumns[i] = dataBaseType == DataBaseType.PostgreSQL
+                            && columnTypes[i] == Types.TIMESTAMP
+                            && "timestamptz".equalsIgnoreCase(metaData.getColumnTypeName(i + 1));
                     if (!binaryColumns.isEmpty() && binaryColumns.contains(metaData.getColumnLabel(i + 1))) {
                         String label = metaData.getColumnLabel(i + 1);
                         int type = columnTypes[i];
@@ -356,12 +361,33 @@ public class CommonRdbmsReader {
                             int year = rs.getInt(i);
                             record.addColumn(rs.wasNull() ? new LongColumn() : new LongColumn(year));
                         } else {
-                            record.addColumn(new DateColumn(rs.getDate(i)));
+                            java.sql.Date date = rs.getDate(i);
+                            if (dataBaseType == DataBaseType.PostgreSQL && date != null) {
+                                java.time.LocalDate nativeDate = rs.getObject(i, java.time.LocalDate.class);
+                                requireExactTemporal(nativeDate.equals(java.time.LocalDate.MIN)
+                                        || nativeDate.equals(java.time.LocalDate.MAX)
+                                        || nativeDate.equals(date.toLocalDate()));
+                            }
+                            record.addColumn(new DateColumn(date));
                         }
                         break;
 
                     case Types.TIMESTAMP:
-                        record.addColumn(new DateColumn(rs.getTimestamp(i)));
+                        java.sql.Timestamp timestamp = rs.getTimestamp(i);
+                        if (dataBaseType == DataBaseType.PostgreSQL && timestamp != null) {
+                            if (zonedTimestampColumns[i - 1]) {
+                                java.time.OffsetDateTime nativeTimestamp = rs.getObject(i, java.time.OffsetDateTime.class);
+                                requireExactTemporal(nativeTimestamp.equals(java.time.OffsetDateTime.MIN)
+                                        || nativeTimestamp.equals(java.time.OffsetDateTime.MAX)
+                                        || nativeTimestamp.toInstant().equals(timestamp.toInstant()));
+                            } else {
+                                java.time.LocalDateTime nativeTimestamp = rs.getObject(i, java.time.LocalDateTime.class);
+                                requireExactTemporal(nativeTimestamp.equals(java.time.LocalDateTime.MIN)
+                                        || nativeTimestamp.equals(java.time.LocalDateTime.MAX)
+                                        || nativeTimestamp.equals(timestamp.toLocalDateTime()));
+                            }
+                        }
+                        record.addColumn(new DateColumn(timestamp));
                         break;
 
                     case Types.BINARY:
@@ -412,6 +438,11 @@ public class CommonRdbmsReader {
                 return null;
             }
             return record;
+        }
+
+        private static void requireExactTemporal(boolean exact) throws SQLException {
+            if (!exact) throw new SQLException("PostgreSQL temporal value cannot be represented losslessly by java.sql date/time. "
+                    + "Use a suitable time zone or explicit ::text with a writer that preserves PostgreSQL temporal text.", "22008");
         }
     }
 

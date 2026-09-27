@@ -1,0 +1,11 @@
+{
+  "deleted_prototype_runtime_bytes": {
+    "candidate-calendar": 162671130,
+    "candidate-calendar-v2": 163036839
+  },
+  "temporary_root_bytes": 1259248982,
+  "postgres_bytes": 1474899968,
+  "host_free_bytes": 280280440832,
+  "remaining_stages": 0,
+  "other_test_connections": 0
+}
