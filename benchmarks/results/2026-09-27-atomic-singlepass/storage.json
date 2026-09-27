@@ -1,0 +1,12 @@
+{
+  "recorded_at": "2026-09-27T05:15:47.412767+00:00",
+  "removed_runtime": "/tmp/datax-perf/candidate-atomic-singlepass",
+  "removed_runtime_bytes": 176695975,
+  "removed_table": "datax-perf-postgres/datax_bench/public.pg_perf_target",
+  "retained_source_rows": 1000000,
+  "tmp_root_bytes": 1266922779,
+  "postgres_bytes": 1475284992,
+  "free_host_bytes": 280041484288,
+  "remaining_stages": 0,
+  "active_other_test_connections": 0
+}

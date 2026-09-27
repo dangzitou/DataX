@@ -1,0 +1,114 @@
+diff --git a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+index 6195f43..3fec1ae 100644
+--- a/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
++++ b/postgresqlwriter/src/main/java/com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlAtomicBatch.java
+@@ -212,6 +212,17 @@ final class PostgresqlAtomicBatch {
+         }
+     }
+ 
++    private void lockTarget() throws SQLException {
++        execute("LOCK TABLE " + target + " IN SHARE ROW EXCLUSIVE MODE");
++        try (PreparedStatement identity = connection.prepareStatement("SELECT ?::regclass::oid=?::oid")) {
++            identity.setString(1, target); identity.setLong(2, targetOid);
++            try (ResultSet result = identity.executeQuery()) {
++                result.next(); if (!result.getBoolean(1)) fail("Atomic target was replaced");
++            }
++        }
++        checkTarget();
++    }
++
+     void publish(List<String> taskRows) {
+         try {
+             if (taskRows == null || taskRows.size() != taskCount) fail("Missing atomic task row counts");
+@@ -219,47 +230,62 @@ final class PostgresqlAtomicBatch {
+             for (String count : taskRows) expected = Math.addExact(expected, Long.parseLong(count));
+             execute("LOCK TABLE " + stage + " IN SHARE MODE");
+             if (!stageComment.equals(comment(stage))) fail("Atomic staging generation changed before publication");
++            checkLedger();
++            boolean published = false;
++            String previousLayout = null, previousFingerprint = null;
++            long previousCount = 0;
++            try (PreparedStatement prior = connection.prepareStatement("SELECT layout,row_count,fingerprint FROM " + ledger + " WHERE target_oid=?::oid AND batch_id=?")) {
++                prior.setLong(1, targetOid); prior.setString(2, batchId);
++                try (ResultSet result = prior.executeQuery()) {
++                    if (result.next()) {
++                        published = true; previousLayout = result.getString(1);
++                        previousCount = result.getLong(2); previousFingerprint = result.getString(3);
++                    }
++                }
++            }
++            boolean merged = !published && connection.getMetaData().getDatabaseMajorVersion() >= 17;
+             // Sum all four signed SHA-256 limbs, preserving multiplicity (XOR would cancel duplicates).
+             // PostgreSQL numeric sums do not overflow; binary record_send preserves typed field boundaries.
+-            StringBuilder hashQuery = new StringBuilder("WITH hashes AS (SELECT encode(sha256(record_send(ROW(")
+-                    .append(columns).append("))),'hex') h FROM ").append(stage).append(") SELECT count(*)");
++            StringBuilder hashQuery;
++            if (merged) {
++                lockTarget();
++                List<String> names = config.getList(Key.COLUMN, String.class);
++                String source = "s." + String.join(",s.", names), written = "t." + String.join(",t.", names);
++                // The DML CTE evaluates the fingerprint once per input row. Compare actual bytes
++                // with the corresponding inserted row; count still must equal all received records.
++                hashQuery = new StringBuilder("WITH inserted AS (MERGE INTO ").append(target)
++                        .append(" AS t USING ").append(stage).append(" AS s ON false WHEN NOT MATCHED THEN INSERT (")
++                        .append(columns).append(") VALUES (").append(source).append(") RETURNING encode(sha256(record_send(ROW(")
++                        .append(source).append("))),'hex') h,record_send(ROW(").append(source)
++                        .append(")) IS NOT DISTINCT FROM record_send(ROW(").append(written).append(")) AS exact) SELECT count(*)");
++            } else {
++                hashQuery = new StringBuilder("WITH hashes AS (SELECT encode(sha256(record_send(ROW(")
++                        .append(columns).append("))),'hex') h FROM ").append(stage).append(") SELECT count(*)");
++            }
+             for (int offset : new int[]{1,17,33,49}) hashQuery.append(",coalesce(sum(('x'||substr(h,").append(offset)
+                     .append(",16))::bit(64)::bigint),0)::text");
+-            hashQuery.append(" FROM hashes");
++            hashQuery.append(merged ? ",count(*) FILTER (WHERE NOT exact) FROM inserted" : " FROM hashes");
+             long count;
+             String fingerprint;
+             try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(hashQuery.toString())) {
+                 result.next(); count = result.getLong(1);
+                 fingerprint = result.getString(2) + ":" + result.getString(3) + ":" + result.getString(4) + ":" + result.getString(5);
++                if (merged && result.getLong(6) != 0) fail("Atomic publication changed or omitted staged values");
+             }
+             if (count != expected) fail("Atomic stage count differs from received records: " + count + " vs " + expected);
+-            checkLedger();
+-            boolean published = false;
+-            try (PreparedStatement prior = connection.prepareStatement("SELECT layout,row_count,fingerprint FROM " + ledger + " WHERE target_oid=?::oid AND batch_id=?")) {
+-                prior.setLong(1, targetOid); prior.setString(2, batchId);
+-                try (ResultSet result = prior.executeQuery()) {
+-                    if (result.next()) {
+-                        if (!layout.equals(result.getString(1)) || count != result.getLong(2) || !fingerprint.equals(result.getString(3)))
+-                            fail("Atomic batch ID was already committed with different data or columns: " + batchId);
+-                        published = true;
+-                    }
+-                }
+-            }
++            if (published && (!layout.equals(previousLayout) || count != previousCount || !fingerprint.equals(previousFingerprint)))
++                fail("Atomic batch ID was already committed with different data or columns: " + batchId);
+             if (!published) {
+-                execute("LOCK TABLE " + target + " IN SHARE ROW EXCLUSIVE MODE");
+-                try (PreparedStatement identity = connection.prepareStatement("SELECT ?::regclass::oid=?::oid")) {
+-                    identity.setString(1, target); identity.setLong(2, targetOid);
+-                    try (ResultSet result = identity.executeQuery()) { result.next(); if (!result.getBoolean(1)) fail("Atomic target was replaced"); }
+-                }
+-                checkTarget();
+-                // Compare exact binary multisets inside the publication transaction, before committing.
+-                // Group the actual bytes once; signed counts preserve duplicate multiplicity.
+-                String inserted = "WITH inserted AS (INSERT INTO " + target + " (" + columns + ") SELECT " + columns + " FROM " + stage
+-                        + " RETURNING record_send(ROW(" + columns + ")) b) SELECT count(*) FROM ("
+-                        + "SELECT b FROM (SELECT record_send(ROW(" + columns + ")) b,1 n FROM " + stage
+-                        + " UNION ALL SELECT b,-1 n FROM inserted) compared GROUP BY b HAVING sum(n)<>0) differences";
+-                try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(inserted)) {
+-                    result.next(); if (result.getLong(1) != 0) fail("Atomic publication changed or omitted staged values");
++                if (!merged) {
++                    lockTarget();
++                    // Older servers compare complete binary multisets, including duplicate multiplicity.
++                    String inserted = "WITH inserted AS (INSERT INTO " + target + " (" + columns + ") SELECT " + columns + " FROM " + stage
++                            + " RETURNING record_send(ROW(" + columns + ")) b) SELECT count(*) FROM ("
++                            + "SELECT b FROM (SELECT record_send(ROW(" + columns + ")) b,1 n FROM " + stage
++                            + " UNION ALL SELECT b,-1 n FROM inserted) compared GROUP BY b HAVING sum(n)<>0) differences";
++                    try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(inserted)) {
++                        result.next(); if (result.getLong(1) != 0) fail("Atomic publication changed or omitted staged values");
++                    }
+                 }
+                 execute("SET CONSTRAINTS ALL IMMEDIATE");
+                 try (PreparedStatement marker = connection.prepareStatement("INSERT INTO " + ledger

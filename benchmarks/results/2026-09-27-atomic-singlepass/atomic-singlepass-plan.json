@@ -1,0 +1,28 @@
+{
+  "recorded_at": "2026-09-27T04:48:44.369016+00:00",
+  "candidate_base": "f9a7612",
+  "baseline_runtime": "candidate-calendar-final",
+  "purpose": "Combine first PG17 atomic publication, exact source/inserted byte equality, received row count and existing-format fingerprint in one DML CTE; keep logged storage, locks, fences, constraints and legacy retry fingerprint",
+  "scenarios": [
+    "table-single",
+    "stream-to-pg",
+    "table-parallel"
+  ],
+  "rows": 1000000,
+  "warmups_each": 1,
+  "paired_rounds": 5,
+  "atomic_both": true,
+  "copy_both": false,
+  "rewrite_both": false,
+  "retention": "Correctness and upgrade/crash checks pass; every scenario median throughput gain >=5%, every pair nonnegative; otherwise revert prototype. Original per-pair +25% and +50% gates are assessed separately and remain required for goal completion.",
+  "correctness": [
+    "native SQL count and fingerprint equivalence, exact value comparisons",
+    "existing full atomic suite",
+    "calendar and float atomic values",
+    "logged process crash recovery before/during/after publication",
+    "previous publisher -> new publisher and reverse same-ID compatibility"
+  ],
+  "isolation": "No concurrent local builds, DB tests, compression or Engine jobs during timed performance; retain unrelated project containers",
+  "storage": "Reuse existing one-million-row source and sequential resets; existing 6GiB guard and per-backend temp limit; no durability reduction",
+  "scope": "Same atomic semantics vs previous fork; not untreated upstream, all writers or billion-row guarantee"
+}

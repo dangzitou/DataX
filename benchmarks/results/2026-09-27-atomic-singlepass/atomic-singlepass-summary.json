@@ -1,0 +1,240 @@
+{
+  "scope": "Same atomic mode and same calendar safety checks relative to previous fork; not upstream, all writers or billion-row guarantee",
+  "results": [
+    {
+      "scenario": "table-single",
+      "medians_seconds": {
+        "baseline": 15.124466874999996,
+        "candidate": 11.807325417000001
+      },
+      "median_throughput_gain_percent": 28.093927632620574,
+      "minimum_gain_percent": 21.011203137873792,
+      "performance_retention_passed": true,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 21.167904899429658,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 31.428639585533304,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 29.978575645429295,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 21.011203137873792,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 27.977460806807564,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 21.011203137873792,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 21.167904899429658,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 31.428639585533304,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 29.978575645429295,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 21.011203137873792,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": 27.977460806807564,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 21.011203137873792,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      }
+    },
+    {
+      "scenario": "stream-to-pg",
+      "medians_seconds": {
+        "baseline": 10.030076166,
+        "candidate": 12.981678500000001
+      },
+      "median_throughput_gain_percent": -22.736677187006293,
+      "minimum_gain_percent": -23.576668616756535,
+      "performance_retention_passed": false,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -21.912430391710537,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 43.66412348562729,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": -23.576668616756535,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 45.12968184853068,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": -22.736677187006293,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -23.576668616756535,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": -21.912430391710537,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 43.66412348562729,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": -23.576668616756535,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 45.12968184853068,
+            "passed": false
+          },
+          {
+            "round": 5,
+            "gain_percent": -22.736677187006293,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": -23.576668616756535,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      }
+    },
+    {
+      "scenario": "table-parallel",
+      "medians_seconds": {
+        "baseline": 14.474840625000013,
+        "candidate": 11.074008375000005
+      },
+      "median_throughput_gain_percent": 30.7100386313371,
+      "minimum_gain_percent": 27.521698077776378,
+      "performance_retention_passed": true,
+      "gate_25": {
+        "metric": "throughput",
+        "required_gain_percent": 25,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 29.844303037795015,
+            "passed": true
+          },
+          {
+            "round": 2,
+            "gain_percent": 27.521698077776378,
+            "passed": true
+          },
+          {
+            "round": 3,
+            "gain_percent": 35.35377469732421,
+            "passed": true
+          },
+          {
+            "round": 4,
+            "gain_percent": 62.0322842501416,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 30.7100386313371,
+            "passed": true
+          }
+        ],
+        "minimum_gain_percent": 27.521698077776378,
+        "passed": true,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      },
+      "gate_50": {
+        "metric": "throughput",
+        "required_gain_percent": 50,
+        "rounds": [
+          {
+            "round": 1,
+            "gain_percent": 29.844303037795015,
+            "passed": false
+          },
+          {
+            "round": 2,
+            "gain_percent": 27.521698077776378,
+            "passed": false
+          },
+          {
+            "round": 3,
+            "gain_percent": 35.35377469732421,
+            "passed": false
+          },
+          {
+            "round": 4,
+            "gain_percent": 62.0322842501416,
+            "passed": true
+          },
+          {
+            "round": 5,
+            "gain_percent": 30.7100386313371,
+            "passed": false
+          }
+        ],
+        "minimum_gain_percent": 27.521698077776378,
+        "passed": false,
+        "scope": "Measured workload and rounds only; not a universal or future guarantee."
+      }
+    }
+  ],
+  "all_performance_retention_passed": false
+}

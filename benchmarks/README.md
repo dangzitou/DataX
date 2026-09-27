@@ -109,6 +109,13 @@ atomic publication. The reader keeps DateColumn compatibility but fails on lossy
 conversion; explicit temporal text round-trips through PostgreSQL's own parser.
 These checks do not establish billion-row or cross-writer correctness.
 
+[Rejected single-pass atomic publisher (中文)](REPORT-pg-atomic-singlepass.zh-CN.md)
+records 393 Engine runs including 36 paired million-row transfers. Ordinary-table
+median throughput improves 28.09% / 30.71%, but the repeated-row workload regresses
+22.74%; the prototype was reverted under its predeclared retention rule. Correctness,
+hard-crash and bidirectional batch-ID compatibility checks do not establish a
+production error rate or billion-row guarantee.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers
