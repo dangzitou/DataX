@@ -1,0 +1,82 @@
+[
+  {
+    "mode": "jdbc",
+    "attempt": 1,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.840534208
+  },
+  {
+    "mode": "jdbc",
+    "attempt": 2,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.667244291
+  },
+  {
+    "mode": "jdbc",
+    "attempt": 3,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6761204579999998
+  },
+  {
+    "mode": "jdbc",
+    "attempt": 4,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6714235420000003
+  },
+  {
+    "mode": "copy",
+    "attempt": 1,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6827887079999995
+  },
+  {
+    "mode": "copy",
+    "attempt": 2,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6575708330000003
+  },
+  {
+    "mode": "copy",
+    "attempt": 3,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6570250419999999
+  },
+  {
+    "mode": "copy",
+    "attempt": 4,
+    "job_succeeded": true,
+    "source": "1.2345",
+    "target": "1.23",
+    "rows": 1,
+    "changed_rows": 1,
+    "seconds_diagnostic_only": 0.6920532079999999
+  }
+]

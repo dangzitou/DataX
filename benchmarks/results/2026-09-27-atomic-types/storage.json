@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-09-27T02:28:11.222598+00:00",
+  "removed": [
+    {
+      "path": "/tmp/datax-perf/jdbc-profile-table-single/selected-events.json",
+      "bytes": 145865244,
+      "sha256": "58e8a15157f1e37051d33a3542aea4b2dd27a14087ce92e61c0e1e47cfe91108"
+    },
+    {
+      "path": "/tmp/datax-perf/jdbc-profile-table-single/profile.jfr",
+      "bytes": 719083,
+      "sha256": "21595f0ae147ea0db5a78e89a47297dcc8edff78bec9afa3ecbd3126b27b2408"
+    },
+    {
+      "path": "/tmp/datax-perf/jdbc-profile-stream-to-pg/selected-events.json",
+      "bytes": 71272822,
+      "sha256": "c4958894fba6aeb42322f8f066eb40348a3389310ae0a3ddaec303bcc43f1102"
+    },
+    {
+      "path": "/tmp/datax-perf/jdbc-profile-stream-to-pg/profile.jfr",
+      "bytes": 608844,
+      "sha256": "3df76c3023838895411d9215e25abf99729a449e3cafa9eb10320df5dd96bb0e"
+    },
+    {
+      "path": "/tmp/datax-perf/candidate-stream-fatal",
+      "bytes": 146508813,
+      "verified_against": "2026-09-27-floating/candidate-stream-fatal-build.json"
+    }
+  ],
+  "temporary_root_bytes": 1093984256,
+  "postgres_data_bytes": 1473990656,
+  "retained_runtimes": [
+    "baseline-all",
+    "candidate-float-driver",
+    "candidate-atomic-types"
+  ],
+  "scope": "Owned diagnostic files, archived intermediate runtime and named disposable tables only; no unrelated containers touched."
+}

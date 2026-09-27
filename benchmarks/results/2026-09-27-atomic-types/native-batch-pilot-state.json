@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-09-27T02:11:06.706521+00:00",
+  "completed": [
+    {
+      "name": "native-batch-pilot-table-single",
+      "median_seconds": {
+        "baseline": 7.81074091699999,
+        "candidate": 6.41412875
+      },
+      "gain": 21.773996460547984
+    },
+    {
+      "name": "native-batch-pilot-stream-to-pg",
+      "median_seconds": {
+        "baseline": 3.061367999999998,
+        "candidate": 2.289247958999999
+      },
+      "gain": 33.72810874263181
+    }
+  ],
+  "finished_at": "2026-09-27T02:13:26.445574+00:00"
+}

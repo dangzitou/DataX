@@ -1,0 +1,397 @@
+{
+  "events": 2250,
+  "threads": [
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "0-0-0-writer",
+      "count": 423
+    },
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "0-0-3-writer",
+      "count": 414
+    },
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "0-0-1-writer",
+      "count": 405
+    },
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "0-0-2-writer",
+      "count": 405
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-3-writer",
+      "count": 134
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-2-writer",
+      "count": 131
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-0-writer",
+      "count": 129
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-1-writer",
+      "count": 104
+    },
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "main",
+      "count": 49
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "main",
+      "count": 29
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-1-reader",
+      "count": 8
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-0-reader",
+      "count": 6
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-3-reader",
+      "count": 4
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "0-0-2-reader",
+      "count": 4
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "JFR Periodic Tasks",
+      "count": 3
+    },
+    {
+      "kind": "jdk.NativeMethodSample",
+      "thread": "pool-1-thread-1",
+      "count": 1
+    },
+    {
+      "kind": "jdk.ExecutionSample",
+      "thread": "Finalizer",
+      "count": 1
+    }
+  ],
+  "leaves": [
+    [
+      "java/net/SocketInputStream.socketRead0",
+      1560
+    ],
+    [
+      "java/net/SocketOutputStream.socketWrite0",
+      98
+    ],
+    [
+      "sun/nio/cs/UTF_8$Encoder.encode",
+      77
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.sendBind",
+      40
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.processResults",
+      32
+    ],
+    [
+      "sun/nio/cs/UTF_8.newEncoder",
+      27
+    ],
+    [
+      "com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter$Task$1.fillPreparedStatementColumnType",
+      26
+    ],
+    [
+      "java/nio/charset/CharsetEncoder.<init>",
+      24
+    ],
+    [
+      "java/util/concurrent/locks/AbstractQueuedSynchronizer.release",
+      24
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.interpretCommandStatus",
+      20
+    ],
+    [
+      "java/util/GregorianCalendar.computeFields",
+      19
+    ],
+    [
+      "org/postgresql/core/v3/SimpleParameterList.copy",
+      19
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.fillPreparedStatementColumnType",
+      16
+    ],
+    [
+      "org/postgresql/util/internal/PgBufferedOutputStream.write",
+      15
+    ],
+    [
+      "org/postgresql/jdbc/PgPreparedStatement.setInt",
+      12
+    ],
+    [
+      "java/util/ArrayDeque.addLast",
+      11
+    ],
+    [
+      "java/lang/StringCoding.decode",
+      9
+    ],
+    [
+      "java/lang/StringCoding.encode",
+      8
+    ],
+    [
+      "sun/security/provider/ByteArrayAccess.i2bBig",
+      7
+    ],
+    [
+      "org/postgresql/jdbc/PgPreparedStatement.setLong",
+      7
+    ]
+  ],
+  "java_leaves": [
+    [
+      "sun/nio/cs/UTF_8$Encoder.encode",
+      77
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.sendBind",
+      40
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.processResults",
+      32
+    ],
+    [
+      "sun/nio/cs/UTF_8.newEncoder",
+      27
+    ],
+    [
+      "com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter$Task$1.fillPreparedStatementColumnType",
+      26
+    ],
+    [
+      "java/nio/charset/CharsetEncoder.<init>",
+      24
+    ],
+    [
+      "java/util/concurrent/locks/AbstractQueuedSynchronizer.release",
+      24
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.interpretCommandStatus",
+      20
+    ],
+    [
+      "java/util/GregorianCalendar.computeFields",
+      19
+    ],
+    [
+      "org/postgresql/core/v3/SimpleParameterList.copy",
+      19
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.fillPreparedStatementColumnType",
+      16
+    ],
+    [
+      "org/postgresql/util/internal/PgBufferedOutputStream.write",
+      15
+    ],
+    [
+      "org/postgresql/jdbc/PgPreparedStatement.setInt",
+      12
+    ],
+    [
+      "java/util/ArrayDeque.addLast",
+      11
+    ],
+    [
+      "java/lang/StringCoding.decode",
+      9
+    ],
+    [
+      "java/lang/StringCoding.encode",
+      8
+    ],
+    [
+      "sun/security/provider/ByteArrayAccess.i2bBig",
+      7
+    ],
+    [
+      "org/postgresql/jdbc/PgPreparedStatement.setLong",
+      7
+    ],
+    [
+      "org/postgresql/core/v3/SimpleQuery.isPreparedFor",
+      7
+    ],
+    [
+      "sun/security/provider/SHA2.implCompress0",
+      6
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.doBatchInsert",
+      6
+    ],
+    [
+      "sun/security/provider/DigestBase.implCompressMultiBlock0",
+      5
+    ],
+    [
+      "java/sql/Timestamp.<init>",
+      5
+    ],
+    [
+      "java/lang/StringBuilder.append",
+      5
+    ],
+    [
+      "java/util/concurrent/locks/AbstractQueuedSynchronizer.doAcquireInterruptibly",
+      5
+    ]
+  ],
+  "writer_stack_methods": [
+    [
+      "java/lang/Thread.run",
+      2139
+    ],
+    [
+      "com/alibaba/datax/core/taskgroup/runner/WriterRunner.run",
+      2139
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.startWrite",
+      2115
+    ],
+    [
+      "com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter$Task.startWrite",
+      2115
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.startWriteWithConnection",
+      2095
+    ],
+    [
+      "com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter$Task$1.doBatchInsert",
+      2082
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.doBatchInsert",
+      2078
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.execute",
+      1915
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.processResults",
+      1601
+    ],
+    [
+      "org/postgresql/jdbc/PgPreparedStatement.executeBatch",
+      1558
+    ],
+    [
+      "org/postgresql/jdbc/PgStatement.executeBatch",
+      1558
+    ],
+    [
+      "org/postgresql/jdbc/PgStatement.internalExecuteBatch",
+      1556
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.ensureBytes",
+      1549
+    ],
+    [
+      "java/net/SocketInputStream.read",
+      1548
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.read",
+      1548
+    ],
+    [
+      "org/postgresql/core/PGStream.receiveChar",
+      1548
+    ],
+    [
+      "org/postgresql/core/VisibleBufferedInputStream.readMore",
+      1548
+    ],
+    [
+      "java/net/SocketInputStream.socketRead0",
+      1547
+    ],
+    [
+      "java/net/SocketInputStream.socketRead",
+      1547
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.flushIfDeadlockRisk",
+      1198
+    ],
+    [
+      "org/postgresql/jdbc/PgConnection.executeTransactionCommand",
+      355
+    ],
+    [
+      "org/postgresql/jdbc/PgConnection.commit",
+      355
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.sendQuery",
+      300
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.sendOneQuery",
+      298
+    ],
+    [
+      "org/postgresql/core/v3/QueryExecutorImpl.sendBind",
+      276
+    ],
+    [
+      "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.fillPreparedStatement",
+      138
+    ],
+    [
+      "com/alibaba/datax/plugin/writer/postgresqlwriter/PostgresqlWriter$Task$1.fillPreparedStatementColumnType",
+      137
+    ],
+    [
+      "org/postgresql/core/v3/SimpleParameterList.getV3Length",
+      136
+    ],
+    [
+      "java/lang/StringCoding.encode",
+      136
+    ],
+    [
+      "java/lang/String.getBytes",
+      136
+    ]
+  ],
+  "scope": "Sample counts, not additive wall-clock proportions; maximum exported stack depth 64."
+}

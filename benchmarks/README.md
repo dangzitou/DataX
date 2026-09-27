@@ -77,6 +77,12 @@ and same-batch atomic reruns. The PG plugins now use JDBC 42.7.13; the report se
 the common conversion fix from the dependency update and retains all performance results.
 This does not establish all-version compatibility, billion-row safety or universal speedups.
 
+[Atomic DOMAIN rejection and native batch controls (中文)](REPORT-pg-atomic-types.zh-CN.md)
+documents a fork-induced silent rounding defect in the experimental PG staging path.
+Unsupported domains/custom types now fail before transfer; repeated real checks preserve
+the existing target. Two separate native batch configuration pilots still fail the
+per-pair +25% / +50% gates and have not been enabled by default.
+
 [PG TIME / TIMETZ preservation (中文)](REPORT-pg-time.zh-CN.md) adds 16 exact
 real-PG round trips for microseconds, offsets and 24:00, plus repeated historical
 corruption evidence. TIME/TIMETZ now travel as StringColumn; custom transformers

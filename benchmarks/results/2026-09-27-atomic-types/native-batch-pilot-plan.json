@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-09-27T02:11:06.706029+00:00",
+  "runtime": "candidate-float-driver",
+  "driver": "42.7.13",
+  "evidence": "Two full-JVM diagnostic JFRs show writer native socket reads and flushIfDeadlockRisk stacks dominating samples. Counts do not equal wall-time proportions.",
+  "comparison": "Same code/runtime, same configuration except candidate reWriteBatchedInserts=true; configuration experiment, not source-only performance.",
+  "scenarios": [
+    "table-single",
+    "stream-to-pg"
+  ],
+  "rows": 1000000,
+  "warmups_each": 1,
+  "pairs": 5,
+  "retention": "No production change in this pilot. Consider a controlled atomic-staging path only if both medians gain >=5% and all correctness checks pass; ordinary user table semantics cannot be assumed equivalent.",
+  "scope": "All-scenario +25/+50 and billion-row safety remain mandatory and unproven.",
+  "storage": "Reuse existing source. Fixed test table, existing 6 GiB guard, no new containers. No builds, profiling or compression while timing."
+}

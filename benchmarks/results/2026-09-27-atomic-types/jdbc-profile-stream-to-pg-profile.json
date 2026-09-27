@@ -1,0 +1,87 @@
+{
+  "common": {
+    "column": {
+      "timeZone": "UTC"
+    }
+  },
+  "core": {
+    "container": {
+      "job": {
+        "sleepInterval": 200
+      },
+      "taskGroup": {
+        "channel": 4
+      }
+    }
+  },
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 4
+      },
+      "errorLimit": {
+        "record": 0
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "streamreader",
+          "parameter": {
+            "sliceRecordCount": 250000,
+            "column": [
+              {
+                "type": "long",
+                "value": "1"
+              },
+              {
+                "type": "long",
+                "value": "7"
+              },
+              {
+                "type": "double",
+                "value": "123.4500"
+              },
+              {
+                "type": "date",
+                "value": "2024-01-01 00:00:00"
+              },
+              {
+                "type": "string",
+                "value": "\u4e2d\u6587\ud83d\ude00-constant"
+              },
+              {
+                "type": "string",
+                "value": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd"
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "postgresqlwriter",
+          "parameter": {
+            "username": "postgres",
+            "password": "datax-local-benchmark",
+            "column": [
+              "id",
+              "tenant",
+              "amount",
+              "created",
+              "message",
+              "payload"
+            ],
+            "batchSize": 1024,
+            "connection": [
+              {
+                "jdbcUrl": "jdbc:postgresql://127.0.0.1:25432/datax_bench",
+                "table": [
+                  "pg_perf_target"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

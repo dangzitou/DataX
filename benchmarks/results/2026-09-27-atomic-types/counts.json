@@ -1,0 +1,27 @@
+{
+  "atomic-domain-before": {
+    "result_entries": 8,
+    "engine_runs": 8,
+    "completed": true
+  },
+  "atomic-domain-after": {
+    "result_entries": 8,
+    "engine_runs": 8,
+    "completed": true
+  },
+  "atomic-types-regression": {
+    "result_entries": 56,
+    "engine_runs": 57,
+    "completed": false
+  },
+  "atomic-types-regression-v2": {
+    "result_entries": 125,
+    "engine_runs": 133,
+    "completed": true
+  },
+  "atomic-types-float": {
+    "result_entries": 8,
+    "engine_runs": 16,
+    "completed": true
+  }
+}
