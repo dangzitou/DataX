@@ -1,0 +1,10 @@
+[
+  {
+    "class": "com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter",
+    "javap_c_p_identical": true
+  },
+  {
+    "class": "com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter$Job",
+    "javap_c_p_identical": true
+  }
+]

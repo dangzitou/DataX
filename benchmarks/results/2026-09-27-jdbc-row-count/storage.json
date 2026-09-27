@@ -1,0 +1,32 @@
+{
+  "recorded_at": "2026-09-27T05:37:10.023900+00:00",
+  "removed_files": [
+    {
+      "path": "/tmp/datax-perf/current-jdbc-profile-table-single/events.json",
+      "bytes": 161878868
+    },
+    {
+      "path": "/tmp/datax-perf/current-jdbc-profile-table-single/profile.jfr",
+      "bytes": 763330
+    },
+    {
+      "path": "/tmp/datax-perf/current-jdbc-profile-stream-to-pg/events.json",
+      "bytes": 78439276
+    },
+    {
+      "path": "/tmp/datax-perf/current-jdbc-profile-stream-to-pg/profile.jfr",
+      "bytes": 636761
+    }
+  ],
+  "removed_bytes": 241718235,
+  "removed_tables": [
+    "pg_perf_target",
+    "pg_wide_target"
+  ],
+  "retained_source_rows": 1000000,
+  "tmp_root_bytes": 1449950264,
+  "postgres_bytes": 1474486272,
+  "free_host_bytes": 279739957248,
+  "remaining_stages": 0,
+  "other_test_connections": 0
+}

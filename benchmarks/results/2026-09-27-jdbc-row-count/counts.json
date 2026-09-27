@@ -1,0 +1,50 @@
+{
+  "row-count-upstream": {
+    "result_entries": 32,
+    "engine_logs": 32
+  },
+  "row-count-before": {
+    "result_entries": 32,
+    "engine_logs": 32
+  },
+  "row-count-after": {
+    "result_entries": 32,
+    "engine_logs": 32
+  },
+  "row-count-fidelity": {
+    "result_entries": 14,
+    "engine_logs": 14
+  },
+  "row-count-writer": {
+    "result_entries": 26,
+    "engine_logs": 26
+  },
+  "row-count-wire": {
+    "result_entries": 4,
+    "engine_logs": 4
+  },
+  "row-count-atomic": {
+    "result_entries": 149,
+    "engine_logs": 157
+  },
+  "row-count-perf-table-single": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "row-count-perf-table-parallel": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "row-count-perf-stream-to-pg": {
+    "result_entries": 12,
+    "engine_logs": 12
+  },
+  "current-jdbc-profile-table-single": {
+    "result_entries": 0,
+    "engine_logs": 1
+  },
+  "current-jdbc-profile-stream-to-pg": {
+    "result_entries": 0,
+    "engine_logs": 1
+  }
+}

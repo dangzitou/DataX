@@ -17,6 +17,69 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class RdbmsWriterRegressionTest {
+    @Test public void postgresBatchCountMismatchRollsBackWithoutReplayOrDirtyRows() throws Exception {
+        for (int[] counts : new int[][] {null, {}, {1}, {1, 0}, {1, 2}, {1, Statement.EXECUTE_FAILED}, {1, -1}}) {
+            CommonRdbmsWriter.Task task = task();
+            task.dataBaseType = DataBaseType.PostgreSQL;
+            Connection connection = connection();
+            PreparedStatement statement = mock(PreparedStatement.class);
+            when(connection.prepareStatement(anyString())).thenReturn(statement);
+            when(statement.executeBatch()).thenReturn(counts);
+            TaskPluginCollector collector = mock(TaskPluginCollector.class);
+            try {
+                task.startWriteWithConnection(records(), collector, connection);
+                fail("Invalid affected-row counts must fail");
+            } catch (DataXException expected) {
+                assertEquals(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH, expected.getErrorCode());
+            }
+            verify(connection).rollback();
+            verify(connection, never()).commit();
+            verify(connection, times(1)).prepareStatement(anyString());
+            verify(statement, never()).execute();
+            verifyZeroInteractions(collector);
+            verify(statement).close();
+            verify(connection).close();
+        }
+    }
+
+    @Test public void postgresKeepsUnknownBatchCountsWithoutClaimingAnExactCount() throws Exception {
+        CommonRdbmsWriter.Task task = task();
+        task.dataBaseType = DataBaseType.PostgreSQL;
+        Connection connection = connection();
+        PreparedStatement statement = mock(PreparedStatement.class);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeBatch()).thenReturn(new int[]{1, 1},
+                new int[]{Statement.SUCCESS_NO_INFO, Statement.SUCCESS_NO_INFO}, new int[]{1});
+        task.startWriteWithConnection(records(), mock(TaskPluginCollector.class), connection);
+        verify(connection, times(3)).commit();
+        verify(connection, never()).rollback();
+    }
+
+    @Test public void postgresSingleRowFallbackCannotHideSkippedRows() throws Exception {
+        for (int count : new int[] {0, 2, -1, Statement.SUCCESS_NO_INFO}) {
+            CommonRdbmsWriter.Task task = task();
+            task.dataBaseType = DataBaseType.PostgreSQL;
+            task.resultSetMetaData = org.apache.commons.lang3.tuple.Triple.of(
+                    Arrays.asList("id"), Arrays.asList(Types.BIGINT), Arrays.asList("int8"));
+            Connection connection = connection();
+            PreparedStatement statement = mock(PreparedStatement.class);
+            when(connection.prepareStatement(anyString())).thenReturn(statement);
+            when(statement.getUpdateCount()).thenReturn(count);
+            TaskPluginCollector collector = mock(TaskPluginCollector.class);
+            task.taskPluginCollector = collector;
+            try {
+                task.doOneInsert(connection, Arrays.asList(records().getFromReader(), records().getFromReader()));
+                fail("Skipped fallback row must fail even if dirty rows are allowed");
+            } catch (DataXException expected) {
+                assertEquals(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH, expected.getErrorCode());
+            }
+            verify(statement, times(1)).execute();
+            verify(statement).clearParameters();
+            verifyZeroInteractions(collector);
+            verify(statement).close();
+        }
+    }
+
     private CommonRdbmsWriter.Task task() {
         CommonRdbmsWriter.Task task = new CommonRdbmsWriter.Task(DataBaseType.MySql);
         task.table = "target";

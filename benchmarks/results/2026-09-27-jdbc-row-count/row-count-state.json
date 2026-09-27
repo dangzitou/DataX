@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-09-27T05:26:58.868658+00:00",
+  "completed": [
+    "row-count-unit-full",
+    "row-count-fidelity",
+    "row-count-writer",
+    "row-count-wire",
+    "row-count-atomic",
+    "row-count-perf-table-single",
+    "row-count-perf-table-parallel",
+    "row-count-perf-stream-to-pg"
+  ],
+  "finished_at": "2026-09-27T05:33:50.494535+00:00"
+}

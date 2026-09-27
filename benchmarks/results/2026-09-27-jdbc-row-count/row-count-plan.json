@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-09-27T05:26:31.651368+00:00",
+  "baseline": "candidate-calendar-final: production f9a7612 code",
+  "candidate": "baf6c1f + row-count-implementation.patch",
+  "scenarios": [
+    "table-single",
+    "table-parallel",
+    "stream-to-pg"
+  ],
+  "rows": 1000000,
+  "warmup_each": 1,
+  "paired_rounds": 5,
+  "atomic_both": false,
+  "rewrite_both": false,
+  "copy_both": false,
+  "scope": "Measure cost of rejecting known affected-row mismatches, not all-scenario or upstream optimization proof",
+  "retention": "Keep required safety fix if its assertions pass; report all measured gains/losses and minimum per-pair 25/50 gates without changing thresholds",
+  "storage": "Existing one-million-row source; reset one target sequentially; 6GiB guard and per-backend temp limit",
+  "isolation": "No builds, compression, other DB tests or DataX jobs during performance rounds"
+}

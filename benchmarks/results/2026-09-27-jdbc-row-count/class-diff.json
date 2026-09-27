@@ -1,0 +1,242 @@
+[
+  {
+    "jar": "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/reader/starrocksreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/reader/dorisreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/reader/postgresqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/reader/mysqlreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/reader/rdbmsreader/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/writer/doriswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/writer/mysqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/writer/postgresqlwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/writer/starrockswriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.class",
+    "before": "53e37ed1262eee35ce323cf5b805ce424bb35506078c159295c66c65e9ef4ae4",
+    "after": "9e37c19ab17c73c3017a1a4fafdbb3b5d28a65e42a7b762ed98b80b799f4ac7a"
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Job.class",
+    "before": "1cd3b8a1aada2cd79cd13ff2612bcf12048ce801c7be3cdb20205033ff51b7a0",
+    "after": "621fcdef9d8bc770d9e54d66cd9133a2ffdf97a44218b9276b2296ed6137c113"
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter$Task.class",
+    "before": "2dd573565992c0b0bfecfee8d73664eb5d38936cd83e9097b6ec767f9454f2d8",
+    "after": "77863c14fa81caf31eef9b64d639e784a020e213d758ea1385910a71630b98bc"
+  },
+  {
+    "jar": "plugin/writer/selectdbwriter/plugin-rdbms-util-0.0.1-SNAPSHOT.jar",
+    "class": "com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.class",
+    "before": "09d58e3da3a4b3fc155f1089eded49c5f7012eca8d69fb3f269911ccc079307a",
+    "after": "164e96f78dbdee4e8a251311dcc259d89baf507572abb177ff3fa67b692d6cd9"
+  }
+]

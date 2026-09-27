@@ -70,6 +70,7 @@ public enum DBUtilErrorCode implements ErrorCode {
     // only for writer
     WRITE_DATA_ERROR("DBUtilErrorCode-05", "往您配置的写入表中写入数据时失败."),
     WRITE_COMMIT_UNCERTAIN("DBUtilErrorCode-25", "写入批次提交未获确认，数据可能已经提交；已禁止自动重放，请核对目标数据后再决定是否重试。"),
+    WRITE_ROW_COUNT_MISMATCH("DBUtilErrorCode-26", "数据库报告的写入行数与输入不符；已停止写入，不能忽略为脏数据，请核对目标后再重试。"),
     NO_INSERT_PRIVILEGE("DBUtilErrorCode-11", "数据库没有写权限，请联系DBA"),
     NO_DELETE_PRIVILEGE("DBUtilErrorCode-16", "数据库没有DELETE权限，请联系DBA"),
     ;

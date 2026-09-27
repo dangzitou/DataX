@@ -1,0 +1,152 @@
+diff --git a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.java b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.java
+index 6e23f9f..b6b85b7 100755
+--- a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.java
++++ b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/util/DBUtilErrorCode.java
+@@ -70,6 +70,7 @@ public enum DBUtilErrorCode implements ErrorCode {
+     // only for writer
+     WRITE_DATA_ERROR("DBUtilErrorCode-05", "往您配置的写入表中写入数据时失败."),
+     WRITE_COMMIT_UNCERTAIN("DBUtilErrorCode-25", "写入批次提交未获确认，数据可能已经提交；已禁止自动重放，请核对目标数据后再决定是否重试。"),
++    WRITE_ROW_COUNT_MISMATCH("DBUtilErrorCode-26", "数据库报告的写入行数与输入不符；已停止写入，不能忽略为脏数据，请核对目标后再重试。"),
+     NO_INSERT_PRIVILEGE("DBUtilErrorCode-11", "数据库没有写权限，请联系DBA"),
+     NO_DELETE_PRIVILEGE("DBUtilErrorCode-16", "数据库没有DELETE权限，请联系DBA"),
+     ;
+diff --git a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.java b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.java
+index 8fd6472..c02149e 100755
+--- a/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.java
++++ b/plugin-rdbms-util/src/main/java/com/alibaba/datax/plugin/rdbms/writer/CommonRdbmsWriter.java
+@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.SQLException;
++import java.sql.Statement;
+ import java.sql.Types;
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -356,7 +357,18 @@ public class CommonRdbmsWriter {
+                     preparedStatement = fillPreparedStatement(preparedStatement, record);
+                     preparedStatement.addBatch();
+                 }
+-                preparedStatement.executeBatch();
++                int[] updated = preparedStatement.executeBatch();
++                if (dataBaseType == DataBaseType.PostgreSQL) {
++                    if (updated == null || updated.length != buffer.size()) {
++                        throw DataXException.asDataXException(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH,
++                                "PostgreSQL batch result count differs from submitted commands: expected="
++                                        + buffer.size() + ", actual=" + (updated == null ? "null" : updated.length));
++                    }
++                    for (int count : updated) {
++                        // Rewritten batches may hide individual counts; this is not proof of row equality.
++                        if (count != Statement.SUCCESS_NO_INFO) checkPostgresqlInsertCount(count);
++                    }
++                }
+             } catch (SQLException e) {
+                 try {
+                     connection.rollback();
+@@ -369,6 +381,8 @@ public class CommonRdbmsWriter {
+                 doOneInsert(connection, buffer);
+                 return;
+             } catch (Exception e) {
++                try { connection.rollback(); }
++                catch (SQLException rollback) { e.addSuppressed(rollback); }
+                 throw DataXException.asDataXException(
+                         DBUtilErrorCode.WRITE_DATA_ERROR, e);
+             } finally {
+@@ -392,6 +406,15 @@ public class CommonRdbmsWriter {
+ 
+         protected boolean allowBatchFallback() { return true; }
+ 
++        private void checkPostgresqlInsertCount(int count) {
++            if (count != 1) {
++                // Fatal: neither dirty-row filtering nor automatic replay may hide a skipped INSERT.
++                throw DataXException.asDataXException(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH,
++                        "PostgreSQL INSERT affected " + count + " rows; expected 1. "
++                                + "Earlier committed batches/rows may remain; reconcile before retrying.");
++            }
++        }
++
+         public boolean needToDumpRecord() {
+             return dumpRecordCount.incrementAndGet() <= dumpRecordLimit;
+         }
+@@ -409,6 +432,8 @@ public class CommonRdbmsWriter {
+                         preparedStatement = fillPreparedStatement(
+                                 preparedStatement, record);
+                         preparedStatement.execute();
++                        if (dataBaseType == DataBaseType.PostgreSQL)
++                            checkPostgresqlInsertCount(preparedStatement.getUpdateCount());
+                     } catch (SQLException e) {
+                         if (needToDumpRecord()) {
+                             LOG.warn("ERROR : record {}", record);
+diff --git a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/writer/RdbmsWriterRegressionTest.java b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/writer/RdbmsWriterRegressionTest.java
+index 576efba..da65540 100644
+--- a/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/writer/RdbmsWriterRegressionTest.java
++++ b/plugin-rdbms-util/src/test/java/com/alibaba/datax/plugin/rdbms/writer/RdbmsWriterRegressionTest.java
+@@ -17,6 +17,69 @@ import static org.junit.Assert.*;
+ import static org.mockito.Mockito.*;
+ 
+ public class RdbmsWriterRegressionTest {
++    @Test public void postgresBatchCountMismatchRollsBackWithoutReplayOrDirtyRows() throws Exception {
++        for (int[] counts : new int[][] {null, {}, {1}, {1, 0}, {1, 2}, {1, Statement.EXECUTE_FAILED}, {1, -1}}) {
++            CommonRdbmsWriter.Task task = task();
++            task.dataBaseType = DataBaseType.PostgreSQL;
++            Connection connection = connection();
++            PreparedStatement statement = mock(PreparedStatement.class);
++            when(connection.prepareStatement(anyString())).thenReturn(statement);
++            when(statement.executeBatch()).thenReturn(counts);
++            TaskPluginCollector collector = mock(TaskPluginCollector.class);
++            try {
++                task.startWriteWithConnection(records(), collector, connection);
++                fail("Invalid affected-row counts must fail");
++            } catch (DataXException expected) {
++                assertEquals(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH, expected.getErrorCode());
++            }
++            verify(connection).rollback();
++            verify(connection, never()).commit();
++            verify(connection, times(1)).prepareStatement(anyString());
++            verify(statement, never()).execute();
++            verifyZeroInteractions(collector);
++            verify(statement).close();
++            verify(connection).close();
++        }
++    }
++
++    @Test public void postgresKeepsUnknownBatchCountsWithoutClaimingAnExactCount() throws Exception {
++        CommonRdbmsWriter.Task task = task();
++        task.dataBaseType = DataBaseType.PostgreSQL;
++        Connection connection = connection();
++        PreparedStatement statement = mock(PreparedStatement.class);
++        when(connection.prepareStatement(anyString())).thenReturn(statement);
++        when(statement.executeBatch()).thenReturn(new int[]{1, 1},
++                new int[]{Statement.SUCCESS_NO_INFO, Statement.SUCCESS_NO_INFO}, new int[]{1});
++        task.startWriteWithConnection(records(), mock(TaskPluginCollector.class), connection);
++        verify(connection, times(3)).commit();
++        verify(connection, never()).rollback();
++    }
++
++    @Test public void postgresSingleRowFallbackCannotHideSkippedRows() throws Exception {
++        for (int count : new int[] {0, 2, -1, Statement.SUCCESS_NO_INFO}) {
++            CommonRdbmsWriter.Task task = task();
++            task.dataBaseType = DataBaseType.PostgreSQL;
++            task.resultSetMetaData = org.apache.commons.lang3.tuple.Triple.of(
++                    Arrays.asList("id"), Arrays.asList(Types.BIGINT), Arrays.asList("int8"));
++            Connection connection = connection();
++            PreparedStatement statement = mock(PreparedStatement.class);
++            when(connection.prepareStatement(anyString())).thenReturn(statement);
++            when(statement.getUpdateCount()).thenReturn(count);
++            TaskPluginCollector collector = mock(TaskPluginCollector.class);
++            task.taskPluginCollector = collector;
++            try {
++                task.doOneInsert(connection, Arrays.asList(records().getFromReader(), records().getFromReader()));
++                fail("Skipped fallback row must fail even if dirty rows are allowed");
++            } catch (DataXException expected) {
++                assertEquals(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH, expected.getErrorCode());
++            }
++            verify(statement, times(1)).execute();
++            verify(statement).clearParameters();
++            verifyZeroInteractions(collector);
++            verify(statement).close();
++        }
++    }
++
+     private CommonRdbmsWriter.Task task() {
+         CommonRdbmsWriter.Task task = new CommonRdbmsWriter.Task(DataBaseType.MySql);
+         task.table = "target";

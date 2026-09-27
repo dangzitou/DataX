@@ -109,6 +109,12 @@ atomic publication. The reader keeps DateColumn compatibility but fails on lossy
 conversion; explicit temporal text round-trips through PostgreSQL's own parser.
 These checks do not establish billion-row or cross-writer correctness.
 
+[PG JDBC affected-row checks (中文)](REPORT-jdbc-row-count.zh-CN.md) reproduces
+successful jobs with skipped INSERTs and makes known count mismatches fatal in
+both batch and single-row fallback paths. Rewritten batches can still hide loss
+behind SUCCESS_NO_INFO; that counterexample remains explicit. Million-row
+median changes are -3.05%, -3.91% and +6.49%; every paired +25% / +50% gate fails.
+
 [Rejected single-pass atomic publisher (中文)](REPORT-pg-atomic-singlepass.zh-CN.md)
 records 393 Engine runs including 36 paired million-row transfers. Ordinary-table
 median throughput improves 28.09% / 30.71%, but the repeated-row workload regresses

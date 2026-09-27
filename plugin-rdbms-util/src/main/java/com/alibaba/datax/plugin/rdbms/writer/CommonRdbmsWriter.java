@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -356,7 +357,18 @@ public class CommonRdbmsWriter {
                     preparedStatement = fillPreparedStatement(preparedStatement, record);
                     preparedStatement.addBatch();
                 }
-                preparedStatement.executeBatch();
+                int[] updated = preparedStatement.executeBatch();
+                if (dataBaseType == DataBaseType.PostgreSQL) {
+                    if (updated == null || updated.length != buffer.size()) {
+                        throw DataXException.asDataXException(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH,
+                                "PostgreSQL batch result count differs from submitted commands: expected="
+                                        + buffer.size() + ", actual=" + (updated == null ? "null" : updated.length));
+                    }
+                    for (int count : updated) {
+                        // Rewritten batches may hide individual counts; this is not proof of row equality.
+                        if (count != Statement.SUCCESS_NO_INFO) checkPostgresqlInsertCount(count);
+                    }
+                }
             } catch (SQLException e) {
                 try {
                     connection.rollback();
@@ -369,6 +381,8 @@ public class CommonRdbmsWriter {
                 doOneInsert(connection, buffer);
                 return;
             } catch (Exception e) {
+                try { connection.rollback(); }
+                catch (SQLException rollback) { e.addSuppressed(rollback); }
                 throw DataXException.asDataXException(
                         DBUtilErrorCode.WRITE_DATA_ERROR, e);
             } finally {
@@ -392,6 +406,15 @@ public class CommonRdbmsWriter {
 
         protected boolean allowBatchFallback() { return true; }
 
+        private void checkPostgresqlInsertCount(int count) {
+            if (count != 1) {
+                // Fatal: neither dirty-row filtering nor automatic replay may hide a skipped INSERT.
+                throw DataXException.asDataXException(DBUtilErrorCode.WRITE_ROW_COUNT_MISMATCH,
+                        "PostgreSQL INSERT affected " + count + " rows; expected 1. "
+                                + "Earlier committed batches/rows may remain; reconcile before retrying.");
+            }
+        }
+
         public boolean needToDumpRecord() {
             return dumpRecordCount.incrementAndGet() <= dumpRecordLimit;
         }
@@ -409,6 +432,8 @@ public class CommonRdbmsWriter {
                         preparedStatement = fillPreparedStatement(
                                 preparedStatement, record);
                         preparedStatement.execute();
+                        if (dataBaseType == DataBaseType.PostgreSQL)
+                            checkPostgresqlInsertCount(preparedStatement.getUpdateCount());
                     } catch (SQLException e) {
                         if (needToDumpRecord()) {
                             LOG.warn("ERROR : record {}", record);

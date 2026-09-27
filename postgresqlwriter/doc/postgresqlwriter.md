@@ -174,6 +174,18 @@ PostgresqlWriter通过 DataX 框架获取 Reader 生成的协议数据，根据�
 
 	* 默认值：1024 <br />
 
+### JDBC 写入行数检查
+
+普通 JDBC INSERT 会检查 `executeBatch()` 返回的结果个数和已知影响行数。
+每条 INSERT 的已知影响行数必须为 1；触发器跳行等情况导致 0 行时，回滚当前批次并以
+`DBUtilErrorCode-26` 终止，不自动逐行重放，也不能用 `errorLimit` 忽略。
+已有逐行降级路径同样检查影响行数，但该路径使用自动提交，之前成功的行和批次仍可能保留。
+
+这不是整作业原子性或完整性证明。`reWriteBatchedInserts=true` 时，pgJDBC 可能返回
+`Statement.SUCCESS_NO_INFO`；实测部分行被触发器跳过时也会得到这个返回值。
+该返回值只表示驱动不提供精确计数，本检查无法由此判断缺行；不要将成功状态当作无遗漏验收。
+实际回归和这一未解决边界见 [JDBC 行数报告](../../benchmarks/REPORT-jdbc-row-count.zh-CN.md)。
+
 ### 可选 COPY 批量写入
 
 `parameter.useCopy` 默认为 `false`，继续使用原来的 JDBC INSERT。设为 `true` 可使用 PostgreSQL 原生 `COPY FROM STDIN`，适合经过验收的批量导入表。例如：
