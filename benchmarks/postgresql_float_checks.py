@@ -14,8 +14,10 @@ def main():
     parser.add_argument('--expect-filter-failure', action='store_true')
     parser.add_argument('--expect-binary-numeric-failure', action='store_true')
     parser.add_argument('--jdbc-only', action='store_true', help='Untouched upstream has no COPY writer')
+    parser.add_argument('--atomic', action='store_true', help='Binary/filter cases with atomic publication and same-ID rerun')
     args = parser.parse_args()
     runtime, output = args.runtime.resolve(), args.output.resolve()
+    assert not args.atomic or not (args.jdbc_only or args.expect_filter_failure or args.expect_binary_numeric_failure)
     output.mkdir(parents=True, exist_ok=True)
     assert not (output / 'results.json').exists(), 'Use a fresh evidence directory'
     sql("""DROP TABLE IF EXISTS pg_float_source;
@@ -34,14 +36,19 @@ def main():
     projection = "id,encode(float4send(f4),'hex') AS f4_hex,encode(float8send(f8),'hex') AS f8_hex,n::text"
     source = 'SELECT ' + projection + ' FROM pg_float_source'
     target = 'SELECT ' + projection + ' FROM pg_float_target'
+    def compare():
+        differences = int(sql('SELECT count(*) FROM ((' + source + ' EXCEPT ALL ' + target
+            + ') UNION ALL (' + target + ' EXCEPT ALL ' + source + ')) d'))
+        return int(sql('SELECT count(*) FROM pg_float_target')), differences
     report = {'scope': __doc__, 'postgres': sql('SELECT version()'),
               'build': json.loads((runtime / 'build-metadata.json').read_text()),
               'source': json.loads(sql('SELECT json_agg(row_to_json(s)) FROM (' + source + ' ORDER BY id) s')),
               'expect_filter_failure': args.expect_filter_failure,
-              'expect_binary_numeric_failure': args.expect_binary_numeric_failure, 'results': []}
+              'expect_binary_numeric_failure': args.expect_binary_numeric_failure,
+              'atomic_publication': args.atomic, 'results': []}
     for mode in (['jdbc'] if args.jdbc_only else ['jdbc', 'copy']):
-        for wire in ['text', 'binary-requested']:
-            for filtered in [False, True]:
+        for wire in (['binary-requested'] if args.atomic else ['text', 'binary-requested']):
+            for filtered in ([True] if args.atomic else [False, True]):
                 for attempt in range(1, 5):
                     name = '%s-%s-%s-%d' % (mode, wire, 'filter' if filtered else 'direct', attempt)
                     sql('DROP TABLE IF EXISTS pg_float_target; CREATE TABLE pg_float_target (LIKE pg_float_source)')
@@ -51,6 +58,9 @@ def main():
                     connection['jdbcUrl'][0] += ('?binaryTransfer=false' if wire == 'text' else
                         '?prepareThreshold=-1&binaryTransfer=true&binaryTransferEnable=float4,float8')
                     content['writer']['parameter'].update(column=['id', 'f4', 'f8', 'n'], useCopy=mode == 'copy')
+                    if args.atomic:
+                        content['reader']['parameter']['consistentSnapshot'] = True
+                        content['writer']['parameter']['atomicBatchId'] = 'float-' + name
                     if filtered:
                         # No IEEE value is less than -Infinity; this filter must discard nothing.
                         content['transformer'] = [{'name': 'dx_filter', 'parameter': {
@@ -58,12 +68,14 @@ def main():
                     numeric_failure = wire == 'binary-requested' and args.expect_binary_numeric_failure
                     expected_failure = numeric_failure or (filtered and args.expect_filter_failure)
                     seconds = run(runtime, config, output, name, expect_success=not expected_failure)
-                    differences = int(sql('SELECT count(*) FROM ((' + source + ' EXCEPT ALL ' + target
-                        + ') UNION ALL (' + target + ' EXCEPT ALL ' + source + ')) d'))
-                    actual = int(sql('SELECT count(*) FROM pg_float_target'))
+                    if args.atomic:
+                        assert compare() == (14, 0), 'First publication differs: ' + name
+                        # Each attempt has a fresh target OID. Reuse the exact batch ID and immutable input.
+                        run(runtime, config, output, name + '-same-id-rerun')
+                    actual, differences = compare()
                     entry = {'case': name, 'seconds_diagnostic_only': seconds, 'expected': 14,
                              'actual': actual, 'binary_multiset_differences': differences,
-                             'expected_failure': expected_failure}
+                             'expected_failure': expected_failure, 'same_id_rerun': args.atomic}
                     report['results'].append(entry)
                     (output / 'results.json').write_text(json.dumps(report, indent=2))
                     print(json.dumps(entry), flush=True)

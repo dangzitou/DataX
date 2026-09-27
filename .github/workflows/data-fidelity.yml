@@ -70,6 +70,7 @@ jobs:
         run: |
           python3 benchmarks/postgresql_float_checks.py /tmp/datax-baseline /tmp/float-baseline --jdbc-only --expect-filter-failure --expect-binary-numeric-failure
           python3 benchmarks/postgresql_float_checks.py /tmp/datax-candidate /tmp/float-candidate
+          python3 benchmarks/postgresql_float_checks.py /tmp/datax-candidate /tmp/float-atomic --atomic
       - name: JDBC commit acknowledgement fault injection with real PostgreSQL
         run: |
           python3 benchmarks/jdbc_commit_checks.py /tmp/datax-baseline /tmp/commit-baseline --expect-legacy
