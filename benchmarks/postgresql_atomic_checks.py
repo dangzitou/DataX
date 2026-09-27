@@ -109,6 +109,7 @@ def main():
             for copy in [False, True]:
                 for attempt in range(1, 5):
                     seed()
+                    sql('ALTER TABLE pg_atomic_source ALTER COLUMN amount TYPE datax_atomic_types.'+kind+' USING NULL')
                     sql('ALTER TABLE pg_atomic_target ALTER COLUMN amount TYPE datax_atomic_types.'
                         +kind+' USING NULL; INSERT INTO pg_atomic_target(id,txt) VALUES(0,\'existing\')')
                     name = 'custom-type-'+kind.replace('[]', '-array')+'-'+('copy' if copy else 'jdbc')+'-'+str(attempt)
